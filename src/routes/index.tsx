@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 
 const BENEFITS = [
   { icon: Gauge, t: "Fast delivery", d: "We find the fastest shipping route for your order. You always know when it arrives before you pay." },
-  { icon: Settings2, t: "We find any part", d: "No link? Just describe the part. We search European suppliers and send you the price. Search fee: 4,960 ISK." },
+  { icon: Settings2, t: "We find any part", d: "No link? Just describe the part. We search European suppliers and send you the price. Search fee: 4,960 ISK (VAT included)." },
   { icon: Landmark, t: "Icelandic invoice", d: "Every order comes with a proper Icelandic VAT invoice. You can deduct it as a business expense. We handle customs — you don't touch it." },
   { icon: Container, t: "Any size, any weight", d: "From a tiny sensor to a full engine, gearbox or body panel — we ship parts of any size and dimensions to Iceland. Oversized & heavy freight included." },
   { icon: Wrench, t: "No middleman stress", d: "You send a request. We handle everything between the European supplier and your door. You just wait for the package." },
