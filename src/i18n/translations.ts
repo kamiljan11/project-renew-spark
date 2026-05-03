@@ -200,7 +200,7 @@ const pl: Dict = {
   "process.s2.t": "Sprawdzamy część",
   "process.s2.d": "Weryfikujemy dostępność, cenę i pełny koszt z dostawą na Islandię.",
   "process.s3.t": "Dostajesz wycenę",
-  "process.s3.d": "Wysyłamy jedną kwotę: część + transport + nasza prowizja. Bez ukrytych kosztów.",
+  "process.s3.d": "Wysyłamy jedną kwotę: część + transport + nasza niewielka prowizja serwisowa. Bez ukrytych kosztów.",
   "process.s4.t": "Akceptujesz",
   "process.s4.d": "Mówisz tak, płacisz. Od razu zamawiamy u dostawcy.",
   "process.s5.t": "Wysyłamy",
