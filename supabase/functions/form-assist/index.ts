@@ -73,13 +73,8 @@ function fallbackPartChips(params: { value: string; reply: string; history: Msg[
       { label: "Both", fill: "Both" },
     ];
   }
-  if (/(front|rear|back)/i.test(reply)) {
-    return [
-      { label: "Front", fill: "Front" },
-      { label: "Rear", fill: "Rear" },
-      { label: "Both", fill: "Both" },
-    ];
-  }
+  // (left/right and front/rear handled later, AFTER more specific part-type checks)
+
   if (/brake/i.test(reply)) {
     return [
       { label: "🛑 Disc pads", fill: "Disc brake pads" },
