@@ -101,6 +101,7 @@ export function ConversationalForm() {
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+  const [dynamicChips, setDynamicChips] = useState<Chip[] | null>(null);
   const [done, setDone] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -133,6 +134,7 @@ export function ConversationalForm() {
   };
 
   const advanceStep = () => {
+    setDynamicChips(null);
     const next = step + 1;
     if (next < STEPS.length) {
       setTimeout(() => {
@@ -200,11 +202,20 @@ export function ConversationalForm() {
       }
 
       if (!valid) {
+        // Show AI-suggested chips for the follow-up question
+        const aiChips: Chip[] = Array.isArray(res?.chips)
+          ? res.chips
+              .filter((c: { label?: string; fill?: string }) => c && typeof c.label === "string")
+              .slice(0, 4)
+              .map((c: { label: string; fill?: string }) => ({ label: c.label, fill: c.fill ?? "" }))
+          : [];
+        setDynamicChips(aiChips.length ? aiChips : null);
         setBusy(false);
         inputRef.current?.focus();
         return;
       }
 
+      setDynamicChips(null);
       data[cur.key] = normalized;
       advanceStep();
     } catch {
@@ -319,10 +330,10 @@ export function ConversationalForm() {
         )}
       </div>
 
-      {/* Quick-reply chips */}
-      {!done && cur.chips && !busy && (
+      {/* Quick-reply chips: AI-suggested (dynamicChips) take priority over static cur.chips */}
+      {!done && !busy && !!(dynamicChips?.length || cur.chips?.length) && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
-          {cur.chips.map((chip) => (
+          {(dynamicChips?.length ? dynamicChips : cur.chips ?? []).map((chip) => (
             <button
               key={chip.label}
               onClick={() => onChip(chip)}
