@@ -20,6 +20,7 @@ export type Database = {
           comment: string | null
           company: string | null
           created_at: string
+          delivery_preference: string | null
           email: string | null
           express_delivery: string | null
           id: string
@@ -46,6 +47,7 @@ export type Database = {
           comment?: string | null
           company?: string | null
           created_at?: string
+          delivery_preference?: string | null
           email?: string | null
           express_delivery?: string | null
           id?: string
@@ -72,6 +74,7 @@ export type Database = {
           comment?: string | null
           company?: string | null
           created_at?: string
+          delivery_preference?: string | null
           email?: string | null
           express_delivery?: string | null
           id?: string

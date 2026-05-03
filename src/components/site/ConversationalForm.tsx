@@ -15,8 +15,8 @@ type Chip = {
 };
 
 type Step = {
-  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "photos";
-  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address" | "photos";
+  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
+  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
   ask: string;
   hint: string;
   multiline?: boolean;
@@ -61,6 +61,17 @@ const STEPS: Step[] = [
     optional: true,
     chips: [
       { label: "📦 I'll pick up myself", submit: "Personal pickup", normalize: "Personal pickup" },
+    ],
+  },
+  {
+    key: "delivery_preference", apiStep: "delivery_preference",
+    ask: "How would you like it shipped?<br><small style='opacity:0.7'>Pick what suits you — we'll quote both if you're not sure.</small>",
+    hint: "Tap a button or type your own preference",
+    optional: true,
+    chips: [
+      { label: "🚚 Standard — cheaper", submit: "Standard (cheaper)", normalize: "Standard (cheaper)" },
+      { label: "✈️ Express — fastest", submit: "Express (fastest)", normalize: "Express (fastest)" },
+      { label: "🤔 Quote me both", submit: "Quote both options", normalize: "Quote both options" },
     ],
   },
   {
@@ -109,7 +120,7 @@ export function ConversationalForm() {
     setBubbles((b) => [...b, { who: "bot", html: t("form.allDone") }]);
     try {
       const payload: Record<string, unknown> = {};
-      for (const k of ["part_links", "phone", "email", "company", "license_plate", "address"] as const) {
+      for (const k of ["part_links", "phone", "email", "company", "license_plate", "address", "delivery_preference"] as const) {
         if (data[k]) payload[k] = data[k];
       }
       if (photoUrls.length) payload.photo_urls = photoUrls;

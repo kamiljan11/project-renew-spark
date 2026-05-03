@@ -42,6 +42,7 @@ type Quote = {
   part: string | null;
   part_links: string | null;
   comment: string | null;
+  delivery_preference: string | null;
   photo_urls: string[] | null;
 };
 
@@ -84,7 +85,7 @@ function AdminPanel() {
   const load = async () => {
     const { data } = await supabase
       .from("quotes")
-      .select("id,order_num,created_at,status,company,phone,email,address,license_plate,part,part_links,comment,photo_urls")
+      .select("id,order_num,created_at,status,company,phone,email,address,license_plate,part,part_links,comment,delivery_preference,photo_urls")
       .order("created_at", { ascending: false });
     setQuotes((data ?? []) as Quote[]);
   };
@@ -230,6 +231,7 @@ function AdminPanel() {
                             <Field icon={<Mail className="w-3.5 h-3.5" />} label="Email" value={q.email} />
                             <Field icon={<MapPin className="w-3.5 h-3.5" />} label="Address" value={q.address} />
                             <Field icon={<Car className="w-3.5 h-3.5" />} label="License plate" value={q.license_plate} />
+                            <Field icon={<Package className="w-3.5 h-3.5" />} label="Delivery preference" value={q.delivery_preference} />
                           </div>
                           {q.part_links && (
                             <div className="mt-4">
