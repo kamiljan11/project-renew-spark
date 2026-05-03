@@ -14,6 +14,7 @@ const GREETINGS: Record<string, string> = {
 export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: boolean) => void }) {
   const { t, lang } = useLang();
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [history, setHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [val, setVal] = useState("");
   const [busy, setBusy] = useState(false);
   const [stage, setStage] = useState<"chat" | "details" | "done">("chat");
@@ -35,18 +36,30 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
   const send = async () => {
     const v = val.trim();
     if (!v || busy) return;
+    const newHistory = [...history, { role: "user" as const, content: v }];
+    setHistory(newHistory);
     setBubbles((b) => [...b, { who: "user", text: v }, { who: "typing" }]);
     setVal("");
     setBusy(true);
 
     try {
       const { data, error } = await supabase.functions.invoke("form-assist", {
-        body: { step: "freeform", value: v, lang },
+        body: { step: "freeform", value: v, lang, history: newHistory },
       });
       setBubbles((b) => b.filter((x) => x.who !== "typing"));
-      if (error) throw error;
+      if (error) {
+        const status = (error as any)?.context?.status;
+        const msg = status === 429
+          ? (lang === "pl" ? "Za dużo wiadomości na raz — spróbuj za chwilę." : "Too many messages — try again in a moment.")
+          : status === 402
+          ? (lang === "pl" ? "Asystent AI chwilowo niedostępny. Napisz: parts@masgroup.is" : "AI assistant temporarily unavailable. Email: parts@masgroup.is")
+          : (lang === "pl" ? "Problem z połączeniem — napisz na parts@masgroup.is" : "Connection issue — email parts@masgroup.is");
+        setBubbles((b) => [...b, { who: "bot", html: msg }]);
+        return;
+      }
       const reply = data?.reply || "OK!";
       setBubbles((b) => [...b, { who: "bot", html: reply }]);
+      setHistory((h) => [...h, { role: "assistant", content: reply.replace(/<[^>]*>/g, "") }]);
       if (data?.submit) {
         setPendingMsg(data.normalized || v);
         setTimeout(() => {
@@ -95,7 +108,7 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
   const reset = () => {
     setBubbles([{ who: "bot", html: GREETINGS[lang] ?? GREETINGS.en }]);
     setVal(""); setPendingMsg(""); setContact({ name: "", phone: "", email: "" });
-    setErrors({}); setStage("chat");
+    setErrors({}); setStage("chat"); setHistory([]);
   };
 
   return (
