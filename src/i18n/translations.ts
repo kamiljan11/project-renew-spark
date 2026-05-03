@@ -28,8 +28,8 @@ const en: Dict = {
   "hero.f2": "You get an Icelandic invoice. We handle customs.",
   "hero.f3": "Don't have a link? We search for you. Only 4,960 ISK (VAT included).",
 
-  "form.title": "Request a Part",
-  "form.sub": "Free quote · no commitment",
+  "form.title": "Get a Price for Your Part",
+  "form.sub": "Answer a few questions — we reply with the total price.",
   "form.step": "Step",
   "form.of": "of",
   "form.privacy": "Your data is used only to process your request.",
