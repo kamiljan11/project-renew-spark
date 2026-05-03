@@ -1,35 +1,101 @@
-import { useState } from "react";
-import { MessageCircle, X, Check } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { MessageCircle, X, Send, Sparkles, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/i18n/LanguageContext";
 
+type Bubble = { who: "bot" | "user" | "typing"; html?: string; text?: string };
+
+const GREETINGS: Record<string, string> = {
+  en: "Hi! 👋 I'm the MAS Parts assistant. Paste a link or tell me what part you need — make, model, year.",
+  pl: "Cześć! 👋 Jestem asystentem MAS Parts. Wklej link lub napisz, jakiej części potrzebujesz — marka, model, rok.",
+  is: "Halló! 👋 Ég er aðstoðarmaður MAS Parts. Sendu hlekk eða lýstu hvaða varahlut þú vantar — tegund, árgerð.",
+};
+
 export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: boolean) => void }) {
-  const { t } = useLang();
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [msg, setMsg] = useState("");
-  const [sent, setSent] = useState(false);
-  const [sending, setSending] = useState(false);
+  const { t, lang } = useLang();
+  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [val, setVal] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [stage, setStage] = useState<"chat" | "details" | "done">("chat");
+  const [pendingMsg, setPendingMsg] = useState("");
+  const [contact, setContact] = useState({ name: "", phone: "", email: "" });
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (open && bubbles.length === 0) {
+      setBubbles([{ who: "bot", html: GREETINGS[lang] ?? GREETINGS.en }]);
+    }
+  }, [open, lang, bubbles.length]);
+
+  useEffect(() => {
+    chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
+  }, [bubbles, stage]);
+
+  const send = async () => {
+    const v = val.trim();
+    if (!v || busy) return;
+    setBubbles((b) => [...b, { who: "user", text: v }, { who: "typing" }]);
+    setVal("");
+    setBusy(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("form-assist", {
+        body: { step: "freeform", value: v, lang },
+      });
+      setBubbles((b) => b.filter((x) => x.who !== "typing"));
+      if (error) throw error;
+      const reply = data?.reply || "OK!";
+      setBubbles((b) => [...b, { who: "bot", html: reply }]);
+      if (data?.submit) {
+        setPendingMsg(data.normalized || v);
+        setTimeout(() => {
+          setBubbles((b) => [...b, {
+            who: "bot",
+            html: lang === "pl"
+              ? "Świetnie! Zostaw <strong>telefon i email</strong>, a odezwiemy się z wyceną. ⬇️"
+              : lang === "is"
+              ? "Frábært! Skildu eftir <strong>síma og netfang</strong> og við sendum tilboð. ⬇️"
+              : "Great! Leave your <strong>phone and email</strong> and we'll get back with a quote. ⬇️",
+          }]);
+          setStage("details");
+        }, 400);
+      }
+    } catch {
+      setBubbles((b) => b.filter((x) => x.who !== "typing"));
+      setBubbles((b) => [...b, { who: "bot", html: "Connection issue — try again, or email <strong>parts@masgroup.is</strong>." }]);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const submit = async () => {
     const e: Record<string, boolean> = {};
-    if (!phone.trim()) e.phone = true;
-    if (!email.trim() || !email.includes("@")) e.email = true;
-    if (!msg.trim()) e.msg = true;
+    if (!contact.phone.trim()) e.phone = true;
+    if (!contact.email.includes("@")) e.email = true;
     setErrors(e);
     if (Object.keys(e).length) return;
-
-    setSending(true);
+    setBusy(true);
     try {
       await supabase.from("quotes").insert({
-        company: name || "Quick message",
-        phone, email, part_links: msg, part: msg,
+        company: contact.name || "Quick chat",
+        phone: contact.phone,
+        email: contact.email,
+        part_links: pendingMsg,
+        part: pendingMsg,
       });
-    } catch {}
-    setSending(false);
-    setSent(true);
+      setStage("done");
+    } catch {
+      setBubbles((b) => [...b, { who: "bot", html: "Couldn't save — please email parts@masgroup.is" }]);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const reset = () => {
+    setBubbles([{ who: "bot", html: GREETINGS[lang] ?? GREETINGS.en }]);
+    setVal(""); setPendingMsg(""); setContact({ name: "", phone: "", email: "" });
+    setErrors({}); setStage("chat");
   };
 
   return (
@@ -40,7 +106,7 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
           bottom: "calc(92px + env(safe-area-inset-bottom, 0px))",
           right: 20,
           zIndex: 49,
-          width: 320,
+          width: 360,
           maxWidth: "calc(100vw - 40px)",
           background: "#fff",
           borderRadius: 16,
@@ -55,34 +121,74 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
         <div className="bg-navy px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-full bg-mas-orange flex items-center justify-center">
-              <MessageCircle className="w-4.5 h-4.5 text-white" />
+              <MessageCircle className="w-4 h-4 text-white" />
             </div>
             <div>
-              <p className="text-white font-bold text-sm m-0" style={{ fontFamily: "Exo 2" }}>{t("float.title")}</p>
+              <p className="text-white font-bold text-sm m-0 flex items-center gap-1.5" style={{ fontFamily: "Exo 2" }}>
+                {t("float.title")}
+                <span className="inline-flex items-center gap-0.5 text-[10px] text-mas-orange font-bold uppercase tracking-wider">
+                  <Sparkles className="w-3 h-3" /> AI
+                </span>
+              </p>
               <p className="text-white/60 text-xs m-0">{t("float.sub")}</p>
             </div>
           </div>
           <button onClick={() => setOpen(false)} className="bg-transparent border-0 text-white/60 cursor-pointer text-2xl leading-none p-0">×</button>
         </div>
-        {!sent ? (
-          <div className="p-5">
-            <p className="text-muted-foreground text-sm mb-3">{t("float.lead")}</p>
-            <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("float.name")} className="w-full border border-border rounded-lg px-3 py-2 text-sm mb-2 outline-none focus:border-mas-orange" />
-            <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("float.phone")} className="w-full rounded-lg px-3 py-2 text-sm mb-2 outline-none focus:border-mas-orange border" style={{ borderColor: errors.phone ? "#ef4444" : "" }} />
-            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("float.email")} className="w-full rounded-lg px-3 py-2 text-sm mb-2 outline-none focus:border-mas-orange border" style={{ borderColor: errors.email ? "#ef4444" : "" }} />
-            <textarea value={msg} onChange={(e) => setMsg(e.target.value)} placeholder={t("float.msg")} rows={3} className="w-full rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-mas-orange resize-none border" style={{ borderColor: errors.msg ? "#ef4444" : "" }} />
-            <button onClick={submit} disabled={sending} className="btn-glow w-full rounded-lg py-3 font-bold text-sm uppercase tracking-wide cursor-pointer border-0">
-              {sending ? t("form.sending") : t("float.send")}
-            </button>
-            <p className="text-center text-xs text-muted-foreground mt-2.5">parts@masgroup.is</p>
+
+        <div ref={chatRef} className="flex flex-col gap-2.5 px-4 pt-4 pb-2" style={{ minHeight: 200, maxHeight: "min(360px, 50vh)", overflowY: "auto" }}>
+          {bubbles.map((b, i) =>
+            b.who === "bot" ? (
+              <div key={i} className="c-bubble-bot" dangerouslySetInnerHTML={{ __html: b.html ?? "" }} />
+            ) : b.who === "typing" ? (
+              <div key={i} className="c-bubble-bot" style={{ display: "inline-flex", gap: 4, width: "fit-content" }}>
+                <span className="typing-dot" /><span className="typing-dot" /><span className="typing-dot" />
+              </div>
+            ) : (
+              <div key={i} className="c-bubble-user">{b.text}</div>
+            )
+          )}
+        </div>
+
+        {stage === "chat" && (
+          <div className="px-4 pb-4">
+            <div className="relative">
+              <textarea
+                value={val}
+                onChange={(e) => setVal(e.target.value)}
+                disabled={busy}
+                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
+                placeholder={lang === "pl" ? "Napisz wiadomość…" : lang === "is" ? "Skrifaðu skilaboð…" : "Type a message…"}
+                rows={2}
+                className="w-full rounded-xl py-2.5 pl-3 pr-11 text-sm outline-none resize-none border-2 border-border focus:border-mas-orange transition-colors box-border disabled:opacity-60"
+              />
+              <button onClick={send} disabled={busy} className="absolute right-2 bottom-2 w-8 h-8 rounded-full bg-mas-orange border-0 cursor-pointer flex items-center justify-center disabled:opacity-60">
+                <Send className="w-3.5 h-3.5 text-white" />
+              </button>
+            </div>
+            <p className="text-center text-[11px] text-muted-foreground mt-2">parts@masgroup.is</p>
           </div>
-        ) : (
-          <div className="p-8 text-center">
-            <div className="w-13 h-13 mx-auto mb-3 rounded-full bg-mas-orange flex items-center justify-center" style={{ width: 52, height: 52 }}>
+        )}
+
+        {stage === "details" && (
+          <div className="px-4 pb-4 space-y-2">
+            <input value={contact.name} onChange={(e) => setContact({ ...contact, name: e.target.value })} placeholder={t("float.name")} className="w-full border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange" />
+            <input value={contact.phone} onChange={(e) => setContact({ ...contact, phone: e.target.value })} placeholder={t("float.phone")} className="w-full rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange border" style={{ borderColor: errors.phone ? "#ef4444" : "" }} />
+            <input value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} placeholder={t("float.email")} className="w-full rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange border" style={{ borderColor: errors.email ? "#ef4444" : "" }} />
+            <button onClick={submit} disabled={busy} className="btn-glow w-full rounded-lg py-2.5 font-bold text-xs uppercase tracking-wide cursor-pointer border-0">
+              {busy ? "…" : t("float.send")}
+            </button>
+          </div>
+        )}
+
+        {stage === "done" && (
+          <div className="p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-mas-orange flex items-center justify-center">
               <Check className="w-6 h-6 text-white" strokeWidth={3} />
             </div>
             <p className="font-bold text-navy text-base mb-1" style={{ fontFamily: "Exo 2" }}>{t("float.sent")}</p>
-            <p className="text-muted-foreground text-sm">{t("float.sentSub")}</p>
+            <p className="text-muted-foreground text-sm mb-4">{t("float.sentSub")}</p>
+            <button onClick={reset} className="text-xs text-mas-orange underline">New message</button>
           </div>
         )}
       </div>
