@@ -29,6 +29,10 @@ function feeInfoText(lang: "en" | "pl" | "is"): string {
   return "<strong>Search fee 4 960 ISK (incl. VAT)</strong> covers: sourcing across European suppliers (Germany, Poland, Baltics), verifying the part fits your vehicle (VIN / OEM check), price comparison and preparing the best offer. Paid upfront — regardless of whether you buy. If you do buy, it's credited toward your order. <strong>Paste a link and the fee disappears.</strong>";
 }
 
+const URL_RE = /https?:\/\/[^\s]+/i;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SKIP_RE = /^(skip|no|nope|none|n\/a|na|yes|ok|okay|sure|idk|hi|hello|hey|hej|halo|czesc|cześć|\-|\.+|x|_|test|asdf+)$/i;
+
 // ---- Localization helpers for heuristic (no-AI) replies ----
 type L = "en" | "pl" | "is";
 const T = {
