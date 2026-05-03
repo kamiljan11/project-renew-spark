@@ -201,7 +201,7 @@ function AdminPanel() {
                   <tr><td colSpan={5} className="text-center text-muted-foreground py-10">No requests.</td></tr>
                 )}
                 {filtered.map((q) => (
-                  <FragmentRow key={q.id}>
+                  <Fragment key={q.id}>
                     <tr className="border-t border-border hover:bg-slate-50 cursor-pointer" onClick={() => setOpenId(openId === q.id ? null : q.id)}>
                       <td className="px-4 py-3 font-mono text-xs">#{q.order_num}</td>
                       <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
