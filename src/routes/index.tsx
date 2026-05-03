@@ -5,7 +5,7 @@ import { Footer } from "@/components/site/Footer";
 import { ConversationalForm } from "@/components/site/ConversationalForm";
 import { FloatContact } from "@/components/site/FloatContact";
 import {
-  Gauge, Settings2, Landmark, Wrench, TrendingDown,
+  Gauge, Settings2, Landmark, Wrench, TrendingDown, Container,
   MessageSquarePlus, SearchCode, FileText, CreditCard, Truck, PackageCheck,
   Quote, Award, ArrowUpRight, MessageCircle, CheckCircle2,
 } from "lucide-react";
@@ -21,6 +21,7 @@ const BENEFITS = [
   { icon: Gauge, t: "Fast delivery", d: "We find the fastest shipping route for your order. You always know when it arrives before you pay." },
   { icon: Settings2, t: "We find any part", d: "No link? Just describe the part. We search European suppliers and send you the price. Search fee: 5,000 ISK." },
   { icon: Landmark, t: "Icelandic invoice", d: "Every order comes with a proper Icelandic VAT invoice. You can deduct it as a business expense. We handle customs — you don't touch it." },
+  { icon: Container, t: "Any size, any weight", d: "From a tiny sensor to a full engine, gearbox or body panel — we ship parts of any size and dimensions to Iceland. Oversized & heavy freight included." },
   { icon: Wrench, t: "No middleman stress", d: "You send a request. We handle everything between the European supplier and your door. You just wait for the package." },
   { icon: TrendingDown, t: "Fair price", d: "We show you the full price before you commit — part cost, shipping, and our fee. No surprises at the end." },
 ];
