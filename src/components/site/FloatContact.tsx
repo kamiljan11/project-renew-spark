@@ -189,6 +189,7 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
             <input value={contact.name} onChange={(e) => setContact({ ...contact, name: e.target.value })} placeholder={t("float.name")} className="w-full border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange" />
             <input value={contact.phone} onChange={(e) => setContact({ ...contact, phone: e.target.value })} placeholder={t("float.phone")} className="w-full rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange border" style={{ borderColor: errors.phone ? "#ef4444" : "" }} />
             <input value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} placeholder={t("float.email")} className="w-full rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange border" style={{ borderColor: errors.email ? "#ef4444" : "" }} />
+            <input value={contact.license_plate} onChange={(e) => setContact({ ...contact, license_plate: e.target.value.toUpperCase() })} placeholder={lang === "pl" ? "Nr rejestracyjny (opcjonalnie)" : lang === "is" ? "Bílnúmer (valfrjálst)" : "License plate (optional)"} className="w-full border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange" />
             <button onClick={submit} disabled={busy} className="btn-glow w-full rounded-lg py-2.5 font-bold text-xs uppercase tracking-wide cursor-pointer border-0">
               {busy ? "…" : t("float.send")}
             </button>
