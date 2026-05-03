@@ -304,7 +304,7 @@ Guidelines (not a hardcoded menu — adapt to the actual situation):
 - If asking year → 3 plausible years for the model's production span + "✏️ Other year: ".
 - If asking left/right, front/rear, manual/automatic, petrol/diesel, halogen/LED, OEM/aftermarket etc. → the real options that exist for THAT part on THAT vehicle.
 - If asking part variant → real variants that actually exist (e.g. brake pads vs discs vs drums for THAT model).
-- Use emojis sparingly when they help recognition. Each chip's `fill` is what gets typed into the input — make it a complete answer the user can send as-is or edit.
+- Use emojis sparingly when they help recognition. Each chip's "fill" is what gets typed into the input — make it a complete answer the user can send as-is or edit.
 - NEVER return generic "Yes"/"No"/"OK". NEVER repeat a question the user already answered. NEVER offer license-plate chips if a plate is already in history.
 - Always include an "✏️ Other" / free-text escape when the answer space is open-ended.
 When valid=true: chips=[].
