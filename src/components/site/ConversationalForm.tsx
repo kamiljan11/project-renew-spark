@@ -121,6 +121,7 @@ export function ConversationalForm() {
   useEffect(() => { chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" }); }, [bubbles]);
 
   const submit = async () => {
+    setReviewing(false);
     setDone(true);
     setBubbles((b) => [...b, { who: "bot", html: t("form.allDone") }]);
     try {
@@ -135,6 +136,30 @@ export function ConversationalForm() {
       setBubbles((b) => [...b, { who: "bot", html: t("form.failed") }]);
       setDone(false);
     }
+  };
+
+  const openReview = () => {
+    setReviewing(true);
+    setBusy(false);
+    setDynamicChips(null);
+  };
+
+  const editStep = (idx: number) => {
+    const k = STEPS[idx].key;
+    delete data[k];
+    if (k === "part_links") {
+      setPartItems([]);
+      setPartHistory([]);
+    }
+    if (k === "photos") {
+      setPhotoUrls([]);
+    }
+    setReviewing(false);
+    setStep(idx);
+    setBubbles((b) => [...b, { who: "bot", html: STEPS[idx].ask }]);
+    setHintErr(false);
+    setHintMsg(STEPS[idx].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setTimeout(() => inputRef.current?.focus(), 50);
   };
 
   const goBack = () => {
