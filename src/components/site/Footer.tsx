@@ -70,7 +70,7 @@ export function Footer() {
               <div className="w-8 h-px bg-slate-700" />
               <span className="font-black italic text-xs uppercase text-mas-orange">{t("footer.iceland")}</span>
             </div>
-            <Link to="/admin" className="text-slate-600 text-xs font-medium opacity-30 hover:opacity-100 transition-opacity">Admin</Link>
+            <a href="/admin" className="text-slate-600 text-xs font-medium opacity-30 hover:opacity-100 transition-opacity">Admin</a>
           </div>
         </div>
       </div>
