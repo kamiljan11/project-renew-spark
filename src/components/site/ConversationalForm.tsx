@@ -349,6 +349,33 @@ export function ConversationalForm() {
             className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
           >➕ Add another part</button>
           <button
+            onClick={() => {
+              setAwaitingMoreParts(false);
+              setVal("");
+              setBubbles((b) => [...b, { who: "user", text: "🔗 I'll paste a link instead" }, {
+                who: "bot",
+                html: lang === "pl"
+                  ? "Świetnie! Wklej link do części (lub kilka linków, jeden na linijkę) — opłata wyszukiwania <strong>znika</strong>, płacisz tylko części + wysyłkę."
+                  : lang === "is"
+                    ? "Frábært! Sendu hlekk á hlutinn (eða nokkra, einn á línu) — leitargjaldið <strong>fellur niður</strong>, þú borgar aðeins varahluti + sendingu."
+                    : "Great! Paste the link(s) to the part — one per line. The search fee <strong>disappears</strong>, you only pay parts + shipping.",
+              }]);
+              inputRef.current?.focus();
+            }}
+            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+          >🔗 Paste link instead</button>
+          <button
+            onClick={() => {
+              const info = lang === "pl"
+                ? "<strong>Opłata wyszukiwania 4 960 ISK (z VAT)</strong> pokrywa: research u dostawców w Europie (Niemcy, Polska, kraje bałtyckie), weryfikację zgodności części z Twoim pojazdem (VIN/numer OEM), porównanie cen i przygotowanie najlepszej oferty. Płatna z góry, niezależnie od decyzji o zakupie. <strong>Wklej link — opłata znika.</strong>"
+                : lang === "is"
+                  ? "<strong>Leitargjald 4 960 ISK (m. VSK)</strong> dekkur: leit hjá birgjum í Evrópu, staðfestingu á að hluturinn passi (VIN/OEM), verðsamanburð og besta tilboð. Greitt fyrirfram, óháð kaupum. <strong>Sendu hlekk — gjaldið fellur niður.</strong>"
+                  : "<strong>Search fee 4 960 ISK (incl. VAT)</strong> covers: sourcing across European suppliers (Germany, Poland, Baltics), verifying the part fits your vehicle (VIN / OEM check), price comparison and preparing the best offer. Paid upfront, regardless of whether you buy. <strong>Paste a link and the fee disappears.</strong>";
+              setBubbles((b) => [...b, { who: "user", text: "ℹ️ Tell me more about the fee" }, { who: "bot", html: info }]);
+            }}
+            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+          >ℹ️ More about fee</button>
+          <button
             onClick={() => { setAwaitingMoreParts(false); advanceStep(); }}
             className="text-[12px] font-bold text-white bg-mas-orange hover:opacity-90 transition rounded-full px-3 py-1.5 border-0"
           >✅ That's all — continue</button>
