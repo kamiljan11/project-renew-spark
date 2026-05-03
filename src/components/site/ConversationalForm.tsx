@@ -1,32 +1,81 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Package, Sparkles } from "lucide-react";
+import { ArrowRight, Package, Sparkles, Upload, X, Image as ImageIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/i18n/LanguageContext";
 import { useNavigate } from "@tanstack/react-router";
 
+type Chip = {
+  label: string;
+  /** If set, fills the input with this text and lets the user keep typing. */
+  fill?: string;
+  /** If set, immediately submits this value (skips AI validation when normalize is provided). */
+  submit?: string;
+  /** When provided, treats `submit` as already-validated and skips backend call. */
+  normalize?: string;
+};
+
 type Step = {
-  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address";
-  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address";
+  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "photos";
+  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address" | "photos";
   ask: string;
   hint: string;
   multiline?: boolean;
   optional?: boolean;
+  chips?: Chip[];
+  /** Special UI mode — file uploader instead of text input. */
+  upload?: boolean;
 };
 
 const STEPS: Step[] = [
   {
     key: "part_links", apiStep: "part",
-    ask: "Hi! 👋 What part are you looking for?<br><small style='opacity:0.7'><strong>Have a link?</strong> Paste it. <strong>No link?</strong> Describe the part: make, model, year.</small>",
-    hint: "Paste a link or describe the part", multiline: true,
+    ask: "Hi! 👋 What part are you looking for?<br><small style='opacity:0.7'>Pick an option below or just type — link, OEM number, or describe the part.</small>",
+    hint: "Paste a link, OEM number, or describe the part",
+    multiline: true,
+    chips: [
+      { label: "🔗 I have a link", fill: "Link: " },
+      { label: "🔢 OEM number", fill: "OEM number: " },
+      { label: "✏️ Describe the part", fill: "" },
+    ],
   },
-  { key: "phone", apiStep: "phone", ask: "Got it! Your <strong>phone number</strong>?<br><small style='opacity:0.7'>We'll send the quote here.</small>", hint: "e.g. +354 787 8617" },
+  {
+    key: "phone", apiStep: "phone",
+    ask: "Got it! Your <strong>phone number</strong>?<br><small style='opacity:0.7'>We'll send the quote here.</small>",
+    hint: "e.g. +354 787 8617",
+  },
   { key: "email", apiStep: "email", ask: "And your <strong>email</strong>?", hint: "e.g. you@workshop.is" },
   { key: "company", apiStep: "company", ask: "Your <strong>name or company</strong>?", hint: "e.g. Workshop ehf." },
-  { key: "license_plate", apiStep: "license_plate", ask: "<strong>License plate</strong>? <small style='opacity:0.7'>You can skip.</small>", hint: "e.g. KEF 123", optional: true },
-  { key: "address", apiStep: "address", ask: "Last one! <strong>Delivery address</strong> in Iceland?", hint: "e.g. Hafnarbraut 5, Reykjanesbær", optional: true },
+  {
+    key: "license_plate", apiStep: "license_plate",
+    ask: "<strong>License plate</strong>? <small style='opacity:0.7'>Helps us match the exact part for your car.</small>",
+    hint: "e.g. KEF 123",
+    optional: true,
+    chips: [
+      { label: "Skip — I'll give car details myself", submit: "", normalize: "" },
+    ],
+  },
+  {
+    key: "address", apiStep: "address",
+    ask: "<strong>Delivery address</strong> in Iceland?",
+    hint: "e.g. Hafnarbraut 5, Reykjanesbær",
+    optional: true,
+    chips: [
+      { label: "📦 I'll pick up myself", submit: "Personal pickup", normalize: "Personal pickup" },
+    ],
+  },
+  {
+    key: "photos", apiStep: "photos",
+    ask: "Last step! 📸 Add <strong>photos of the part or car</strong> (optional but speeds things up a lot).<br><small style='opacity:0.7'>Up to 5 photos, max 10 MB each.</small>",
+    hint: "",
+    optional: true,
+    upload: true,
+  },
 ];
 
 type Bubble = { who: "bot" | "user" | "typing"; html?: string; text?: string; faded?: boolean };
+
+const MAX_PHOTOS = 5;
+const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
 
 export function ConversationalForm() {
   const { t, lang } = useLang();
@@ -38,10 +87,13 @@ export function ConversationalForm() {
   const [hintErr, setHintErr] = useState(false);
   const [busy, setBusy] = useState(false);
   const [data] = useState<Record<string, string>>({});
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [done, setDone] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -56,16 +108,39 @@ export function ConversationalForm() {
     setDone(true);
     setBubbles((b) => [...b, { who: "bot", html: t("form.allDone") }]);
     try {
-      // Build payload with only known columns
-      const payload: Record<string, string> = {};
+      const payload: Record<string, unknown> = {};
       for (const k of ["part_links", "phone", "email", "company", "license_plate", "address"] as const) {
         if (data[k]) payload[k] = data[k];
       }
+      if (photoUrls.length) payload.photo_urls = photoUrls;
       await supabase.from("quotes").insert(payload as never);
       setTimeout(() => navigate({ to: "/thank-you" }), 800);
     } catch {
       setBubbles((b) => [...b, { who: "bot", html: t("form.failed") }]);
       setDone(false);
+    }
+  };
+
+  const advanceStep = () => {
+    const next = step + 1;
+    if (next < STEPS.length) {
+      setTimeout(() => {
+        setBubbles((b) => [...b, { who: "bot", html: STEPS[next].ask }]);
+        setStep(next);
+        const nextStep = STEPS[next];
+        setHintMsg(
+          nextStep.upload
+            ? "Tap to add photos or skip"
+            : nextStep.multiline
+              ? "Enter to send · Shift+Enter for new line"
+              : "Press Enter to continue"
+        );
+        setBusy(false);
+        if (!nextStep.upload) inputRef.current?.focus();
+      }, 350);
+    } else {
+      setBusy(false);
+      submit();
     }
   };
 
@@ -77,14 +152,13 @@ export function ConversationalForm() {
       data[cur.key] = "";
       setBubbles((b) => [...b, { who: "user", text: "Skipped", faded: true }]);
       setVal("");
-      goNext();
+      advanceStep();
       return;
     }
     if (!v) {
       setHintErr(true); setHintMsg("Please enter a value"); return;
     }
 
-    // Show user message immediately
     setBubbles((b) => [...b, { who: "user", text: v }, { who: "typing" }]);
     setVal("");
     setBusy(true);
@@ -101,9 +175,7 @@ export function ConversationalForm() {
           history: isPart ? newHistory : undefined,
         },
       });
-      // remove typing bubble
       setBubbles((b) => b.filter((x) => x.who !== "typing"));
-
       if (error) throw error;
 
       const reply: string = res?.reply || "OK!";
@@ -123,29 +195,79 @@ export function ConversationalForm() {
       }
 
       data[cur.key] = normalized;
-      goNext();
-    } catch (e) {
+      advanceStep();
+    } catch {
       setBubbles((b) => b.filter((x) => x.who !== "typing"));
-      // Fallback: accept on minimal validation so user isn't blocked
       data[cur.key] = v;
-      goNext();
+      advanceStep();
     }
   };
 
-  const goNext = () => {
-    const next = step + 1;
-    if (next < STEPS.length) {
-      setTimeout(() => {
-        setBubbles((b) => [...b, { who: "bot", html: STEPS[next].ask }]);
-        setStep(next);
-        setHintMsg(STEPS[next].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
-        setBusy(false);
-        inputRef.current?.focus();
-      }, 350);
-    } else {
-      setBusy(false);
-      submit();
+  const onChip = (chip: Chip) => {
+    if (busy) return;
+    // Pre-fill mode — let user keep typing
+    if (chip.fill !== undefined && chip.submit === undefined) {
+      setVal(chip.fill);
+      inputRef.current?.focus();
+      return;
     }
+    // Direct submit (skip AI when normalize is provided)
+    const cur = STEPS[step];
+    const submitVal = chip.submit ?? "";
+    if (chip.normalize !== undefined) {
+      // Local fast-path: no backend call
+      data[cur.key] = chip.normalize;
+      setBubbles((b) => [...b, { who: "user", text: chip.label, faded: !chip.normalize }]);
+      advanceStep();
+      return;
+    }
+    setVal(submitVal);
+    setTimeout(() => onNext(), 0);
+  };
+
+  const onFiles = async (files: FileList | null) => {
+    if (!files || !files.length) return;
+    if (uploading) return;
+    setUploading(true);
+    const remaining = MAX_PHOTOS - photoUrls.length;
+    const list = Array.from(files).slice(0, remaining);
+    const newUrls: string[] = [];
+    for (const file of list) {
+      if (file.size > MAX_PHOTO_BYTES) {
+        setBubbles((b) => [...b, { who: "bot", html: `<small>⚠️ ${file.name} is over 10 MB and was skipped.</small>` }]);
+        continue;
+      }
+      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from("quote-photos").upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: file.type || undefined,
+      });
+      if (error) {
+        setBubbles((b) => [...b, { who: "bot", html: `<small>⚠️ Could not upload ${file.name}.</small>` }]);
+        continue;
+      }
+      const { data: pub } = supabase.storage.from("quote-photos").getPublicUrl(path);
+      if (pub?.publicUrl) newUrls.push(pub.publicUrl);
+    }
+    setPhotoUrls((cur) => [...cur, ...newUrls]);
+    setUploading(false);
+  };
+
+  const removePhoto = (url: string) => {
+    setPhotoUrls((cur) => cur.filter((u) => u !== url));
+  };
+
+  const finishPhotosStep = () => {
+    if (busy || uploading) return;
+    setBubbles((b) => [
+      ...b,
+      photoUrls.length
+        ? { who: "user", text: `${photoUrls.length} photo${photoUrls.length > 1 ? "s" : ""} attached` }
+        : { who: "user", text: "No photos", faded: true },
+    ]);
+    advanceStep();
   };
 
   const cur = STEPS[step] ?? STEPS[STEPS.length - 1];
@@ -188,7 +310,77 @@ export function ConversationalForm() {
           )
         )}
       </div>
-      {!done && (
+
+      {/* Quick-reply chips */}
+      {!done && cur.chips && !busy && (
+        <div className="px-4 pb-2 flex flex-wrap gap-1.5">
+          {cur.chips.map((chip) => (
+            <button
+              key={chip.label}
+              onClick={() => onChip(chip)}
+              className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+            >
+              {chip.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {!done && cur.upload && (
+        <div className="px-5 pb-5 pt-1">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => { onFiles(e.target.files); e.target.value = ""; }}
+          />
+          {photoUrls.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {photoUrls.map((url) => (
+                <div key={url} className="relative w-16 h-16 rounded-lg overflow-hidden border border-border">
+                  <img src={url} alt="upload" className="w-full h-full object-cover" />
+                  <button
+                    onClick={() => removePhoto(url)}
+                    className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-black"
+                    aria-label="Remove"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="flex gap-2">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading || photoUrls.length >= MAX_PHOTOS}
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-300 hover:border-mas-orange hover:bg-orange-50 transition-colors py-3 text-sm font-semibold text-navy disabled:opacity-50"
+            >
+              {uploading ? (
+                <>Uploading…</>
+              ) : photoUrls.length >= MAX_PHOTOS ? (
+                <><ImageIcon className="w-4 h-4" /> Max {MAX_PHOTOS} reached</>
+              ) : (
+                <><Upload className="w-4 h-4" /> {photoUrls.length === 0 ? "Add photos" : "Add more"}</>
+              )}
+            </button>
+            <button
+              onClick={finishPhotosStep}
+              disabled={uploading}
+              className="px-5 rounded-xl bg-mas-orange text-white font-bold text-sm hover:opacity-90 disabled:opacity-60"
+            >
+              {photoUrls.length ? "Send request" : "Skip & send"}
+            </button>
+          </div>
+          <p className="text-[11px] text-muted-foreground mt-2">
+            {photoUrls.length}/{MAX_PHOTOS} photos · max 10 MB each
+          </p>
+        </div>
+      )}
+
+      {!done && !cur.upload && (
         <div className="px-5 pb-5">
           <div className="relative">
             <textarea

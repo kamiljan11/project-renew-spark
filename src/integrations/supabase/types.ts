@@ -33,6 +33,7 @@ export type Database = {
           part: string | null
           part_links: string | null
           phone: string | null
+          photo_urls: string[]
           standard_delivery: string | null
           status: string
           tracking_is: string | null
@@ -58,6 +59,7 @@ export type Database = {
           part?: string | null
           part_links?: string | null
           phone?: string | null
+          photo_urls?: string[]
           standard_delivery?: string | null
           status?: string
           tracking_is?: string | null
@@ -83,6 +85,7 @@ export type Database = {
           part?: string | null
           part_links?: string | null
           phone?: string | null
+          photo_urls?: string[]
           standard_delivery?: string | null
           status?: string
           tracking_is?: string | null
