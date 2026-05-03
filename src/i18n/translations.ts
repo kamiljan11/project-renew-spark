@@ -337,7 +337,7 @@ const is: Dict = {
   "benefits.b1.t": "Hröð afhending",
   "benefits.b1.d": "Við finnum hraðustu leiðina. Þú veist alltaf afhendingartíma áður en þú borgar.",
   "benefits.b2.t": "Við finnum hvaða hlut sem er",
-  "benefits.b2.d": "Engan hlekk? Lýstu hlutnum. Við leitum hjá evrópskum birgjum og sendum verð. Leitargjald: 4.960 kr. (VSK innifalinn)",
+  "benefits.b2.d": "Engan hlekk? Lýstu hlutnum — <strong>við verðum kaupandi þinn í Evrópu</strong>: leitum hjá traustum birgjum, semjum besta verðið fyrir þig og staðfestum að hluturinn passi við bílinn þinn. Þóknun fyrir vinnuna: 4.960 kr. (m. VSK) — dregst frá pöntuninni þegar þú kaupir.",
   "benefits.b3.t": "Íslenskur reikningur",
   "benefits.b3.d": "Hver pöntun fylgir íslenskum VSK-reikningi. Þú getur dregið hann frá. Við sjáum um tollinn.",
   "benefits.b4.t": "Engin milliliðavandræði",
