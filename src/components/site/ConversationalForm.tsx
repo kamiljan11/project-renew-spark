@@ -345,8 +345,20 @@ export function ConversationalForm() {
             <div className="text-[11px] text-muted-foreground">{t("form.sub")}</div>
           </div>
         </div>
-        <div className="text-[11px] font-bold text-mas-orange bg-orange-50 px-2.5 py-1 rounded-full">
-          {t("form.step")} {Math.min(step + 1, STEPS.length)} {t("form.of")} {STEPS.length}
+        <div className="flex items-center gap-2">
+          {!done && step > 0 && (
+            <button
+              onClick={goBack}
+              disabled={busy}
+              className="flex items-center gap-1 text-[12px] font-semibold text-navy bg-white hover:bg-slate-100 active:bg-slate-200 transition-colors rounded-full px-3 py-1.5 border border-slate-300 disabled:opacity-50"
+              aria-label="Go back to previous step"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> {t("form.back") || "Back"}
+            </button>
+          )}
+          <div className="text-[11px] font-bold text-mas-orange bg-orange-50 px-2.5 py-1 rounded-full">
+            {t("form.step")} {Math.min(step + 1, STEPS.length)} {t("form.of")} {STEPS.length}
+          </div>
         </div>
       </div>
       <div className="h-1 bg-muted">
