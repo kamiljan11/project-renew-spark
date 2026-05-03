@@ -153,6 +153,8 @@ export function ConversationalForm() {
   const [thinkingLabel, setThinkingLabel] = useState("Thinking…");
   const [copied, setCopied] = useState(false);
   const [whyOpen, setWhyOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
