@@ -47,11 +47,11 @@ const STEPS: Step[] = [
   { key: "company", apiStep: "company", ask: "Your <strong>name or company</strong>?", hint: "e.g. Workshop ehf." },
   {
     key: "license_plate", apiStep: "license_plate",
-    ask: "<strong>License plate</strong>? <small style='opacity:0.7'>Helps us match the exact part for your car.</small>",
-    hint: "e.g. KEF 123",
+    ask: "<strong>License plate</strong> or <strong>car make, model & year</strong>?<br><small style='opacity:0.7'>Either works — a plate is fastest (we can look the car up from it). Otherwise just type something like \"VW Golf 2015 1.6 TDI\".</small>",
+    hint: "e.g. KEF 123  —  or  —  VW Golf 2015 1.6 TDI",
     optional: true,
     chips: [
-      { label: "Skip — I'll give car details myself", submit: "", normalize: "" },
+      { label: "Skip for now", submit: "", normalize: "" },
     ],
   },
   {
