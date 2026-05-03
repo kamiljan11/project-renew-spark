@@ -206,7 +206,7 @@ const pl: Dict = {
   "process.titleB": "DZIAŁA",
   "process.lead": "6 kroków od wiadomości do części pod drzwiami.",
   "process.s1.t": "Wyślij czego potrzebujesz",
-  "process.s1.d": "Wypełnij formularz: wklej link do części lub opisz, czego potrzebujesz. Bez linku? Wyszukamy ją dla Ciebie — jednorazowa opłata za wyszukiwanie 4 960 ISK (z VAT), płatna z góry zanim zaczniemy szukać. Dane do płatności wysyłamy po przesłaniu formularza.",
+  "process.s1.d": "Wypełnij formularz: wklej link do części lub opisz, czego potrzebujesz. Bez linku? <strong>Stajemy się Twoim kupcem w Europie</strong> — szukamy części u zaufanych dostawców w UE, <strong>negocjujemy najlepszą cenę w Twoim imieniu</strong>, weryfikujemy dopasowanie do Twojego pojazdu (VIN/OEM) i ogarniamy formalności. Jednorazowa <strong>opłata 4 960 ISK (z VAT)</strong> za naszą pracę, płatna z góry. Jeśli zamówisz — kwota wlicza się w cenę zamówienia, więc płacisz ją tylko raz.",
   "process.s2.t": "Sprawdzamy część",
   "process.s2.d": "Weryfikujemy dostępność, cenę i pełny koszt z dostawą na Islandię.",
   "process.s3.t": "Dostajesz wycenę",
