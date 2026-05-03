@@ -440,6 +440,14 @@ export function ConversationalForm() {
   const advanceStep = (overrideData?: Record<string, string>) => {
     setDynamicChips(null);
     const baseData = overrideData ?? data;
+    if (editingReturnRef.current) {
+      editingReturnRef.current = false;
+      setData(baseData);
+      persist({ step, data: baseData });
+      setBusy(false);
+      openReview();
+      return;
+    }
     let next = step + 1;
     const workingData = { ...baseData };
     while (next < STEPS.length && STEPS[next].key === "license_plate" && !workingData["license_plate"]) {
