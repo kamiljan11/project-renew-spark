@@ -64,6 +64,17 @@ const STEPS: Step[] = [
     ],
   },
   {
+    key: "delivery_preference", apiStep: "delivery_preference",
+    ask: "How would you like it shipped?<br><small style='opacity:0.7'>Pick what suits you — we'll quote both if you're not sure.</small>",
+    hint: "Tap a button or type your own preference",
+    optional: true,
+    chips: [
+      { label: "🚚 Standard — cheaper", submit: "Standard (cheaper)", normalize: "Standard (cheaper)" },
+      { label: "✈️ Express — fastest", submit: "Express (fastest)", normalize: "Express (fastest)" },
+      { label: "🤔 Quote me both", submit: "Quote both options", normalize: "Quote both options" },
+    ],
+  },
+  {
     key: "photos", apiStep: "photos",
     ask: "Last step! 📸 Add <strong>photos of the part or car</strong> (optional but speeds things up a lot).<br><small style='opacity:0.7'>Up to 5 photos, max 10 MB each.</small>",
     hint: "",
