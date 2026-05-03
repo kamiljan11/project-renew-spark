@@ -110,6 +110,8 @@ function fallbackPartChips(params: { value: string; reply: string; history: Msg[
       { label: "Rear", fill: "Rear" },
       { label: "Both", fill: "Both" },
     ];
+  }
+  if (/year/i.test(reply)) {
     const y = new Date().getFullYear();
     return [
       { label: `${y - 2}`, fill: `${y - 2}` },
