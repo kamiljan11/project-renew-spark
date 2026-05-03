@@ -189,12 +189,12 @@ function Index() {
             </h2>
           </div>
           <Accordion type="single" collapsible className="space-y-2">
-            {FAQ.map(([q, a], i) => (
-              <AccordionItem key={i} value={`f-${i}`} className="rounded-xl border border-slate-200 bg-slate-50 px-5 data-[state=open]:bg-white data-[state=open]:shadow-sm transition-all">
+            {FAQ_KEYS.map((k, i) => (
+              <AccordionItem key={k} value={`f-${i}`} className="rounded-xl border border-slate-200 bg-slate-50 px-5 data-[state=open]:bg-white data-[state=open]:shadow-sm transition-all">
                 <AccordionTrigger className="hover:no-underline text-left text-base md:text-lg font-bold text-navy py-5">
-                  <span>{q}</span>
+                  <span>{t(`faq.q${k}`)}</span>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-600 leading-relaxed pb-5">{a}</AccordionContent>
+                <AccordionContent className="text-slate-600 leading-relaxed pb-5">{t(`faq.a${k}`)}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
