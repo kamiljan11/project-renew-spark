@@ -11,6 +11,7 @@ import {
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useLang } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/")({
   component: Index,
