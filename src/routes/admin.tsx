@@ -85,7 +85,7 @@ function AdminPanel() {
   const load = async () => {
     const { data } = await supabase
       .from("quotes")
-      .select("id,order_num,created_at,status,company,phone,email,address,license_plate,part,part_links,comment,photo_urls")
+      .select("id,order_num,created_at,status,company,phone,email,address,license_plate,part,part_links,comment,delivery_preference,photo_urls")
       .order("created_at", { ascending: false });
     setQuotes((data ?? []) as Quote[]);
   };
