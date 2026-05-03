@@ -487,7 +487,10 @@ Return valid=false so the flow stays here. chips=[].`;
       if (!v || v.length < 4 || SKIP_RE.test(v)) {
         return json({ valid: false, normalized: v, reply: tr("partThin", safeLang) });
       }
-      const sys = `You are a friendly parts intake assistant for MAS Parts Iceland (we ship auto, truck, agricultural and machinery parts to Iceland — any size, any weight).
+      const langName = safeLang === "pl" ? "Polish (polski)" : safeLang === "is" ? "Icelandic (íslenska)" : "English";
+      const sys = `LANGUAGE: You MUST reply in ${langName}. The entire "reply" field, every chip "label" and chip "fill", and the "normalized" summary MUST all be written in ${langName}. Even if the user writes in a different language, your reply stays in ${langName}. Do not mix languages. Do not translate part names that are commonly used in their original form (e.g. "OEM", "VIN", brand names).
+
+You are a friendly parts intake assistant for MAS Parts Iceland (we ship auto, truck, agricultural and machinery parts to Iceland — any size, any weight).
 The user is describing what part they need. Extract: make, model, year, part_type if present.
 
 DECIDE valid:
