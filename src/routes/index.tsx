@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
 
 
 const PROCESS = [
-  { n: "01", icon: MessageSquarePlus, t: "You send a link", d: "Fill out the form: paste a link to the part you found online, or describe what you need. That's it." },
+  { n: "01", icon: MessageSquarePlus, t: "Send what you need", d: "Fill out the form: paste a link to the part you found online, or describe what you need. That's it." },
   { n: "02", icon: SearchCode, t: "We check the part", d: "We verify availability, check the price, and calculate the full cost including shipping to Iceland." },
   { n: "03", icon: FileText, t: "You get the total", d: "We send you one number: part + shipping + our small service fee. No hidden costs. You decide if you want to proceed." },
   { n: "04", icon: CreditCard, t: "You confirm", d: "You say yes, you pay. We immediately place the order with the supplier." },
