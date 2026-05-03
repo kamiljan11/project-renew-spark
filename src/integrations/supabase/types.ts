@@ -14,16 +14,117 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      quotes: {
+        Row: {
+          address: string | null
+          comment: string | null
+          company: string | null
+          created_at: string
+          email: string | null
+          express_delivery: string | null
+          id: string
+          invoice: string | null
+          kennitala: string | null
+          label_link: string | null
+          last_changed: string
+          license_plate: string | null
+          order_num: number
+          order_total: string | null
+          part: string | null
+          part_links: string | null
+          phone: string | null
+          standard_delivery: string | null
+          status: string
+          tracking_is: string | null
+          tracking_pl1: string | null
+          tracking_pl2: string | null
+          vin: string | null
+        }
+        Insert: {
+          address?: string | null
+          comment?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          express_delivery?: string | null
+          id?: string
+          invoice?: string | null
+          kennitala?: string | null
+          label_link?: string | null
+          last_changed?: string
+          license_plate?: string | null
+          order_num?: number
+          order_total?: string | null
+          part?: string | null
+          part_links?: string | null
+          phone?: string | null
+          standard_delivery?: string | null
+          status?: string
+          tracking_is?: string | null
+          tracking_pl1?: string | null
+          tracking_pl2?: string | null
+          vin?: string | null
+        }
+        Update: {
+          address?: string | null
+          comment?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          express_delivery?: string | null
+          id?: string
+          invoice?: string | null
+          kennitala?: string | null
+          label_link?: string | null
+          last_changed?: string
+          license_plate?: string | null
+          order_num?: number
+          order_total?: string | null
+          part?: string | null
+          part_links?: string | null
+          phone?: string | null
+          standard_delivery?: string | null
+          status?: string
+          tracking_is?: string | null
+          tracking_pl1?: string | null
+          tracking_pl2?: string | null
+          vin?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +251,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
