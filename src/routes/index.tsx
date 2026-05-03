@@ -217,27 +217,15 @@ function Index() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 relative overflow-hidden bg-navy">
-        <div className="cta-pattern absolute inset-0" />
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h2 className="text-3xl md:text-5xl font-black italic mb-6 leading-tight text-white uppercase" style={{ letterSpacing: "-0.02em" }}>
-            GOT A LINK? <span className="text-mas-orange">SEND IT TO US.</span>
+      <section className="py-16 px-6 bg-navy">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white" style={{ letterSpacing: "-0.02em" }}>
+            Ready? Send us your link.
           </h2>
-          <p className="text-slate-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-            Paste the link, fill in your details, click send. We reply with the full price. You decide. That's the whole process.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="#order" className="text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest transition-all shadow-lg flex items-center gap-3 text-lg w-full sm:w-auto justify-center bg-mas-orange hover:opacity-90">
-              Get a Quote <ArrowUpRight className="w-6 h-6" />
-            </a>
-            <button onClick={() => setContactOpen(true)} className="bg-white/10 text-white border border-white/20 px-8 py-4 rounded-xl font-bold uppercase tracking-wider hover:bg-white/20 transition-all flex items-center gap-3 w-full sm:w-auto justify-center">
-              Have a Question <MessageCircle className="w-5 h-5" />
-            </button>
-          </div>
-          <p className="mt-8 text-sm text-slate-400 font-medium flex flex-wrap justify-center gap-4">
-            <span className="inline-flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-mas-orange" /> Secure VIN selection</span>
-            <span className="inline-flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-mas-orange" /> Fast shipping</span>
-          </p>
+          <p className="text-slate-300 mb-8">We'll reply with the full price. You decide if you go ahead.</p>
+          <a href="#order" className="inline-block text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg bg-mas-orange hover:opacity-90">
+            Get a quote
+          </a>
         </div>
       </section>
 
