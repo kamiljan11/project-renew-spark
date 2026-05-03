@@ -19,7 +19,7 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
   const [busy, setBusy] = useState(false);
   const [stage, setStage] = useState<"chat" | "details" | "done">("chat");
   const [pendingMsg, setPendingMsg] = useState("");
-  const [contact, setContact] = useState({ name: "", phone: "", email: "" });
+  const [contact, setContact] = useState({ name: "", phone: "", email: "", license_plate: "" });
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const chatRef = useRef<HTMLDivElement>(null);
 
@@ -94,9 +94,10 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
         company: contact.name || "Quick chat",
         phone: contact.phone,
         email: contact.email,
+        license_plate: contact.license_plate || null,
         part_links: pendingMsg,
         part: pendingMsg,
-      });
+      } as never);
       setStage("done");
     } catch {
       setBubbles((b) => [...b, { who: "bot", html: "Couldn't save — please email parts@masgroup.is" }]);
@@ -107,7 +108,7 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
 
   const reset = () => {
     setBubbles([{ who: "bot", html: GREETINGS[lang] ?? GREETINGS.en }]);
-    setVal(""); setPendingMsg(""); setContact({ name: "", phone: "", email: "" });
+    setVal(""); setPendingMsg(""); setContact({ name: "", phone: "", email: "", license_plate: "" });
     setErrors({}); setStage("chat"); setHistory([]);
   };
 
