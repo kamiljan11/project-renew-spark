@@ -120,7 +120,7 @@ export function ConversationalForm() {
     setBubbles((b) => [...b, { who: "bot", html: t("form.allDone") }]);
     try {
       const payload: Record<string, unknown> = {};
-      for (const k of ["part_links", "phone", "email", "company", "license_plate", "address"] as const) {
+      for (const k of ["part_links", "phone", "email", "company", "license_plate", "address", "delivery_preference"] as const) {
         if (data[k]) payload[k] = data[k];
       }
       if (photoUrls.length) payload.photo_urls = photoUrls;
