@@ -62,7 +62,7 @@ function Index() {
               SHIPPED TO <span className="text-mas-orange">ICELAND.</span>
             </h1>
             <p className="mt-6 text-lg text-white/85 max-w-xl leading-relaxed">
-              Need a car part? Send us a link to one you found online, or just tell us what you need in the form on the right — we'll buy it, ship it to Iceland, and deliver to your door. Full Icelandic VAT invoice, no customs to deal with.
+              Need a car part? Send us a link to one you found online, or just tell us what you need <span className="hidden lg:inline">in the form on the right</span><span className="lg:hidden">in the form below</span> — we'll buy it, ship it to Iceland, and deliver to your door. Full Icelandic VAT invoice, no customs to deal with.
             </p>
             <p className="mt-4 lg:hidden text-sm text-white/70">
               👉 Scroll down to fill in the form.
