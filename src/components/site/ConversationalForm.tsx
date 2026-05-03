@@ -201,11 +201,20 @@ export function ConversationalForm() {
       }
 
       if (!valid) {
+        // Show AI-suggested chips for the follow-up question
+        const aiChips: Chip[] = Array.isArray(res?.chips)
+          ? res.chips
+              .filter((c: { label?: string; fill?: string }) => c && typeof c.label === "string")
+              .slice(0, 4)
+              .map((c: { label: string; fill?: string }) => ({ label: c.label, fill: c.fill ?? "" }))
+          : [];
+        setDynamicChips(aiChips.length ? aiChips : null);
         setBusy(false);
         inputRef.current?.focus();
         return;
       }
 
+      setDynamicChips(null);
       data[cur.key] = normalized;
       advanceStep();
     } catch {
