@@ -282,7 +282,12 @@ Deno.serve(async (req) => {
           : safeLang === "is"
             ? "Þú borgar aðeins <strong>varahluti + sendingu</strong> (tollur innifalinn). Engin leitargjald."
             : "You'll only pay for <strong>parts + shipping</strong> (customs included). No search fee.";
-        return json({ valid: true, normalized: v, reply: `${linkLine} ${pricingLine}` });
+        const moreLine = safeLang === "pl"
+          ? " Potrzebujesz czegoś jeszcze?"
+          : safeLang === "is"
+            ? " Þarftu eitthvað fleira?"
+            : " Need anything else?";
+        return json({ valid: true, normalized: v, reply: `${linkLine} ${pricingLine}${moreLine}` });
       }
       if (!v || v.length < 4 || SKIP_RE.test(v)) {
         return json({
