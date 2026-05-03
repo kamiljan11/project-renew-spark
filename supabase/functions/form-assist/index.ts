@@ -147,7 +147,8 @@ When valid=true: brief warm acknowledgement.
 Reply MUST be in language: ${lang}. Max 35 words. Use <strong> for emphasis. Friendly, slightly playful, never robotic.
 "normalized" = a clean one-line summary of what we know so far (e.g. "Ursus C-360 engine — needs year & fuel type").`;
       try {
-        const out = await callAI(sys, v);
+        const msgs: Msg[] = history.length ? history : [{ role: "user", content: v }];
+        const out = await callAI(sys, msgs);
         return json(out);
       } catch (e) {
         // Graceful fallback: accept if reasonably long
