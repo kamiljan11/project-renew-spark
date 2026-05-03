@@ -1026,6 +1026,12 @@ export function ConversationalForm() {
               value={val}
               onChange={(e) => setVal(e.target.value)}
               disabled={busy}
+              onFocus={() => {
+                // Prevent iOS keyboard from hiding the input
+                setTimeout(() => {
+                  inputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+                }, 250);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (!cur.multiline || !e.shiftKey)) { e.preventDefault(); onNext(); }
               }}
@@ -1033,8 +1039,11 @@ export function ConversationalForm() {
               rows={cur.multiline ? 3 : 1}
               maxLength={maxLen ? maxLen + 50 : undefined}
               aria-label={cur.hint || cur.key}
-              className="w-full rounded-xl py-3.5 pl-4 pr-14 text-base outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
-              style={{ borderColor: hintErr || overLimit ? "#ef4444" : "" }}
+              enterKeyHint={cur.multiline ? "enter" : "send"}
+              inputMode={cur.key === "phone" ? "tel" : cur.key === "email" ? "email" : "text"}
+              autoComplete={cur.key === "phone" ? "tel" : cur.key === "email" ? "email" : cur.key === "company" ? "organization" : cur.key === "address" ? "street-address" : "off"}
+              className="w-full rounded-xl py-3.5 pl-4 pr-14 outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
+              style={{ borderColor: hintErr || overLimit ? "#ef4444" : "", fontSize: "16px" }}
             />
             <button
               onClick={onNext}
