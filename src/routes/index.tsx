@@ -147,13 +147,13 @@ function Index() {
                   <p>We run 4 workshops ourselves. We know the stress of a car blocking a lift because of a missing bolt — so we built MAS Parts to fix the one thing that always slows the job down: <span className="text-mas-orange font-semibold">logistics.</span></p>
                 </div>
                 <div className="mt-12 flex flex-wrap items-center gap-8 md:gap-12 border-t border-slate-800 pt-8">
-                  {[["4","Own workshops"],["99%","Available parts"],["11+","B2B Partners"]].map(([num, lbl], i) => (
+                  {[["99%","Available parts"],["11+","B2B Partners"]].map(([num, lbl], i) => (
                     <div key={i} className="flex items-center gap-8 md:gap-12">
                       <div className="flex flex-col">
                         <span className="text-3xl font-black text-white italic">{num}</span>
                         <span className="text-xs uppercase text-slate-400 font-bold tracking-widest">{lbl}</span>
                       </div>
-                      {i < 2 && <div className="w-px h-10 bg-slate-700 hidden md:block" />}
+                      {i < 1 && <div className="w-px h-10 bg-slate-700 hidden md:block" />}
                     </div>
                   ))}
                 </div>
