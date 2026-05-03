@@ -353,7 +353,7 @@ const is: Dict = {
   "process.titleB": "VIRKAR",
   "process.lead": "6 skref frá skilaboðum að hlutnum við dyrnar þínar.",
   "process.s1.t": "Sendu það sem þú þarft",
-  "process.s1.d": "Fylltu út formið: límdu hlekk eða lýstu hvað þú þarft. Enginn hlekkur? Við leitum fyrir þig — einskiptis leitargjald 4 960 ISK (með VSK) greiðist fyrirfram áður en við byrjum að leita. Greiðsluupplýsingar sendar eftir að þú sendir formið.",
+  "process.s1.d": "Fylltu út formið: límdu hlekk eða lýstu hvað þú þarft. Enginn hlekkur? <strong>Við verðum kaupandi þinn í Evrópu</strong> — leitum að hlutnum hjá traustum birgjum í ESB, <strong>semjum besta verðið fyrir þína hönd</strong>, staðfestum að hluturinn passi við ökutækið þitt (VIN/OEM) og sjáum um pappírsvinnuna. Einskiptis <strong>þóknun 4 960 ISK (m. VSK)</strong> fyrir vinnuna, greidd fyrirfram. Ef þú pantar — dregst hún frá heildarverðinu, svo þú borgar hana aðeins einu sinni.",
   "process.s2.t": "Við athugum hlutinn",
   "process.s2.d": "Við staðfestum framboð, verð og heildarkostnað með flutningi til Íslands.",
   "process.s3.t": "Þú færð heildarverðið",
