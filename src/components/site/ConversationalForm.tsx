@@ -15,8 +15,8 @@ type Chip = {
 };
 
 type Step = {
-  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "photos";
-  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address" | "photos";
+  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
+  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
   ask: string;
   hint: string;
   multiline?: boolean;
