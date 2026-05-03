@@ -218,6 +218,15 @@ export function ConversationalForm() {
       }
 
       setDynamicChips(null);
+      // Multi-part loop: after the AI accepts a part, ask if user wants to add more.
+      if (isPart) {
+        const updated = [...partItems, normalized];
+        setPartItems(updated);
+        data[cur.key] = updated.join("\n---\n");
+        setAwaitingMoreParts(true);
+        setBusy(false);
+        return;
+      }
       data[cur.key] = normalized;
       advanceStep();
     } catch {
