@@ -29,7 +29,7 @@ type Step = {
 const STEPS: Step[] = [
   {
     key: "part_links", apiStep: "part",
-    ask: "Hi 👋 Tell us what car part you need.<br><small style='opacity:0.75'>1. <strong>Got a link (or several)?</strong> Paste them all — one per line is perfect. You pay for the parts + shipping (customs clearance included).<br>2. <strong>No link?</strong> We'll find it for you, we negotiate best deal possible on your behalf — search fee <strong>4 960 ISK (incl. VAT)</strong> is paid upfront before we start searching.</small>",
+    ask: "Hi 👋 Tell us what car part you need.<br><small style='opacity:0.75'>1. <strong>Got a link (or several)?</strong> Paste them all — one per line is perfect. You pay for the parts + shipping (customs clearance included).<br>2. <strong>No link?</strong> <strong>We become your buyer in Europe</strong> — we hunt the part across our trusted EU suppliers, <strong>negotiate the best price on your behalf</strong>, verify it fits your vehicle and handle the paperwork. Sourcing fee <strong>4 960 ISK (incl. VAT)</strong> upfront — credited toward your order if you buy.</small>",
     hint: "Paste one or more links (one per line), OEM number, or describe the part",
     multiline: true,
     chips: [
@@ -532,10 +532,10 @@ export function ConversationalForm() {
           <button
             onClick={() => {
               const info = lang === "pl"
-                ? "<strong>Opłata wyszukiwania 4 960 ISK (z VAT)</strong> pokrywa: research u dostawców w Europie (Niemcy, Polska, kraje bałtyckie), weryfikację zgodności części z Twoim pojazdem (VIN/numer OEM), porównanie cen i przygotowanie najlepszej oferty. Płatna z góry, niezależnie od decyzji o zakupie. <strong>Wklej link — opłata znika.</strong>"
+                ? "Wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Za <strong>4 960 ISK (z VAT)</strong>: kontaktujemy się z naszymi zaufanymi dostawcami (Niemcy, Polska, kraje bałtyckie), <strong>negocjujemy najlepszą cenę w Twoim imieniu</strong>, sprawdzamy dopasowanie do Twojego pojazdu (VIN/OEM), porównujemy OEM vs. dobry zamiennik i przygotowujemy pełną wycenę z transportem i cłem. Płatne z góry — <strong>kwota wlicza się w cenę zamówienia, gdy kupisz</strong>. Wklej link — opłata znika."
                 : lang === "is"
-                  ? "<strong>Leitargjald 4 960 ISK (m. VSK)</strong> dekkur: leit hjá birgjum í Evrópu, staðfestingu á að hluturinn passi (VIN/OEM), verðsamanburð og besta tilboð. Greitt fyrirfram, óháð kaupum. <strong>Sendu hlekk — gjaldið fellur niður.</strong>"
-                  : "<strong>Search fee 4 960 ISK (incl. VAT)</strong> covers: sourcing across European suppliers (Germany, Poland, Baltics), verifying the part fits your vehicle (VIN / OEM check), price comparison and preparing the best offer. Paid upfront, regardless of whether you buy. <strong>Paste a link and the fee disappears.</strong>";
+                  ? "Þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Fyrir <strong>4 960 ISK (m. VSK)</strong>: höfum samband við trausta birgja okkar (Þýskaland, Pólland, Eystrasaltsríkin), <strong>semjum besta verðið fyrir þína hönd</strong>, staðfestum að hluturinn passi (VIN/OEM), berum saman OEM vs. góða aukaframleiðslu og útbúum heildartilboð með flutningi og tolli. Greitt fyrirfram — <strong>dregst frá pöntuninni þegar þú kaupir</strong>. Sendu hlekk — gjaldið fellur niður."
+                  : "You're hiring us as <strong>your buyer in Europe</strong>. For <strong>4 960 ISK (incl. VAT)</strong>: we contact our trusted EU suppliers (Germany, Poland, Baltics), <strong>negotiate the best price on your behalf</strong>, verify the part fits your vehicle (VIN/OEM), compare OEM vs. quality aftermarket options and prepare a full quote with shipping + customs included. Paid upfront — <strong>credited toward your order when you buy</strong>. Paste a link and the fee disappears.";
               setBubbles((b) => [...b, { who: "user", text: "ℹ️ Tell me more about the fee" }, { who: "bot", html: info }]);
             }}
             className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
