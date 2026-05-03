@@ -34,7 +34,7 @@ const en: Dict = {
   "form.of": "of",
   "form.privacy": "Your data is used only to process your request.",
   "form.sending": "Sending...",
-  "form.allDone": "All done! Sending your request now...",
+  "form.allDone": "✅ Got it — sending your request now. We usually reply within a few business hours.",
   "form.failed":
     "Something went wrong. Please try again or email us at parts@masgroup.is",
 
@@ -171,7 +171,7 @@ const pl: Dict = {
   "form.of": "z",
   "form.privacy": "Twoje dane służą wyłącznie do realizacji zapytania.",
   "form.sending": "Wysyłanie...",
-  "form.allDone": "Gotowe! Wysyłamy Twoje zapytanie...",
+  "form.allDone": "✅ Mamy to — wysyłamy zapytanie. Zwykle odpowiadamy w ciągu kilku godzin roboczych.",
   "form.failed": "Coś poszło nie tak. Spróbuj ponownie lub napisz na parts@masgroup.is",
 
   "benefits.kicker": "Jak to działa",
@@ -307,7 +307,7 @@ const is: Dict = {
   "form.of": "af",
   "form.privacy": "Gögnin þín eru aðeins notuð fyrir þessa beiðni.",
   "form.sending": "Sendi...",
-  "form.allDone": "Tilbúið! Sendi beiðnina þína núna...",
+  "form.allDone": "✅ Móttekið — sendi beiðnina. Við svörum yfirleitt innan nokkurra klukkustunda á virkum dögum.",
   "form.failed":
     "Eitthvað fór úrskeiðis. Reyndu aftur eða sendu póst á parts@masgroup.is",
 
