@@ -115,12 +115,15 @@ Deno.serve(async (req) => {
 
     // ---------- AI-assisted steps ----------
     if (step === "part") {
-      // If it's clearly just a URL, accept fast.
-      if (URL_RE.test(v) && v.length < 500) {
+      // If it contains URL(s), accept fast — supports multiple links.
+      if (URL_RE.test(v)) {
+        const linkCount = (v.match(/https?:\/\/\S+/gi) ?? []).length;
         return json({
           valid: true,
           normalized: v,
-          reply: "Got the link! 🔗 I'll send it to our parts team.",
+          reply: linkCount > 1
+            ? `Got <strong>${linkCount} links</strong>! 🔗 I'll send them to our parts team.`
+            : "Got the link! 🔗 I'll send it to our parts team.",
         });
       }
       if (!v || v.length < 4 || SKIP_RE.test(v)) {
