@@ -471,7 +471,10 @@ export function ConversationalForm() {
         );
         setBusy(false);
         persist({ step: next, data: workingData });
-        if (!nextStep.upload) inputRef.current?.focus();
+        // Only auto-focus on desktop — on mobile this opens the keyboard unexpectedly and shifts layout
+        if (!nextStep.upload && typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches) {
+          inputRef.current?.focus();
+        }
       }, 350);
     } else {
       setBusy(false);
