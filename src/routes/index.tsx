@@ -5,7 +5,7 @@ import { Footer } from "@/components/site/Footer";
 import { ConversationalForm } from "@/components/site/ConversationalForm";
 import { FloatContact } from "@/components/site/FloatContact";
 import {
-  Gauge, Settings2, Landmark, Wrench, TrendingDown, Sparkles,
+  Gauge, Settings2, Landmark, Wrench, TrendingDown,
   MessageSquarePlus, SearchCode, FileText, CreditCard, Truck, PackageCheck,
   Quote, Award, ArrowUpRight, MessageCircle, CheckCircle2,
 } from "lucide-react";
@@ -68,11 +68,7 @@ function Index() {
         />
         <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20 grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-white">
-            <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/15 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-mas-orange" />
-              AI-assisted · Iceland-ready
-            </span>
-            <h1 className="mt-5 text-4xl md:text-6xl font-black leading-[1.05] tracking-tight uppercase italic" style={{ fontFamily: "Exo 2", letterSpacing: "-0.02em" }}>
+            <h1 className="text-4xl md:text-6xl font-black leading-[1.05] tracking-tight uppercase italic" style={{ fontFamily: "Exo 2", letterSpacing: "-0.02em" }}>
               FOUND A PART ONLINE?<br/>
               SEND US <span className="text-mas-orange">THE LINK.</span>
             </h1>
