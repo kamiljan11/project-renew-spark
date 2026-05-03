@@ -34,7 +34,7 @@ const en: Dict = {
   "form.of": "of",
   "form.privacy": "Your data is used only to process your request.",
   "form.sending": "Sending...",
-  "form.allDone": "All done! Sending your request now...",
+  "form.allDone": "✅ Got it — sending your request now. We usually reply within a few business hours.",
   "form.failed":
     "Something went wrong. Please try again or email us at parts@masgroup.is",
 
