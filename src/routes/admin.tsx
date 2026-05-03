@@ -42,6 +42,7 @@ type Quote = {
   part: string | null;
   part_links: string | null;
   comment: string | null;
+  delivery_preference: string | null;
   photo_urls: string[] | null;
 };
 
