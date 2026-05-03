@@ -52,6 +52,19 @@ async function callAI(system: string, messages: Msg[]): Promise<any> {
                 valid: { type: "boolean", description: "Is the input usable for this step?" },
                 reply: { type: "string", description: "Short friendly bot reply (1-2 sentences). HTML <strong> ok. If valid: brief acknowledgement. If invalid: ask for what's missing." },
                 normalized: { type: "string", description: "Cleaned/normalized version of the user input to store" },
+                chips: {
+                  type: "array",
+                  description: "2-4 short quick-reply suggestions tailored to your follow-up question. Each chip pre-fills the input so the user can edit before sending. Empty array if no helpful suggestions.",
+                  items: {
+                    type: "object",
+                    properties: {
+                      label: { type: "string", description: "Short button text shown to the user (with emoji ok), max 32 chars." },
+                      fill: { type: "string", description: "Text to pre-fill into the input when chip is tapped." },
+                    },
+                    required: ["label", "fill"],
+                    additionalProperties: false,
+                  },
+                },
                 make: { type: "string" },
                 model: { type: "string" },
                 year: { type: "string" },
