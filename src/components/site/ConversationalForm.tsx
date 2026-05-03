@@ -29,7 +29,7 @@ type Step = {
 const STEPS: Step[] = [
   {
     key: "part_links", apiStep: "part",
-    ask: "Hi! 👋 What part are you looking for?<br><small style='opacity:0.7'>Pick an option below or just type — link, OEM number, or describe the part.</small>",
+    ask: "Hi 👋 Tell us what car part you need.<br><small style='opacity:0.75'>Pick one of the buttons below to start, or just type. The fastest way is to paste a link from any online shop.</small>",
     hint: "Paste a link, OEM number, or describe the part",
     multiline: true,
     chips: [

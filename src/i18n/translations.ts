@@ -28,8 +28,8 @@ const en: Dict = {
   "hero.f2": "You get an Icelandic invoice. We handle customs.",
   "hero.f3": "Don't have a link? We search for you. Only 4,960 ISK (VAT included).",
 
-  "form.title": "Request a Part",
-  "form.sub": "Free quote · no commitment",
+  "form.title": "Get a Price for Your Part",
+  "form.sub": "Answer a few questions — we reply with the total price.",
   "form.step": "Step",
   "form.of": "of",
   "form.privacy": "Your data is used only to process your request.",
@@ -165,8 +165,8 @@ const pl: Dict = {
   "hero.f2": "Dostajesz islandzką fakturę. My ogarniamy cło.",
   "hero.f3": "Brak linku? Szukamy za Ciebie. Tylko 4 960 ISK (z VAT).",
 
-  "form.title": "Zapytanie o część",
-  "form.sub": "Darmowa wycena · bez zobowiązań",
+  "form.title": "Sprawdź cenę części",
+  "form.sub": "Odpowiedz na kilka pytań — odeślemy Ci całkowitą cenę.",
   "form.step": "Krok",
   "form.of": "z",
   "form.privacy": "Twoje dane służą wyłącznie do realizacji zapytania.",
@@ -301,8 +301,8 @@ const is: Dict = {
   "hero.f2": "Þú færð íslenskan reikning. Við sjáum um tollinn.",
   "hero.f3": "Engan hlekk? Við leitum fyrir þig. Aðeins 4.960 kr. (VSK innifalinn)",
 
-  "form.title": "Pöntun á varahlut",
-  "form.sub": "Ókeypis tilboð · engin skuldbinding",
+  "form.title": "Fáðu verð á varahlut",
+  "form.sub": "Svaraðu nokkrum spurningum — við sendum heildarverðið.",
   "form.step": "Skref",
   "form.of": "af",
   "form.privacy": "Gögnin þín eru aðeins notuð fyrir þessa beiðni.",
