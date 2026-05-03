@@ -58,11 +58,14 @@ function Index() {
         <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20 grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-white">
             <h1 className="text-4xl md:text-6xl font-black leading-[1.05] tracking-tight uppercase italic" style={{ fontFamily: "Exo 2", letterSpacing: "-0.02em" }}>
-              GOT A LINK?<br/>
-              OR JUST <span className="text-mas-orange">A PART NAME?</span>
+              CAR PARTS<br/>
+              SHIPPED TO <span className="text-mas-orange">ICELAND.</span>
             </h1>
-            <p className="mt-6 text-lg text-white/80 max-w-xl leading-relaxed">
-              Send us the link — or describe what you need and we'll find it. We buy it, ship it to Iceland, and deliver to your door with a full Icelandic VAT invoice. No customs, no surprise costs.
+            <p className="mt-6 text-lg text-white/85 max-w-xl leading-relaxed">
+              Need a car part? Send us a link to one you found online, or just tell us what you need in the form on the right — we'll buy it, ship it to Iceland, and deliver to your door. Full Icelandic VAT invoice, no customs to deal with.
+            </p>
+            <p className="mt-4 lg:hidden text-sm text-white/70">
+              👉 Scroll down to fill in the form.
             </p>
           </div>
           <div className="lg:pl-6">
