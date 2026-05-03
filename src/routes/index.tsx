@@ -5,9 +5,8 @@ import { Footer } from "@/components/site/Footer";
 import { ConversationalForm } from "@/components/site/ConversationalForm";
 import { FloatContact } from "@/components/site/FloatContact";
 import {
-  Gauge, Settings2, Landmark, Wrench, TrendingDown, Container,
   MessageSquarePlus, SearchCode, FileText, CreditCard, Truck, PackageCheck,
-  Quote, Award, ArrowUpRight, MessageCircle, CheckCircle2,
+  Quote, Award,
 } from "lucide-react";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
