@@ -60,7 +60,7 @@ const en: Dict = {
   "process.titleB": "WORKS",
   "process.lead": "6 steps from your message to the part at your door.",
   "process.s1.t": "Send what you need",
-  "process.s1.d": "Fill out the form: paste a link to the part you found online, or describe what you need. No link? We'll search for you — a one-off search fee of 4 960 ISK (incl. VAT) applies, paid upfront before we start looking. Payment details are sent after you submit the form.",
+  "process.s1.d": "Fill out the form: paste a link to the part you found online, or describe what you need. No link? <strong>We become your buyer in Europe</strong> — we hunt down the part across trusted EU suppliers, negotiate the best price on your behalf, verify it fits your vehicle (VIN/OEM) and handle the paperwork. A one-off <strong>4 960 ISK (incl. VAT) sourcing fee</strong> covers our work and is paid upfront. If you order, it's credited toward your total — so you only pay it once.",
   "process.s2.t": "We check the part",
   "process.s2.d": "We verify availability, check the price, and calculate the full cost including shipping to Iceland.",
   "process.s3.t": "You get the total",
