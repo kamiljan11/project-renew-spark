@@ -196,10 +196,9 @@ function Index() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest">
               Knowledge
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold uppercase leading-tight text-navy" style={{ letterSpacing: "-0.02em" }}>
-              FREQUENT <span className="italic text-mas-orange">QUESTIONS</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-navy" style={{ letterSpacing: "-0.02em" }}>
+              Frequent questions
             </h2>
-            <p className="text-slate-500 mt-4">Everything you need to know about working with MAS Parts in one place.</p>
           </div>
           <Accordion type="single" collapsible className="space-y-2">
             {FAQ.map(([q, a], i) => (
