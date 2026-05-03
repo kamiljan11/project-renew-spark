@@ -330,10 +330,10 @@ export function ConversationalForm() {
         )}
       </div>
 
-      {/* Quick-reply chips */}
-      {!done && cur.chips && !busy && (
+      {/* Quick-reply chips: AI-suggested (dynamicChips) take priority over static cur.chips */}
+      {!done && !busy && (dynamicChips?.length || cur.chips?.length) && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
-          {cur.chips.map((chip) => (
+          {(dynamicChips?.length ? dynamicChips : cur.chips ?? []).map((chip) => (
             <button
               key={chip.label}
               onClick={() => onChip(chip)}
