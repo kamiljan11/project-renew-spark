@@ -83,63 +83,24 @@ function Index() {
         </div>
       </section>
 
-      {/* BENEFITS */}
-      <section id="benefits" className="w-full py-16 px-6 bg-[#f3f4f6]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-navy text-white text-xs font-bold uppercase tracking-widest">
-              How it works
-            </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-4 uppercase text-navy" style={{ letterSpacing: "-0.02em" }}>
-              WHAT YOU <span className="italic text-mas-orange">ACTUALLY GET</span>
-            </h2>
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <div className="h-1 w-12 bg-slate-300 rounded" />
-              <div className="h-1.5 w-6 rounded-full bg-mas-orange" />
-              <div className="h-1 w-12 bg-slate-300 rounded" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {BENEFITS.map(({ icon: Icon, t, d }) => (
-              <div key={t} className="parts-card group p-8 rounded-xl flex flex-col items-start">
-                <div className="icon-box p-3 rounded-lg mb-6 group-hover:scale-110 transition-transform">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold mb-3 italic uppercase text-navy">{t}</h3>
-                <p className="text-slate-500 leading-relaxed">{d}</p>
-              </div>
-            ))}
-            <div className="relative rounded-xl p-8 flex flex-col items-center justify-center text-center shadow-xl overflow-hidden bg-navy">
-              <div className="absolute bottom-0 left-0 w-full h-2 bg-mas-orange" />
-              <h3 className="text-2xl font-black italic text-white mb-2 uppercase tracking-tighter">Have questions?</h3>
-              <p className="text-slate-300 text-xs mb-4">Write to us and we'll get back to you within a few hours.</p>
-              <button onClick={() => setContactOpen(true)} className="w-full text-white px-6 py-4 font-black uppercase tracking-widest transition-all bg-mas-orange hover:opacity-90">
-                Contact us
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* PROCESS */}
       <section id="proces" className="w-full py-16 px-6 bg-[#f3f4f6]">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-200 text-navy text-xs font-bold uppercase tracking-widest">
-              Our Process
+              How it works
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-4 uppercase text-navy" style={{ letterSpacing: "-0.02em" }}>
-              HOW IT <span className="italic text-mas-orange">WORKS</span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 text-navy" style={{ letterSpacing: "-0.02em" }}>
+              From your link to your door in 6 steps
             </h2>
-            <p className="text-slate-600 text-lg max-w-2xl mx-auto font-medium">6 steps from your message to the part at your door.</p>
+            <p className="text-slate-600 max-w-xl mx-auto">No phone calls. No customs paperwork. No surprise costs.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {PROCESS.map(({ n, icon: Icon, t, d }) => (
               <div key={n} className="parts-card p-5 md:p-8 rounded-xl relative group">
                 <span className="step-number">{n}</span>
                 <div className="mb-4 text-mas-orange"><Icon className="w-8 h-8" /></div>
-                <h4 className="text-xl font-bold mb-2 uppercase text-navy">{t}</h4>
+                <h4 className="text-lg font-bold mb-2 text-navy">{t}</h4>
                 <p className="text-slate-500 text-sm">{d}</p>
               </div>
             ))}
