@@ -134,6 +134,7 @@ export function ConversationalForm() {
   };
 
   const advanceStep = () => {
+    setDynamicChips(null);
     const next = step + 1;
     if (next < STEPS.length) {
       setTimeout(() => {
