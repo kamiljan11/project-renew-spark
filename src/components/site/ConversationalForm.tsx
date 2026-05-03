@@ -383,7 +383,7 @@ export function ConversationalForm() {
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           <button
             onClick={() => { setAwaitingMoreParts(false); setVal(""); inputRef.current?.focus(); }}
-            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+            className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
           >➕ Add another part</button>
           <button
             onClick={() => {
@@ -399,7 +399,7 @@ export function ConversationalForm() {
               }]);
               inputRef.current?.focus();
             }}
-            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+            className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
           >🔗 Paste link instead</button>
           <button
             onClick={() => {
@@ -410,7 +410,7 @@ export function ConversationalForm() {
                   : "<strong>Search fee 4 960 ISK (incl. VAT)</strong> covers: sourcing across European suppliers (Germany, Poland, Baltics), verifying the part fits your vehicle (VIN / OEM check), price comparison and preparing the best offer. Paid upfront, regardless of whether you buy. <strong>Paste a link and the fee disappears.</strong>";
               setBubbles((b) => [...b, { who: "user", text: "ℹ️ Tell me more about the fee" }, { who: "bot", html: info }]);
             }}
-            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+            className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
           >ℹ️ More about fee</button>
           <button
             onClick={() => { setAwaitingMoreParts(false); advanceStep(); }}
@@ -426,7 +426,7 @@ export function ConversationalForm() {
             <button
               key={chip.label}
               onClick={() => onChip(chip)}
-              className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+              className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
             >
               {chip.label}
             </button>
