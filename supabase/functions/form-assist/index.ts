@@ -80,7 +80,7 @@ async function callAI(system: string, messages: Msg[]): Promise<any> {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
-    const { step, value, lang = "en" }: ReqBody = await req.json();
+    const { step, value, lang = "en", history = [] }: ReqBody = await req.json();
     const v = (value ?? "").trim();
 
     // ---------- Heuristic fast-paths (no AI call) ----------
