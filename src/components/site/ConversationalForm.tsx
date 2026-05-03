@@ -509,7 +509,7 @@ export function ConversationalForm() {
       })()}
 
       {/* Multi-part loop: after a part is accepted, let the user add more or move on */}
-      {!done && !busy && awaitingMoreParts && (
+      {!done && !reviewing && !busy && awaitingMoreParts && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           <button
             onClick={() => { setAwaitingMoreParts(false); setVal(""); inputRef.current?.focus(); }}
@@ -550,7 +550,7 @@ export function ConversationalForm() {
       )}
 
       {/* Quick-reply chips: AI-suggested (dynamicChips) take priority over static cur.chips */}
-      {!done && !busy && !awaitingMoreParts && !!(dynamicChips?.length || cur.chips?.length) && (
+      {!done && !reviewing && !busy && !awaitingMoreParts && !!(dynamicChips?.length || cur.chips?.length) && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           {(dynamicChips?.length ? dynamicChips : cur.chips ?? []).map((chip) => (
             <button
@@ -564,7 +564,7 @@ export function ConversationalForm() {
         </div>
       )}
 
-      {!done && cur.upload && (
+      {!done && !reviewing && cur.upload && (
         <div className="px-5 pb-5 pt-1">
           <input
             ref={fileInputRef}
@@ -618,7 +618,7 @@ export function ConversationalForm() {
         </div>
       )}
 
-      {!done && !cur.upload && (
+      {!done && !reviewing && !cur.upload && (
         <div className="px-5 pb-5">
           <div className="relative">
             <textarea
