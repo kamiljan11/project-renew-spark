@@ -148,14 +148,12 @@ function Index() {
                 <div className="inline-block mb-6 px-4 py-1 rounded-sm text-xs font-bold uppercase tracking-widest border-l-2 text-mas-orange border-mas-orange bg-white/10">
                   Built on experience
                 </div>
-                <h2 className="text-3xl md:text-5xl font-black italic text-white mb-8 uppercase" style={{ letterSpacing: "-0.02em" }}>
-                  FROM WORKSHOP OWNERS,<br />
-                  <span className="text-mas-orange">FOR WORKSHOP OWNERS</span>
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6" style={{ letterSpacing: "-0.02em" }}>
+                  From workshop owners,<br />
+                  <span className="text-mas-orange">for workshop owners</span>
                 </h2>
-                <div className="space-y-6 text-slate-300 text-lg leading-relaxed text-left">
-                  <p>We didn't just open a trading company; <span className="text-white font-bold italic">we created a solution to our own problems.</span></p>
-                  <p>Our experience is based on running a total of 4 of our own workshops, so we perfectly understand the challenges you face every day. We know the stress of a car blocking a lift because of a missing bolt.</p>
-                  <p>MAS Parts was created to effectively solve one of the key problems in the industry: <span className="text-mas-orange font-bold uppercase">Logistics.</span> We take the problems on ourselves so you can focus on the work.</p>
+                <div className="space-y-4 text-slate-300 text-base md:text-lg leading-relaxed text-left">
+                  <p>We run 4 workshops ourselves. We know the stress of a car blocking a lift because of a missing bolt — so we built MAS Parts to fix the one thing that always slows the job down: <span className="text-mas-orange font-semibold">logistics.</span></p>
                 </div>
                 <div className="mt-12 flex flex-wrap items-center gap-8 md:gap-12 border-t border-slate-800 pt-8">
                   {[["4","Own workshops"],["99%","Available parts"],["11+","B2B Partners"]].map(([num, lbl], i) => (
