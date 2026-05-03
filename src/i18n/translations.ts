@@ -301,8 +301,8 @@ const is: Dict = {
   "hero.f2": "Þú færð íslenskan reikning. Við sjáum um tollinn.",
   "hero.f3": "Engan hlekk? Við leitum fyrir þig. Aðeins 4.960 kr. (VSK innifalinn)",
 
-  "form.title": "Pöntun á varahlut",
-  "form.sub": "Ókeypis tilboð · engin skuldbinding",
+  "form.title": "Fáðu verð á varahlut",
+  "form.sub": "Svaraðu nokkrum spurningum — við sendum heildarverðið.",
   "form.step": "Skref",
   "form.of": "af",
   "form.privacy": "Gögnin þín eru aðeins notuð fyrir þessa beiðni.",
