@@ -375,6 +375,40 @@ Deno.serve(async (req) => {
 
     // ---------- AI-assisted steps ----------
     if (step === "part") {
+      // ---- FAQ INTERCEPT ----
+      // If the user asks a question (about payment, shipping, fee, timing, refunds,
+      // process, etc.) instead of giving a part, answer it and stay on this step.
+      const isQuestion = /\?\s*$/.test(v) || /^(how|what|when|where|why|who|do you|does|can (i|you|we)|is (it|there)|are (you|there)|jak|co|ile|kiedy|gdzie|czy|hvernig|hvað|hvenær|hvar)\b/i.test(v);
+      const faqKeywords = /(pay|payment|fee|cost|price|cena|cennik|opłat|koszt|verð|gjald|borga|ship|shipping|delivery|wysyłk|dostaw|sending|afhend|refund|zwrot|return|cło|customs|toll|vat|invoice|faktur|how long|czas|hversu lengi|safe|trust|guarantee|gwarancj|ábyrgð)/i.test(v);
+      if (!URL_RE.test(v) && isQuestion && (faqKeywords || v.length < 60)) {
+        const faqSys = `You are MAS Parts Iceland's friendly assistant. The user is asking a QUESTION mid-flow (not giving a part). Answer briefly (max 50 words), in language: ${safeLang}. Use <strong> for key facts.
+
+KEY FACTS:
+- We source auto, truck, agri & machinery parts to Iceland from EU suppliers.
+- Two paths:
+  (1) Customer pastes a link → pays only <strong>parts + shipping</strong> (customs included). NO search fee.
+  (2) Customer describes part → <strong>4 960 ISK (incl. VAT)</strong> search fee, paid upfront. Covers EU sourcing, OEM/VIN fit-check, price comparison, best-offer prep. Credited toward order if they buy.
+- Payment: bank transfer or card invoice — our team emails instructions after the request is submitted.
+- Shipping: standard (cheaper, ~7-14 days) or express (fastest). We quote both on request.
+- Customs clearance is included in the shipping price.
+- No order is placed without customer confirmation of the final quote.
+
+After answering, gently ask if they want to add another part or continue. NEVER claim to have submitted anything yet.
+Return valid=false so the flow stays here. chips=[].`;
+        try {
+          const msgs: Msg[] = trimmedHistory.length ? [...trimmedHistory, { role: "user", content: v }] : [{ role: "user", content: v }];
+          const out = await callAI(faqSys, msgs);
+          return json({ valid: false, normalized: v, reply: out?.reply ?? "Sure — ask away!", chips: [] });
+        } catch {
+          const fallback = safeLang === "pl"
+            ? "Po wysłaniu zapytania nasz zespół wyśle Ci e-mailem instrukcje płatności i finalną wycenę. Dodać kolejną część czy lecimy dalej?"
+            : safeLang === "is"
+              ? "Eftir að beiðnin er send sendir teymið okkar greiðsluleiðbeiningar og lokatilboð í tölvupósti. Bæta við hlut eða halda áfram?"
+              : "Once you submit, our team emails you payment instructions and the final quote. Add another part or continue?";
+          return json({ valid: false, normalized: v, reply: fallback, chips: [] });
+        }
+      }
+
       // If it contains URL(s), accept fast — supports multiple links.
       // PATH 1 — links: parts + shipping (no search fee).
       if (URL_RE.test(v)) {
