@@ -501,11 +501,11 @@ export function ConversationalForm() {
               }}
               placeholder={cur.hint}
               rows={cur.multiline ? 3 : 1}
-              className="w-full rounded-xl py-3 pl-3.5 pr-12 text-sm outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
+              className="w-full rounded-xl py-3.5 pl-4 pr-14 text-base outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
               style={{ borderColor: hintErr ? "#ef4444" : "" }}
             />
-            <button onClick={onNext} disabled={busy} className="absolute right-2.5 bottom-2.5 w-9 h-9 rounded-full bg-mas-orange border-0 cursor-pointer flex items-center justify-center disabled:opacity-60" style={{ boxShadow: "0 2px 8px color-mix(in oklab, var(--mas-orange) 40%, transparent)" }}>
-              <ArrowRight className="w-4 h-4 text-white" />
+            <button onClick={onNext} disabled={busy} aria-label="Continue" className="absolute right-2.5 bottom-2.5 w-11 h-11 rounded-full bg-mas-orange border-0 cursor-pointer flex items-center justify-center disabled:opacity-60" style={{ boxShadow: "0 2px 8px color-mix(in oklab, var(--mas-orange) 40%, transparent)" }}>
+              <ArrowRight className="w-5 h-5 text-white" />
             </button>
           </div>
           <div className="flex items-center justify-between mt-1.5">
