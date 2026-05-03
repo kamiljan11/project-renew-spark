@@ -105,6 +105,8 @@ export function ConversationalForm() {
   const [awaitingMoreParts, setAwaitingMoreParts] = useState(false);
   const [dynamicChips, setDynamicChips] = useState<Chip[] | null>(null);
   const [done, setDone] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
+  const [, force] = useState(0);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
