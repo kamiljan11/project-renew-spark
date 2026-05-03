@@ -171,7 +171,7 @@ const pl: Dict = {
   "form.of": "z",
   "form.privacy": "Twoje dane służą wyłącznie do realizacji zapytania.",
   "form.sending": "Wysyłanie...",
-  "form.allDone": "Gotowe! Wysyłamy Twoje zapytanie...",
+  "form.allDone": "✅ Mamy to — wysyłamy zapytanie. Zwykle odpowiadamy w ciągu kilku godzin roboczych.",
   "form.failed": "Coś poszło nie tak. Spróbuj ponownie lub napisz na parts@masgroup.is",
 
   "benefits.kicker": "Jak to działa",
