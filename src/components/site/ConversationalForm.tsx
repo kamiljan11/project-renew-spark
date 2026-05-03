@@ -471,7 +471,10 @@ export function ConversationalForm() {
         );
         setBusy(false);
         persist({ step: next, data: workingData });
-        if (!nextStep.upload) inputRef.current?.focus();
+        // Only auto-focus on desktop — on mobile this opens the keyboard unexpectedly and shifts layout
+        if (!nextStep.upload && typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches) {
+          inputRef.current?.focus();
+        }
       }, 350);
     } else {
       setBusy(false);
@@ -746,7 +749,7 @@ export function ConversationalForm() {
       <div
         ref={chatRef}
         className="px-4 pt-4 pb-2 flex flex-col gap-2.5"
-        style={{ minHeight: 160, maxHeight: "min(340px,40vh)", overflowY: "auto" }}
+        style={{ minHeight: 160, maxHeight: "min(340px,40svh)", overflowY: "auto", overscrollBehavior: "contain" }}
         aria-live="polite"
         aria-atomic="false"
         role="log"
@@ -1026,6 +1029,12 @@ export function ConversationalForm() {
               value={val}
               onChange={(e) => setVal(e.target.value)}
               disabled={busy}
+              onFocus={() => {
+                // Prevent iOS keyboard from hiding the input
+                setTimeout(() => {
+                  inputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+                }, 250);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (!cur.multiline || !e.shiftKey)) { e.preventDefault(); onNext(); }
               }}
@@ -1033,8 +1042,11 @@ export function ConversationalForm() {
               rows={cur.multiline ? 3 : 1}
               maxLength={maxLen ? maxLen + 50 : undefined}
               aria-label={cur.hint || cur.key}
-              className="w-full rounded-xl py-3.5 pl-4 pr-14 text-base outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
-              style={{ borderColor: hintErr || overLimit ? "#ef4444" : "" }}
+              enterKeyHint={cur.multiline ? "enter" : "send"}
+              inputMode={cur.key === "phone" ? "tel" : cur.key === "email" ? "email" : "text"}
+              autoComplete={cur.key === "phone" ? "tel" : cur.key === "email" ? "email" : cur.key === "company" ? "organization" : cur.key === "address" ? "street-address" : "off"}
+              className="w-full rounded-xl py-3.5 pl-4 pr-14 outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
+              style={{ borderColor: hintErr || overLimit ? "#ef4444" : "", fontSize: "16px" }}
             />
             <button
               onClick={onNext}
