@@ -337,7 +337,7 @@ const is: Dict = {
   "process.s2.t": "Við athugum hlutinn",
   "process.s2.d": "Við staðfestum framboð, verð og heildarkostnað með flutningi til Íslands.",
   "process.s3.t": "Þú færð heildarverðið",
-  "process.s3.d": "Ein tala: hlutur + flutningur + þóknun. Engin falinn kostnaður.",
+  "process.s3.d": "Ein tala: hlutur + flutningur + lítil þjónustuþóknun. Engin falinn kostnaður.",
   "process.s4.t": "Þú samþykkir",
   "process.s4.d": "Þú segir já og borgar. Við pöntum strax hjá birgi.",
   "process.s5.t": "Við sendum",
