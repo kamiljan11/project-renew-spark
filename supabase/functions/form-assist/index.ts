@@ -16,7 +16,18 @@ type ReqBody = {
   lang?: "en" | "pl" | "is";
   history?: Msg[];
 };
-type Chip = { label: string; fill: string };
+type Chip = { label: string; fill?: string; info?: string };
+
+// Localized fee-explanation text shown when user taps "More about fee".
+function feeInfoText(lang: "en" | "pl" | "is"): string {
+  if (lang === "pl") {
+    return "<strong>Opłata wyszukiwania 4 960 ISK (z VAT)</strong> pokrywa: research u dostawców w Europie (Niemcy, Polska, kraje bałtyckie), weryfikację zgodności części z Twoim pojazdem (VIN/numer OEM), porównanie cen i przygotowanie najlepszej oferty. Płacona z góry, BEZ względu na to czy zdecydujesz się kupić. Jeśli kupisz — wlicza się w cenę zamówienia. <strong>Wklej link i opłata znika.</strong>";
+  }
+  if (lang === "is") {
+    return "<strong>Leitargjald 4 960 ISK (m. VSK)</strong> dekkur: leit hjá birgjum í Evrópu (Þýskaland, Pólland, Eystrasaltsríkin), staðfestingu á að hluturinn passi við ökutækið (VIN/OEM númer), verðsamanburð og bestu tilboð. Greitt fyrirfram, óháð því hvort þú kaupir. Ef þú kaupir — dregst frá pöntuninni. <strong>Sendu hlekk og gjaldið fellur niður.</strong>";
+  }
+  return "<strong>Search fee 4 960 ISK (incl. VAT)</strong> covers: sourcing across European suppliers (Germany, Poland, Baltics), verifying the part fits your vehicle (VIN / OEM check), price comparison and preparing the best offer. Paid upfront — regardless of whether you buy. If you do buy, it's credited toward your order. <strong>Paste a link and the fee disappears.</strong>";
+}
 
 const URL_RE = /https?:\/\/[^\s]+/i;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
