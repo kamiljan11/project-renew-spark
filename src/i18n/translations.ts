@@ -190,7 +190,7 @@ const pl: Dict = {
   "benefits.b1.t": "Szybka dostawa",
   "benefits.b1.d": "Znajdujemy najszybszą trasę dla Twojego zamówienia. Termin dostawy znasz przed zapłatą.",
   "benefits.b2.t": "Znajdziemy każdą część",
-  "benefits.b2.d": "Brak linku? Po prostu opisz część. Sprawdzamy europejskich dostawców i wysyłamy cenę. Opłata za szukanie: 4 960 ISK (z VAT).",
+  "benefits.b2.d": "Brak linku? Opisz część — <strong>działamy jako Twój kupiec w Europie</strong>: szukamy u sprawdzonych dostawców, negocjujemy najlepszą cenę w Twoim imieniu i sprawdzamy dopasowanie do Twojego auta. Opłata za naszą pracę: 4 960 ISK (z VAT) — wliczana w cenę zamówienia.",
   "benefits.b3.t": "Islandzka faktura",
   "benefits.b3.d": "Każde zamówienie z fakturą VAT z Islandii. Wrzucasz w koszty firmy. Cło bierzemy na siebie.",
   "benefits.b4.t": "Bez stresu z pośrednikami",
