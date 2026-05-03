@@ -746,7 +746,7 @@ export function ConversationalForm() {
       <div
         ref={chatRef}
         className="px-4 pt-4 pb-2 flex flex-col gap-2.5"
-        style={{ minHeight: 160, maxHeight: "min(340px,40vh)", overflowY: "auto" }}
+        style={{ minHeight: 160, maxHeight: "min(340px,40svh)", overflowY: "auto", overscrollBehavior: "contain" }}
         aria-live="polite"
         aria-atomic="false"
         role="log"
