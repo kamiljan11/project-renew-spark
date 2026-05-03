@@ -14,6 +14,7 @@ const GREETINGS: Record<string, string> = {
 export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: boolean) => void }) {
   const { t, lang } = useLang();
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [history, setHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [val, setVal] = useState("");
   const [busy, setBusy] = useState(false);
   const [stage, setStage] = useState<"chat" | "details" | "done">("chat");
