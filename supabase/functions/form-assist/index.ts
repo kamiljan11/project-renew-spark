@@ -405,7 +405,10 @@ Deno.serve(async (req) => {
       const isQuestion = /\?\s*$/.test(v) || /^(how|what|when|where|why|who|do you|does|can (i|you|we)|is (it|there)|are (you|there)|jak|co|ile|kiedy|gdzie|czy|hvernig|hvað|hvenær|hvar)\b/i.test(v);
       const faqKeywords = /(pay|payment|fee|cost|price|cena|cennik|opłat|koszt|verð|gjald|borga|ship|shipping|delivery|wysyłk|dostaw|sending|afhend|refund|zwrot|return|cło|customs|toll|vat|invoice|faktur|how long|czas|hversu lengi|safe|trust|guarantee|gwarancj|ábyrgð)/i.test(v);
       if (!URL_RE.test(v) && isQuestion && (faqKeywords || v.length < 60)) {
-        const faqSys = `You are MAS Parts Iceland's friendly assistant. The user is asking a QUESTION mid-flow (not giving a part). Answer briefly (max 60 words), in language: ${safeLang}. Use <strong> for key facts. Be specific — pull the exact answer from the facts below.
+        const faqLangName = safeLang === "pl" ? "Polish (polski)" : safeLang === "is" ? "Icelandic (íslenska)" : "English";
+        const faqSys = `LANGUAGE: You MUST reply ENTIRELY in ${faqLangName}. Even if the user writes in another language, your "reply" stays in ${faqLangName}. Do not mix languages.
+
+You are MAS Parts Iceland's friendly assistant. The user is asking a QUESTION mid-flow (not giving a part). Answer briefly (max 60 words). Use <strong> for key facts. Be specific — pull the exact answer from the facts below.
 
 ═══ COMPANY ═══
 - MAS Parts Iceland — we source new & used auto, truck, agri & machinery parts from EU suppliers (Germany, Poland, Baltics, Netherlands) and ship to Iceland. Any size, any weight.
