@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Package, Upload, X, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, Package, Upload, X, Image as ImageIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/i18n/LanguageContext";
 import { useNavigate } from "@tanstack/react-router";
@@ -133,6 +133,31 @@ export function ConversationalForm() {
       setBubbles((b) => [...b, { who: "bot", html: t("form.failed") }]);
       setDone(false);
     }
+  };
+
+  const goBack = () => {
+    if (busy || step === 0) return;
+    const prev = step - 1;
+    const prevKey = STEPS[prev].key;
+    delete data[prevKey];
+    if (prevKey === "part_links") {
+      setPartItems([]);
+      setPartHistory([]);
+    }
+    setBubbles((b) => {
+      const arr = [...b].filter((x) => x.who !== "typing");
+      let lastUser = -1;
+      for (let i = arr.length - 1; i >= 0; i--) if (arr[i].who === "user") { lastUser = i; break; }
+      const trimmed = lastUser === -1 ? arr : arr.slice(0, lastUser);
+      return [...trimmed, { who: "bot", html: STEPS[prev].ask }];
+    });
+    setStep(prev);
+    setVal("");
+    setDynamicChips(null);
+    setAwaitingMoreParts(false);
+    setHintErr(false);
+    setHintMsg(STEPS[prev].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setTimeout(() => inputRef.current?.focus(), 50);
   };
 
   const advanceStep = () => {
@@ -320,8 +345,20 @@ export function ConversationalForm() {
             <div className="text-[11px] text-muted-foreground">{t("form.sub")}</div>
           </div>
         </div>
-        <div className="text-[11px] font-bold text-mas-orange bg-orange-50 px-2.5 py-1 rounded-full">
-          {t("form.step")} {Math.min(step + 1, STEPS.length)} {t("form.of")} {STEPS.length}
+        <div className="flex items-center gap-2">
+          {!done && step > 0 && (
+            <button
+              onClick={goBack}
+              disabled={busy}
+              className="flex items-center gap-1 text-[12px] font-semibold text-navy bg-white hover:bg-slate-100 active:bg-slate-200 transition-colors rounded-full px-3 py-1.5 border border-slate-300 disabled:opacity-50"
+              aria-label="Go back to previous step"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> {t("form.back") || "Back"}
+            </button>
+          )}
+          <div className="text-[11px] font-bold text-mas-orange bg-orange-50 px-2.5 py-1 rounded-full">
+            {t("form.step")} {Math.min(step + 1, STEPS.length)} {t("form.of")} {STEPS.length}
+          </div>
         </div>
       </div>
       <div className="h-1 bg-muted">
@@ -346,7 +383,7 @@ export function ConversationalForm() {
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           <button
             onClick={() => { setAwaitingMoreParts(false); setVal(""); inputRef.current?.focus(); }}
-            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+            className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
           >➕ Add another part</button>
           <button
             onClick={() => {
@@ -362,7 +399,7 @@ export function ConversationalForm() {
               }]);
               inputRef.current?.focus();
             }}
-            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+            className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
           >🔗 Paste link instead</button>
           <button
             onClick={() => {
@@ -373,7 +410,7 @@ export function ConversationalForm() {
                   : "<strong>Search fee 4 960 ISK (incl. VAT)</strong> covers: sourcing across European suppliers (Germany, Poland, Baltics), verifying the part fits your vehicle (VIN / OEM check), price comparison and preparing the best offer. Paid upfront, regardless of whether you buy. <strong>Paste a link and the fee disappears.</strong>";
               setBubbles((b) => [...b, { who: "user", text: "ℹ️ Tell me more about the fee" }, { who: "bot", html: info }]);
             }}
-            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+            className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
           >ℹ️ More about fee</button>
           <button
             onClick={() => { setAwaitingMoreParts(false); advanceStep(); }}
@@ -389,7 +426,7 @@ export function ConversationalForm() {
             <button
               key={chip.label}
               onClick={() => onChip(chip)}
-              className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+              className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
             >
               {chip.label}
             </button>
@@ -464,17 +501,17 @@ export function ConversationalForm() {
               }}
               placeholder={cur.hint}
               rows={cur.multiline ? 3 : 1}
-              className="w-full rounded-xl py-3 pl-3.5 pr-12 text-sm outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
+              className="w-full rounded-xl py-3.5 pl-4 pr-14 text-base outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
               style={{ borderColor: hintErr ? "#ef4444" : "" }}
             />
-            <button onClick={onNext} disabled={busy} className="absolute right-2.5 bottom-2.5 w-9 h-9 rounded-full bg-mas-orange border-0 cursor-pointer flex items-center justify-center disabled:opacity-60" style={{ boxShadow: "0 2px 8px color-mix(in oklab, var(--mas-orange) 40%, transparent)" }}>
-              <ArrowRight className="w-4 h-4 text-white" />
+            <button onClick={onNext} disabled={busy} aria-label="Continue" className="absolute right-2.5 bottom-2.5 w-11 h-11 rounded-full bg-mas-orange border-0 cursor-pointer flex items-center justify-center disabled:opacity-60" style={{ boxShadow: "0 2px 8px color-mix(in oklab, var(--mas-orange) 40%, transparent)" }}>
+              <ArrowRight className="w-5 h-5 text-white" />
             </button>
           </div>
-          <div className="flex items-center justify-between mt-1.5">
-            <p className="text-[11px] m-0" style={{ color: hintErr ? "#ef4444" : "var(--muted-foreground)" }}>{busy ? "Thinking…" : hintMsg}</p>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-xs m-0" style={{ color: hintErr ? "#ef4444" : "var(--muted-foreground)" }}>{busy ? "Thinking…" : hintMsg}</p>
             {cur.optional && !busy && (
-              <button onClick={() => { setVal(""); onNext(); }} className="text-[11px] text-muted-foreground bg-transparent border-0 cursor-pointer underline">Skip this step</button>
+              <button onClick={() => { setVal(""); onNext(); }} className="text-xs text-muted-foreground bg-transparent border-0 cursor-pointer underline px-2 py-1">Skip this step</button>
             )}
           </div>
         </div>
