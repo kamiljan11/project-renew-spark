@@ -64,7 +64,7 @@ const en: Dict = {
   "process.s2.t": "We check the part",
   "process.s2.d": "We verify availability, check the price, and calculate the full cost including shipping to Iceland.",
   "process.s3.t": "You get the total",
-  "process.s3.d": "We send you one number: part + shipping + our small service fee. No hidden costs. You decide if you want to proceed.",
+  "process.s3.d": "We send you one number: part + shipping + customs clearance + our small service fee. No hidden costs. You decide if you want to proceed.",
   "process.s4.t": "You confirm",
   "process.s4.d": "You say yes, you pay. We immediately place the order with the supplier.",
   "process.s5.t": "We ship it",
