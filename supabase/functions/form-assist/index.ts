@@ -160,7 +160,80 @@ Reply MUST be in language: ${lang}. Keep reply under 25 words. Use <strong> for 
       return json({ valid: ok, normalized: v, reply: ok ? "Address noted. ✓" : "Please give a delivery address in Iceland." });
     }
 
+    // Freeform message (used by the floating contact widget). Accepts greetings,
+    // off-topic chit-chat, and part requests. AI replies conversationally and
+    // tells us whether the message is "submittable" (contains an actual request).
+    if (step === "freeform") {
+      if (!v) {
+        return json({ valid: false, submit: false, normalized: "", reply: "Write a message and I'll help 🙂" });
+      }
+      if (SKIP_RE.test(v) || v.length < 3) {
+        const greetings: Record<string, string> = {
+          en: "Hi! 👋 What part are you looking for? You can paste a link or describe it (car make, model, year + part).",
+          pl: "Cześć! 👋 Jakiej części szukasz? Wklej link albo opisz (marka, model, rok + część).",
+          is: "Halló! 👋 Hvaða varahlut ert þú að leita að? Þú getur sent hlekk eða lýst (tegund, árgerð + hlutur).",
+        };
+        return json({ valid: false, submit: false, normalized: v, reply: greetings[lang] ?? greetings.en });
+      }
+      const sys = `You are a friendly chat assistant for MAS Parts Iceland (we import auto parts to Iceland).
+The user wrote a message via the floating contact widget. It can be:
+- a greeting / smalltalk → reply warmly, ask what part they need.
+- an off-topic question (about Iceland, weather, prices in general, our company, hours, payment) → answer briefly + steer back to: "What part do you need?".
+- a real part request (link OR car + part description) → acknowledge and confirm we'll get back to them.
+- a vague request ("I need a part") → ask for car make, model, year + which part.
+
+Always reply in language: ${lang}. Keep reply under 35 words. Be warm, helpful, slightly playful. Use <strong> sparingly.
+Set submit=true ONLY when the message is a real, actionable part request (link or has car + part info).
+Set valid=true when the message deserves to be sent through (real request). For greetings/smalltalk/off-topic, valid=false and submit=false.
+"normalized" = clean one-line summary of the request if submit=true, else echo input.`;
+      try {
+        const apiKey = Deno.env.get("LOVABLE_API_KEY");
+        if (!apiKey) throw new Error("no_key");
+        const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash",
+            messages: [{ role: "system", content: sys }, { role: "user", content: v }],
+            tools: [{
+              type: "function",
+              function: {
+                name: "respond",
+                parameters: {
+                  type: "object",
+                  properties: {
+                    valid: { type: "boolean" },
+                    submit: { type: "boolean" },
+                    reply: { type: "string" },
+                    normalized: { type: "string" },
+                  },
+                  required: ["valid", "submit", "reply", "normalized"],
+                  additionalProperties: false,
+                },
+              },
+            }],
+            tool_choice: { type: "function", function: { name: "respond" } },
+          }),
+        });
+        if (!r.ok) throw new Error(`ai_${r.status}`);
+        const data = await r.json();
+        const tc = data.choices?.[0]?.message?.tool_calls?.[0];
+        const out = JSON.parse(tc.function.arguments);
+        return json(out);
+      } catch {
+        // Fallback: accept anything reasonably long with a URL or car-ish keywords
+        const looksReal = URL_RE.test(v) || /\b(19|20)\d{2}\b/.test(v) || v.length > 30;
+        return json({
+          valid: looksReal,
+          submit: looksReal,
+          normalized: v,
+          reply: looksReal ? "Got it, thanks! We'll reply shortly." : "Could you add the car (make, model, year) and which part?",
+        });
+      }
+    }
+
     return json({ valid: true, normalized: v, reply: "OK!" });
+
   } catch (e) {
     const msg = e instanceof Error ? e.message : "unknown";
     const status = msg === "rate_limited" ? 429 : msg === "payment_required" ? 402 : 500;
