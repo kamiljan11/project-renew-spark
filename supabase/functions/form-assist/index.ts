@@ -471,9 +471,7 @@ Return valid=false so the flow stays here. chips=[].`;
       // PATH 1 — links: parts + shipping (no search fee).
       if (URL_RE.test(v)) {
         const linkCount = (v.match(/https?:\/\/\S+/gi) ?? []).length;
-        const linkLine = linkCount > 1
-          ? `Got <strong>${linkCount} links</strong>!`
-          : "Got the link!";
+        const linkLine = linkCount > 1 ? T.gotLinkN[safeLang](linkCount) : tr("gotLink1", safeLang);
         const pricingLine = safeLang === "pl"
           ? "Płacisz tylko za <strong>części + wysyłkę</strong> (cło wliczone). Brak opłaty wyszukiwania."
           : safeLang === "is"
@@ -487,11 +485,7 @@ Return valid=false so the flow stays here. chips=[].`;
         return json({ valid: true, normalized: v, reply: `${linkLine} ${pricingLine}${moreLine}` });
       }
       if (!v || v.length < 4 || SKIP_RE.test(v)) {
-        return json({
-          valid: false,
-          normalized: v,
-          reply: "I need a bit more — paste a product link, or tell me the <strong>car (make, model, year)</strong> and the <strong>part</strong> you need.",
-        });
+        return json({ valid: false, normalized: v, reply: tr("partThin", safeLang) });
       }
       const sys = `You are a friendly parts intake assistant for MAS Parts Iceland (we ship auto, truck, agricultural and machinery parts to Iceland — any size, any weight).
 The user is describing what part they need. Extract: make, model, year, part_type if present.
