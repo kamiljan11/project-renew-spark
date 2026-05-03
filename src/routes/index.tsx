@@ -58,24 +58,12 @@ function Index() {
         <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20 grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-white">
             <h1 className="text-4xl md:text-6xl font-black leading-[1.05] tracking-tight uppercase italic" style={{ fontFamily: "Exo 2", letterSpacing: "-0.02em" }}>
-              FOUND A PART ONLINE?<br/>
-              SEND US <span className="text-mas-orange">THE LINK.</span>
+              GOT A LINK?<br/>
+              OR JUST <span className="text-mas-orange">A PART NAME?</span>
             </h1>
-            <p className="mt-6 text-lg text-white/75 max-w-xl leading-relaxed">
-              We buy it, ship it to Iceland, and deliver to your door — with a proper Icelandic VAT invoice. No customs headaches.
+            <p className="mt-6 text-lg text-white/80 max-w-xl leading-relaxed">
+              Send us the link — or describe what you need and we'll find it. We buy it, ship it to Iceland, and deliver to your door with a full Icelandic VAT invoice. No customs, no surprise costs.
             </p>
-            <ul className="mt-6 space-y-2.5 text-white/85 text-sm">
-              {[
-                "Paste a link or describe the part — we'll find it.",
-                "One total: part + shipping + our fee. No surprises.",
-                "Icelandic ehf. — full VAT invoice on every order.",
-              ].map((f) => (
-                <li key={f} className="flex items-start gap-2.5">
-                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-mas-orange shrink-0" />
-                  {f}
-                </li>
-              ))}
-            </ul>
           </div>
           <div className="lg:pl-6">
             <ConversationalForm />
