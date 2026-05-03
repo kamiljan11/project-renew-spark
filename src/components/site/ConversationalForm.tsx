@@ -153,6 +153,9 @@ export function ConversationalForm() {
   const [thinkingLabel, setThinkingLabel] = useState("Thinking…");
   const [copied, setCopied] = useState(false);
   const [whyOpen, setWhyOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const editingReturnRef = useRef(false);
+  useEffect(() => { setMounted(true); }, []);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -381,6 +384,7 @@ export function ConversationalForm() {
       setPhotoUrls([]);
     }
     setReviewing(false);
+    editingReturnRef.current = true;
     setStep(idx);
     setBubbles((b) => [...b, { who: "bot", html: STEPS[idx].ask }]);
     setHintErr(false);
@@ -436,6 +440,14 @@ export function ConversationalForm() {
   const advanceStep = (overrideData?: Record<string, string>) => {
     setDynamicChips(null);
     const baseData = overrideData ?? data;
+    if (editingReturnRef.current) {
+      editingReturnRef.current = false;
+      setData(baseData);
+      persist({ step, data: baseData });
+      setBusy(false);
+      openReview();
+      return;
+    }
     let next = step + 1;
     const workingData = { ...baseData };
     while (next < STEPS.length && STEPS[next].key === "license_plate" && !workingData["license_plate"]) {
@@ -702,7 +714,7 @@ export function ConversationalForm() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {!done && step > 0 && !reviewing && (
+          {mounted && !done && step > 0 && !reviewing && (
             <button
               onClick={goBack}
               disabled={busy}
@@ -712,7 +724,7 @@ export function ConversationalForm() {
               <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" /> {t("form.back") || "Back"}
             </button>
           )}
-          {!done && (step > 0 || partItems.length > 0) && (
+          {mounted && !done && (step > 0 || partItems.length > 0) && (
             <button
               onClick={handleReset}
               className="flex items-center gap-1 text-[12px] font-semibold text-slate-600 bg-white hover:bg-slate-100 transition-colors rounded-full px-3 py-1.5 border border-slate-300"
