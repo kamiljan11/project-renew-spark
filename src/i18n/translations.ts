@@ -165,8 +165,8 @@ const pl: Dict = {
   "hero.f2": "Dostajesz islandzką fakturę. My ogarniamy cło.",
   "hero.f3": "Brak linku? Szukamy za Ciebie. Tylko 4 960 ISK (z VAT).",
 
-  "form.title": "Zapytanie o część",
-  "form.sub": "Darmowa wycena · bez zobowiązań",
+  "form.title": "Sprawdź cenę części",
+  "form.sub": "Odpowiedz na kilka pytań — odeślemy Ci całkowitą cenę.",
   "form.step": "Krok",
   "form.of": "z",
   "form.privacy": "Twoje dane służą wyłącznie do realizacji zapytania.",
