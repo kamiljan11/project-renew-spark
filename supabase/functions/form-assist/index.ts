@@ -29,9 +29,29 @@ function feeInfoText(lang: "en" | "pl" | "is"): string {
   return "<strong>Search fee 4 960 ISK (incl. VAT)</strong> covers: sourcing across European suppliers (Germany, Poland, Baltics), verifying the part fits your vehicle (VIN / OEM check), price comparison and preparing the best offer. Paid upfront — regardless of whether you buy. If you do buy, it's credited toward your order. <strong>Paste a link and the fee disappears.</strong>";
 }
 
-const URL_RE = /https?:\/\/[^\s]+/i;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const SKIP_RE = /^(skip|no|nope|none|n\/a|na|yes|ok|okay|sure|idk|hi|hello|hey|hej|halo|czesc|cześć|\-|\.+|x|_|test|asdf+)$/i;
+// ---- Localization helpers for heuristic (no-AI) replies ----
+type L = "en" | "pl" | "is";
+const T = {
+  emailOk:    { en: "Perfect, got it. ✓",                                                pl: "Świetnie, mam to. ✓",                                       is: "Frábært, ég er með það. ✓" },
+  emailBad:   { en: "Hmm, that doesn't look like a valid email. Try again?",             pl: "Hmm, to nie wygląda na poprawny e-mail. Spróbuj ponownie?", is: "Hmm, þetta lítur ekki út eins og gilt netfang. Reyndu aftur?" },
+  phoneOk:    { en: "Great, noted. ✓",                                                   pl: "Super, zapisałem. ✓",                                       is: "Frábært, skráð. ✓" },
+  phoneBad:   { en: "Please enter a valid phone number (with country code, e.g. +354).", pl: "Podaj poprawny numer telefonu (z kierunkowym, np. +354).",  is: "Sláðu inn gilt símanúmer (með landsnúmeri, t.d. +354)." },
+  plateSkip:  { en: "No problem, skipping.",                                             pl: "Nie ma problemu, pomijam.",                                 is: "Ekkert mál, sleppi." },
+  plateOk:    { en: "Noted",                                                             pl: "Zapisane",                                                  is: "Skráð" },
+  plateBad:   { en: "That doesn't look like a plate. You can also skip.",                pl: "To nie wygląda na tablicę. Możesz też pominąć.",            is: "Þetta lítur ekki út eins og skráningarnúmer. Þú getur líka sleppt." },
+  companyAsk: { en: "Just your name or company name please 🙂",                          pl: "Po prostu imię lub nazwę firmy proszę 🙂",                  is: "Bara nafn eða fyrirtækisnafn takk 🙂" },
+  companyOk:  { en: "Nice to meet you",                                                  pl: "Miło Cię poznać",                                           is: "Gaman að kynnast þér" },
+  addrSkip:   { en: "OK, skipping for now.",                                             pl: "OK, pomijam na razie.",                                     is: "Allt í lagi, sleppi í bili." },
+  addrOk:     { en: "Address noted. ✓",                                                  pl: "Adres zapisany. ✓",                                         is: "Heimilisfang skráð. ✓" },
+  addrBad:    { en: "Please give a delivery address in Iceland.",                        pl: "Podaj adres dostawy na Islandii.",                          is: "Sláðu inn afhendingarheimilisfang á Íslandi." },
+  partThin:   { en: "I need a bit more — paste a product link, or tell me the <strong>car (make, model, year)</strong> and the <strong>part</strong> you need.",
+                pl: "Potrzebuję trochę więcej — wklej link do produktu lub podaj <strong>auto (marka, model, rok)</strong> i jakiej <strong>części</strong> potrzebujesz.",
+                is: "Mig vantar aðeins meira — sendu hlekk á vöruna eða segðu mér <strong>bílinn (tegund, gerð, árgerð)</strong> og hvaða <strong>varahlut</strong> þú þarft." },
+  gotLink1:   { en: "Got the link!",                                                     pl: "Mam link!",                                                 is: "Fékk hlekkinn!" },
+  gotLinkN:   { en: (n: number) => `Got <strong>${n} links</strong>!`,                   pl: (n: number) => `Mam <strong>${n} linków</strong>!`,          is: (n: number) => `Fékk <strong>${n} hlekki</strong>!` },
+  freeAsk:    { en: "Write a message and I'll help 🙂",                                  pl: "Napisz wiadomość, a pomogę 🙂",                             is: "Skrifaðu skilaboð og ég hjálpa 🙂" },
+} as const;
+const tr = <K extends keyof typeof T>(k: K, lang: L): typeof T[K][L] => T[k][lang];
 
 function plateNormalize(v: string) {
   return v.toUpperCase().replace(/[^A-Z0-9]/g, "");
