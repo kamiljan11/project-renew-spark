@@ -90,7 +90,26 @@ function fallbackPartChips(params: { value: string; reply: string; history: Msg[
       { label: "🔌 Hybrid/EV", fill: "Hybrid" },
     ];
   }
-  if (/year/i.test(reply)) {
+  if (/(manual|automatic|gearbox|transmission|dsg|dct)/i.test(reply)) {
+    return [
+      { label: "Manual", fill: "Manual" },
+      { label: "Automatic", fill: "Automatic" },
+      { label: "DSG/DCT", fill: "DSG" },
+    ];
+  }
+  if (/(left|right|driver|passenger)/i.test(reply)) {
+    return [
+      { label: "Left", fill: "Left" },
+      { label: "Right", fill: "Right" },
+      { label: "Both", fill: "Both" },
+    ];
+  }
+  if (/(front|rear|back)/i.test(reply)) {
+    return [
+      { label: "Front", fill: "Front" },
+      { label: "Rear", fill: "Rear" },
+      { label: "Both", fill: "Both" },
+    ];
     const y = new Date().getFullYear();
     return [
       { label: `${y - 2}`, fill: `${y - 2}` },
