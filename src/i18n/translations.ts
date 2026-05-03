@@ -59,7 +59,7 @@ const en: Dict = {
   "process.titleA": "HOW IT",
   "process.titleB": "WORKS",
   "process.lead": "6 steps from your message to the part at your door.",
-  "process.s1.t": "You send a link",
+  "process.s1.t": "Send what you need",
   "process.s1.d": "Fill out the form: paste a link to the part you found online, or describe what you need. That's it.",
   "process.s2.t": "We check the part",
   "process.s2.d": "We verify availability, check the price, and calculate the full cost including shipping to Iceland.",
