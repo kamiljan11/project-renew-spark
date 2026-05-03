@@ -228,9 +228,16 @@ async function callAI(system: string, messages: Msg[]): Promise<any> {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
-    const { step, value, lang = "en", history = [] }: ReqBody = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { step, value, lang = "en", history = [] }: ReqBody = body ?? {};
+    const allowedSteps = new Set(["email", "phone", "license_plate", "part", "company", "address", "freeform"]);
+    if (!step || !allowedSteps.has(step)) {
+      return json({ valid: false, normalized: "", reply: "Unknown step." }, 400);
+    }
+    const allowedLangs = new Set(["en", "pl", "is"]);
+    const safeLang = allowedLangs.has(lang) ? lang : "en";
     const v = (value ?? "").trim().slice(0, 2000); // hard cap input
-    const trimmedHistory = (history ?? []).slice(-8); // keep cost bounded
+    const trimmedHistory = Array.isArray(history) ? history.slice(-8) : []; // keep cost bounded
 
     // ---------- Heuristic fast-paths (no AI call) ----------
     if (step === "email") {
