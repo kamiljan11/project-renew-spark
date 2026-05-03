@@ -38,21 +38,26 @@ function normalizeChipArray(chips: unknown): Chip[] {
 }
 
 function isNoPlateReply(value: string) {
-  return /(no license plate|no plate|without plate|brak tablic|nie mam tablic|bez tablic)/i.test(value);
+  return /(no license plate|no plate|without plate|brak tablic|nie mam tablic|bez tablic|don'?t have (a )?plate)/i.test(value);
 }
 
 function detectVehicleContext(text: string): "truck" | "agri" | "car" {
-  if (/(truck|lorry|van|hgv|semi|scania|volvo truck|man truck)/i.test(text)) return "truck";
-  if (/(tractor|agri|agricultural|farm|combine|excavator|loader|massey|ursus|jcb|cat)/i.test(text)) return "agri";
+  if (/\b(truck|lorry|hgv|semi|scania|volvo truck|man truck|daf|iveco|kenworth|peterbilt)\b/i.test(text)) return "truck";
+  if (/\b(tractor|agri|agricultural|farm|combine|excavator|backhoe|skid steer|massey|ursus|john deere|new holland|kubota|jcb|caterpillar|komatsu)\b/i.test(text)) return "agri";
   return "car";
 }
 
-const PLATE_RE = /\b[A-Z]{1,3}[\s-]?\d{1,3}[A-Z]?\b/i;
+// Iceland plate: 2 letters + 3 digits (most common) OR 3 letters + 2 digits.
+// Stricter than before to avoid matching model codes like "C-360" or "E46".
+const PLATE_RE = /\b[A-Z]{2,3}[\s-]?\d{2,3}\b/;
 
 function hasPlateInHistory(history: Msg[], value: string): boolean {
+  // Last user message wins — if user says "no plate" now, ignore older plate mentions.
+  const lastUser = [...history].reverse().find((m) => m.role === "user")?.content ?? "";
+  const recent = `${lastUser} ${value}`;
+  if (isNoPlateReply(recent)) return false;
   const all = [...history.map((m) => m.content), value].join(" \n ");
-  if (isNoPlateReply(all)) return false;
-  return PLATE_RE.test(all);
+  return PLATE_RE.test(all.toUpperCase());
 }
 
 function fallbackPartChips(params: { value: string; reply: string; history: Msg[] }): Chip[] {
