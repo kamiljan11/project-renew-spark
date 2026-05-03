@@ -101,6 +101,8 @@ export function ConversationalForm() {
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+  const [partItems, setPartItems] = useState<string[]>([]);
+  const [awaitingMoreParts, setAwaitingMoreParts] = useState(false);
   const [dynamicChips, setDynamicChips] = useState<Chip[] | null>(null);
   const [done, setDone] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
@@ -216,6 +218,15 @@ export function ConversationalForm() {
       }
 
       setDynamicChips(null);
+      // Multi-part loop: after the AI accepts a part, ask if user wants to add more.
+      if (isPart) {
+        const updated = [...partItems, normalized];
+        setPartItems(updated);
+        data[cur.key] = updated.join("\n---\n");
+        setAwaitingMoreParts(true);
+        setBusy(false);
+        return;
+      }
       data[cur.key] = normalized;
       advanceStep();
     } catch {
@@ -330,8 +341,22 @@ export function ConversationalForm() {
         )}
       </div>
 
+      {/* Multi-part loop: after a part is accepted, let the user add more or move on */}
+      {!done && !busy && awaitingMoreParts && (
+        <div className="px-4 pb-2 flex flex-wrap gap-1.5">
+          <button
+            onClick={() => { setAwaitingMoreParts(false); setVal(""); inputRef.current?.focus(); }}
+            className="text-[12px] font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-3 py-1.5 border border-slate-200"
+          >➕ Add another part</button>
+          <button
+            onClick={() => { setAwaitingMoreParts(false); advanceStep(); }}
+            className="text-[12px] font-bold text-white bg-mas-orange hover:opacity-90 transition rounded-full px-3 py-1.5 border-0"
+          >✅ That's all — continue</button>
+        </div>
+      )}
+
       {/* Quick-reply chips: AI-suggested (dynamicChips) take priority over static cur.chips */}
-      {!done && !busy && !!(dynamicChips?.length || cur.chips?.length) && (
+      {!done && !busy && !awaitingMoreParts && !!(dynamicChips?.length || cur.chips?.length) && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           {(dynamicChips?.length ? dynamicChips : cur.chips ?? []).map((chip) => (
             <button
