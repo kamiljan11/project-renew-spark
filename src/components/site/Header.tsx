@@ -79,14 +79,6 @@ export function Header({ onContact }: { onContact?: () => void }) {
               <button onClick={() => { setOpen(false); onContact?.(); }} className="text-left font-bold uppercase tracking-wider py-3 px-2 text-sm text-navy bg-transparent border-0 cursor-pointer hover:bg-muted/50 rounded-md">
                 {t("nav.contact")}
               </button>
-              <div className="flex sm:hidden items-center gap-2 px-2 pt-3 mt-2 border-t border-border">
-                {LANGS.map((l) => (
-                  <button key={l.code} onClick={() => setLang(l.code)} className="border-0 bg-transparent p-1 cursor-pointer"
-                    style={{ filter: lang === l.code ? "none" : "grayscale(100%)", opacity: lang === l.code ? 1 : 0.55 }}>
-                    <img src={l.flag} width={22} alt={l.code} className="rounded-sm" />
-                  </button>
-                ))}
-              </div>
             </div>
           </div>
         )}
