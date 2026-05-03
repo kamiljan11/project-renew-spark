@@ -268,7 +268,7 @@ function AdminPanel() {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </tbody>
             </table>
