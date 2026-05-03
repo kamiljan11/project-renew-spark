@@ -271,15 +271,18 @@ Deno.serve(async (req) => {
     // ---------- AI-assisted steps ----------
     if (step === "part") {
       // If it contains URL(s), accept fast — supports multiple links.
+      // PATH 1 — links: parts + shipping (no search fee).
       if (URL_RE.test(v)) {
         const linkCount = (v.match(/https?:\/\/\S+/gi) ?? []).length;
-        return json({
-          valid: true,
-          normalized: v,
-          reply: linkCount > 1
-            ? `Got <strong>${linkCount} links</strong>! 🔗 I'll send them to our parts team.`
-            : "Got the link! 🔗 I'll send it to our parts team.",
-        });
+        const linkLine = linkCount > 1
+          ? `Got <strong>${linkCount} links</strong>!`
+          : "Got the link!";
+        const pricingLine = safeLang === "pl"
+          ? "Płacisz tylko za <strong>części + wysyłkę</strong> (cło wliczone). Brak opłaty wyszukiwania."
+          : safeLang === "is"
+            ? "Þú borgar aðeins <strong>varahluti + sendingu</strong> (tollur innifalinn). Engin leitargjald."
+            : "You'll only pay for <strong>parts + shipping</strong> (customs included). No search fee.";
+        return json({ valid: true, normalized: v, reply: `${linkLine} ${pricingLine}` });
       }
       if (!v || v.length < 4 || SKIP_RE.test(v)) {
         return json({
