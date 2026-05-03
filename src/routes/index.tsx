@@ -18,9 +18,9 @@ export const Route = createFileRoute("/")({
 
 
 const PROCESS = [
-  { n: "01", icon: MessageSquarePlus, t: "Send what you need", d: "Fill out the form: paste a link to the part you found online, or describe what you need. No link? We'll search for you — small service fee of 4 960 ISK (incl. VAT) applies, payment details sent after you submit the form." },
+  { n: "01", icon: MessageSquarePlus, t: "Send what you need", d: "Fill out the form: paste a link to the part you found online, or describe what you need. No link? We'll search for you — a one-off search fee of 4 960 ISK (incl. VAT) applies, paid upfront before we start looking. Payment details are sent after you submit the form." },
   { n: "02", icon: SearchCode, t: "We check the part", d: "We verify availability, check the price, and calculate the full cost including shipping to Iceland." },
-  { n: "03", icon: FileText, t: "You get the total", d: "We send you one number: part + shipping + customs clearance + our small service fee. No hidden costs. You decide if you want to proceed." },
+  { n: "03", icon: FileText, t: "You get the total", d: "We send you one number: part + shipping + customs clearance + our service commission for handling everything. No hidden costs." },
   { n: "04", icon: CreditCard, t: "You confirm", d: "You say yes, you pay. We immediately place the order with the supplier." },
   { n: "05", icon: Truck, t: "We ship it", d: "We handle the purchase, international shipping, and all customs paperwork to Iceland. You get tracking info." },
   { n: "06", icon: PackageCheck, t: "Pickup", d: "When the package arrives, you can pick it up locally or we deliver it to you." },
