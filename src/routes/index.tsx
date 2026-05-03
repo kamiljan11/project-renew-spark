@@ -37,9 +37,6 @@ const FAQ = [
   ["Do you issue an Icelandic VAT invoice?", "Yes. We are a registered company in Iceland (ehf.) and every order comes with a full Icelandic VAT invoice. If you run a workshop or company, you can deduct it as a business expense."],
   ["How long does part delivery take?", "It depends on where the part ships from, but we always tell you the estimated delivery time before you pay. Most European orders arrive within 5-10 business days. Express options are available."],
   ["What if the ordered part doesn't fit?", "If we ordered the wrong part on our end, we replace it or refund you, no questions asked. If you sent us an incorrect link or wrong vehicle details, we'll do our best to help but the responsibility lies on your side. Always double-check the link before sending."],
-  ["Do you deliver parts outside the capital area?", "Yes, everywhere in Iceland. Reykjavik, Akureyri, Egilsstaðir, Westfjords — we ship to your address. Just write your delivery address in the form."],
-  ["What car brands do you support?", "All of them. VW, Audi, BMW, Toyota, Kia, Ford, Volvo — if it drives, we can get the part. Both original OEM parts and quality aftermarket alternatives."],
-  ["Do you supply used parts?", "Yes, on request. Engines, gearboxes, body parts — just ask. Keep in mind: used parts cannot be returned once delivered, so make sure you know what you're ordering."],
 ];
 
 function Index() {
