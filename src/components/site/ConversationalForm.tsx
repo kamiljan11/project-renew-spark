@@ -432,7 +432,6 @@ export function ConversationalForm() {
 
       {/* Review & Confirm screen — shown after the last step, before submit */}
       {!done && reviewing && (() => {
-        void force;
         const reviewItems = STEPS.map((s, idx) => {
           let value = "";
           if (s.key === "photos") {
