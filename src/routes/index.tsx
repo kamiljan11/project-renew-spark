@@ -208,7 +208,7 @@ function Index() {
       <section className="py-16 px-6 bg-navy">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white" style={{ letterSpacing: "-0.02em" }}>
-            Ready? Send us your link.
+            Ready? Send us your link or describe what you need.
           </h2>
           <p className="text-slate-300 mb-8">We'll reply with the full price. You decide if you go ahead.</p>
           <a href="#order" className="inline-block text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg bg-mas-orange hover:opacity-90">
