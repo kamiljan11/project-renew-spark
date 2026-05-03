@@ -281,11 +281,8 @@ export function ConversationalForm() {
             <Package className="w-4 h-4 text-white" />
           </div>
           <div>
-            <div className="font-extrabold text-sm text-navy flex items-center gap-1.5" style={{ fontFamily: "Exo 2" }}>
+            <div className="font-extrabold text-sm text-navy" style={{ fontFamily: "Exo 2" }}>
               {t("form.title")}
-              <span title="AI-assisted" className="inline-flex items-center gap-0.5 text-[10px] text-mas-orange font-bold uppercase tracking-wider">
-                <Sparkles className="w-3 h-3" /> AI
-              </span>
             </div>
             <div className="text-[11px] text-muted-foreground">{t("form.sub")}</div>
           </div>
