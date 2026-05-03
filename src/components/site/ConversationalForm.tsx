@@ -29,11 +29,11 @@ type Step = {
 const STEPS: Step[] = [
   {
     key: "part_links", apiStep: "part",
-    ask: "Hi 👋 Tell us what car part you need.<br><small style='opacity:0.75'>1. <strong>Got a link?</strong> Paste it — you pay for the part + shipping (customs clearance included).<br>2. <strong>No link?</strong> We'll find it for you, best deal possible — search fee <strong>4 960 ISK (incl. VAT)</strong> is paid upfront before we start searching.</small>",
-    hint: "Paste a link, OEM number, or describe the part",
+    ask: "Hi 👋 Tell us what car part you need.<br><small style='opacity:0.75'>1. <strong>Got a link (or several)?</strong> Paste them all — one per line is perfect. You pay for the parts + shipping (customs clearance included).<br>2. <strong>No link?</strong> We'll find it for you, best deal possible — search fee <strong>4 960 ISK (incl. VAT)</strong> is paid upfront before we start searching.</small>",
+    hint: "Paste one or more links (one per line), OEM number, or describe the part",
     multiline: true,
     chips: [
-      { label: "🔗 I have a link", fill: "Link: " },
+      { label: "🔗 I have link(s)", fill: "" },
       { label: "🔢 OEM number", fill: "OEM number: " },
       { label: "✏️ Describe the part", fill: "" },
     ],
