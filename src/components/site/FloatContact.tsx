@@ -6,9 +6,9 @@ import { useLang } from "@/i18n/LanguageContext";
 type Bubble = { who: "bot" | "user" | "typing"; html?: string; text?: string };
 
 const GREETINGS: Record<string, string> = {
-  en: "Hi! 👋 I'm the MAS Parts assistant. Paste a link or tell me what part you need — make, model, year.",
-  pl: "Cześć! 👋 Jestem asystentem MAS Parts. Wklej link lub napisz, jakiej części potrzebujesz — marka, model, rok.",
-  is: "Halló! 👋 Ég er aðstoðarmaður MAS Parts. Sendu hlekk eða lýstu hvaða varahlut þú vantar — tegund, árgerð.",
+  en: "Hi! 👋 I'm the MAS Parts assistant — happy to answer quick questions.<br><br>👉 Looking to <strong>order a part</strong>? Please use the <strong>request form on the homepage</strong> — it's the fastest way to get a price.",
+  pl: "Cześć! 👋 Jestem asystentem MAS Parts — chętnie odpowiem na krótkie pytania.<br><br>👉 Chcesz <strong>zamówić część</strong>? Skorzystaj z <strong>formularza na stronie głównej</strong> — to najszybszy sposób na wycenę.",
+  is: "Halló! 👋 Ég er aðstoðarmaður MAS Parts — svara fúslega stuttum spurningum.<br><br>👉 Viltu <strong>panta varahlut</strong>? Notaðu <strong>beiðniformið á forsíðunni</strong> — fljótlegasta leiðin að tilboði.",
 };
 
 export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: boolean) => void }) {
