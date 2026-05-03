@@ -508,10 +508,10 @@ export function ConversationalForm() {
               <ArrowRight className="w-5 h-5 text-white" />
             </button>
           </div>
-          <div className="flex items-center justify-between mt-1.5">
-            <p className="text-[11px] m-0" style={{ color: hintErr ? "#ef4444" : "var(--muted-foreground)" }}>{busy ? "Thinking…" : hintMsg}</p>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-xs m-0" style={{ color: hintErr ? "#ef4444" : "var(--muted-foreground)" }}>{busy ? "Thinking…" : hintMsg}</p>
             {cur.optional && !busy && (
-              <button onClick={() => { setVal(""); onNext(); }} className="text-[11px] text-muted-foreground bg-transparent border-0 cursor-pointer underline">Skip this step</button>
+              <button onClick={() => { setVal(""); onNext(); }} className="text-xs text-muted-foreground bg-transparent border-0 cursor-pointer underline px-2 py-1">Skip this step</button>
             )}
           </div>
         </div>
