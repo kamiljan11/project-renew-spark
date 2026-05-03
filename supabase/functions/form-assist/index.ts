@@ -25,7 +25,7 @@ function plateNormalize(v: string) {
   return v.toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
-async function callAI(system: string, user: string): Promise<any> {
+async function callAI(system: string, messages: Msg[]): Promise<any> {
   const apiKey = Deno.env.get("LOVABLE_API_KEY");
   if (!apiKey) throw new Error("LOVABLE_API_KEY not set");
   const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
