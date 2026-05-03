@@ -332,7 +332,7 @@ const is: Dict = {
   "process.titleA": "HVERNIG ÞAÐ",
   "process.titleB": "VIRKAR",
   "process.lead": "6 skref frá skilaboðum að hlutnum við dyrnar þínar.",
-  "process.s1.t": "Þú sendir hlekk",
+  "process.s1.t": "Sendu það sem þú þarft",
   "process.s1.d": "Fylltu út formið: límdu hlekk eða lýstu hvað þú þarft. Þetta er allt.",
   "process.s2.t": "Við athugum hlutinn",
   "process.s2.d": "Við staðfestum framboð, verð og heildarkostnað með flutningi til Íslands.",
