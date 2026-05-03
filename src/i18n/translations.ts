@@ -195,7 +195,7 @@ const pl: Dict = {
   "process.titleA": "JAK TO",
   "process.titleB": "DZIAŁA",
   "process.lead": "6 kroków od wiadomości do części pod drzwiami.",
-  "process.s1.t": "Wysyłasz link",
+  "process.s1.t": "Wyślij czego potrzebujesz",
   "process.s1.d": "Wypełnij formularz: wklej link do części lub opisz, czego potrzebujesz. Tyle.",
   "process.s2.t": "Sprawdzamy część",
   "process.s2.d": "Weryfikujemy dostępność, cenę i pełny koszt z dostawą na Islandię.",
