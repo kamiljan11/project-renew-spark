@@ -81,7 +81,8 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
     const { step, value, lang = "en", history = [] }: ReqBody = await req.json();
-    const v = (value ?? "").trim();
+    const v = (value ?? "").trim().slice(0, 2000); // hard cap input
+    const trimmedHistory = (history ?? []).slice(-8); // keep cost bounded
 
     // ---------- Heuristic fast-paths (no AI call) ----------
     if (step === "email") {
