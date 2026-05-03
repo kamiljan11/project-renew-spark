@@ -384,6 +384,7 @@ export function ConversationalForm() {
       setPhotoUrls([]);
     }
     setReviewing(false);
+    editingReturnRef.current = true;
     setStep(idx);
     setBubbles((b) => [...b, { who: "bot", html: STEPS[idx].ask }]);
     setHintErr(false);
