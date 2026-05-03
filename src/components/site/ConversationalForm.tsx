@@ -101,6 +101,7 @@ export function ConversationalForm() {
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+  const [dynamicChips, setDynamicChips] = useState<Chip[] | null>(null);
   const [done, setDone] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
