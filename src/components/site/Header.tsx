@@ -40,7 +40,7 @@ export function Header({ onContact }: { onContact?: () => void }) {
 
           {/* Right cluster */}
           <div className="flex items-center gap-2 md:gap-3 ml-auto xl:ml-0 shrink-0">
-            <div className="hidden sm:flex items-center gap-1.5 border-l pl-2 md:pl-3 border-border">
+            <div className="flex items-center gap-1.5 sm:border-l sm:pl-2 md:pl-3 sm:border-border">
               {LANGS.map((l) => (
                 <button
                   key={l.code}
