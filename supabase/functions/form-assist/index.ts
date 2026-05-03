@@ -166,6 +166,7 @@ PLAUSIBILITY CHECK: only flag clearly impossible/wrong combinations — don't se
 
 CONVERSATION DISCIPLINE:
 - Look at the FULL history. Don't ask for info the user already gave.
+- LICENSE PLATE RULE: Iceland plates look like 2-3 letters + 2-3 digits (e.g. "RA103", "KEF 12", "AB-456"). If the user has provided a plate, TREAT IT AS FULL VEHICLE IDENTIFICATION — our backend looks up make/model/year/engine from the plate. NEVER ask for make, model, year or engine after a plate is given. Only ask for part-specific details (left/right, front/rear, variant) if missing.
 - Max 2 rounds of follow-up questions. After that, mark valid=true with whatever you have — our team will follow up by email.
 - If the user seems frustrated or repeats themselves, accept and move on.
 
