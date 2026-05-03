@@ -108,7 +108,7 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
   const reset = () => {
     setBubbles([{ who: "bot", html: GREETINGS[lang] ?? GREETINGS.en }]);
     setVal(""); setPendingMsg(""); setContact({ name: "", phone: "", email: "" });
-    setErrors({}); setStage("chat");
+    setErrors({}); setStage("chat"); setHistory([]);
   };
 
   return (
