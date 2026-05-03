@@ -9,10 +9,12 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+type Msg = { role: "user" | "assistant"; content: string };
 type ReqBody = {
-  step: string; // "part" | "phone" | "email" | "company" | "license_plate" | "address"
+  step: string;
   value: string;
   lang?: "en" | "pl" | "is";
+  history?: Msg[];
 };
 
 const URL_RE = /https?:\/\/[^\s]+/i;
