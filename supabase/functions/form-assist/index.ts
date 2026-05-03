@@ -65,15 +65,7 @@ function fallbackPartChips(params: { value: string; reply: string; history: Msg[
   const conversation = [...params.history.map((msg) => msg.content), params.value, params.reply].join(" \n ");
   const plateKnown = hasPlateInHistory(params.history, params.value);
 
-  // Part-detail questions (asked AFTER vehicle is identified)
-  if (/(left|right|driver|passenger)/i.test(reply) && /(side|left|right)/i.test(reply)) {
-    return [
-      { label: "⬅️ Left", fill: "Left" },
-      { label: "➡️ Right", fill: "Right" },
-      { label: "Both", fill: "Both" },
-    ];
-  }
-  // (left/right and front/rear handled later, AFTER more specific part-type checks)
+  // ORDER MATTERS: most-specific (part type) first, then variants, then position last.
 
   if (/brake/i.test(reply)) {
     return [
