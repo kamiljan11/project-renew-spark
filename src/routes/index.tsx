@@ -7,7 +7,7 @@ import { FloatContact } from "@/components/site/FloatContact";
 import {
   Gauge, Settings2, Landmark, Wrench, TrendingDown, Sparkles,
   MessageSquarePlus, SearchCode, FileText, CreditCard, Truck, PackageCheck,
-  Quote, Award, ArrowUpRight, MessageCircle, CheckCircle2, ChevronDown,
+  Quote, Award, ArrowUpRight, MessageCircle, CheckCircle2,
 } from "lucide-react";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
