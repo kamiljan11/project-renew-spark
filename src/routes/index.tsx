@@ -5,9 +5,8 @@ import { Footer } from "@/components/site/Footer";
 import { ConversationalForm } from "@/components/site/ConversationalForm";
 import { FloatContact } from "@/components/site/FloatContact";
 import {
-  Gauge, Settings2, Landmark, Wrench, TrendingDown, Container,
   MessageSquarePlus, SearchCode, FileText, CreditCard, Truck, PackageCheck,
-  Quote, Award, ArrowUpRight, MessageCircle, CheckCircle2,
+  Quote, Award,
 } from "lucide-react";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
@@ -17,14 +16,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const BENEFITS = [
-  { icon: Gauge, t: "Fast delivery", d: "We find the fastest shipping route for your order. You always know when it arrives before you pay." },
-  { icon: Settings2, t: "We find any part", d: "No link? Just describe the part. We search European suppliers and send you the price. Search fee: 4,960 ISK (VAT included)." },
-  { icon: Landmark, t: "Icelandic invoice", d: "Every order comes with a proper Icelandic VAT invoice. You can deduct it as a business expense. We handle customs — you don't touch it." },
-  { icon: Container, t: "Any size, any weight", d: "From a tiny sensor to a full engine, gearbox or body panel — we ship parts of any size and dimensions to Iceland. Oversized & heavy freight included." },
-  { icon: Wrench, t: "No middleman stress", d: "You send a request. We handle everything between the European supplier and your door. You just wait for the package." },
-  { icon: TrendingDown, t: "Fair price", d: "We show you the full price before you commit — part cost, shipping, and our fee. No surprises at the end." },
-];
 
 const PROCESS = [
   { n: "01", icon: MessageSquarePlus, t: "You send a link", d: "Fill out the form: paste a link to the part you found online, or describe what you need. That's it." },
@@ -46,9 +37,6 @@ const FAQ = [
   ["Do you issue an Icelandic VAT invoice?", "Yes. We are a registered company in Iceland (ehf.) and every order comes with a full Icelandic VAT invoice. If you run a workshop or company, you can deduct it as a business expense."],
   ["How long does part delivery take?", "It depends on where the part ships from, but we always tell you the estimated delivery time before you pay. Most European orders arrive within 5-10 business days. Express options are available."],
   ["What if the ordered part doesn't fit?", "If we ordered the wrong part on our end, we replace it or refund you, no questions asked. If you sent us an incorrect link or wrong vehicle details, we'll do our best to help but the responsibility lies on your side. Always double-check the link before sending."],
-  ["Do you deliver parts outside the capital area?", "Yes, everywhere in Iceland. Reykjavik, Akureyri, Egilsstaðir, Westfjords — we ship to your address. Just write your delivery address in the form."],
-  ["What car brands do you support?", "All of them. VW, Audi, BMW, Toyota, Kia, Ford, Volvo — if it drives, we can get the part. Both original OEM parts and quality aftermarket alternatives."],
-  ["Do you supply used parts?", "Yes, on request. Engines, gearboxes, body parts — just ask. Keep in mind: used parts cannot be returned once delivered, so make sure you know what you're ordering."],
 ];
 
 function Index() {
@@ -95,63 +83,24 @@ function Index() {
         </div>
       </section>
 
-      {/* BENEFITS */}
-      <section id="benefits" className="w-full py-16 px-6 bg-[#f3f4f6]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-navy text-white text-xs font-bold uppercase tracking-widest">
-              How it works
-            </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-4 uppercase text-navy" style={{ letterSpacing: "-0.02em" }}>
-              WHAT YOU <span className="italic text-mas-orange">ACTUALLY GET</span>
-            </h2>
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <div className="h-1 w-12 bg-slate-300 rounded" />
-              <div className="h-1.5 w-6 rounded-full bg-mas-orange" />
-              <div className="h-1 w-12 bg-slate-300 rounded" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {BENEFITS.map(({ icon: Icon, t, d }) => (
-              <div key={t} className="parts-card group p-8 rounded-xl flex flex-col items-start">
-                <div className="icon-box p-3 rounded-lg mb-6 group-hover:scale-110 transition-transform">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold mb-3 italic uppercase text-navy">{t}</h3>
-                <p className="text-slate-500 leading-relaxed">{d}</p>
-              </div>
-            ))}
-            <div className="relative rounded-xl p-8 flex flex-col items-center justify-center text-center shadow-xl overflow-hidden bg-navy">
-              <div className="absolute bottom-0 left-0 w-full h-2 bg-mas-orange" />
-              <h3 className="text-2xl font-black italic text-white mb-2 uppercase tracking-tighter">Have questions?</h3>
-              <p className="text-slate-300 text-xs mb-4">Write to us and we'll get back to you within a few hours.</p>
-              <button onClick={() => setContactOpen(true)} className="w-full text-white px-6 py-4 font-black uppercase tracking-widest transition-all bg-mas-orange hover:opacity-90">
-                Contact us
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* PROCESS */}
       <section id="proces" className="w-full py-16 px-6 bg-[#f3f4f6]">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-200 text-navy text-xs font-bold uppercase tracking-widest">
-              Our Process
+              How it works
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-4 uppercase text-navy" style={{ letterSpacing: "-0.02em" }}>
-              HOW IT <span className="italic text-mas-orange">WORKS</span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 text-navy" style={{ letterSpacing: "-0.02em" }}>
+              From your link to your door in 6 steps
             </h2>
-            <p className="text-slate-600 text-lg max-w-2xl mx-auto font-medium">6 steps from your message to the part at your door.</p>
+            <p className="text-slate-600 max-w-xl mx-auto">No phone calls. No customs paperwork. No surprise costs.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {PROCESS.map(({ n, icon: Icon, t, d }) => (
               <div key={n} className="parts-card p-5 md:p-8 rounded-xl relative group">
                 <span className="step-number">{n}</span>
                 <div className="mb-4 text-mas-orange"><Icon className="w-8 h-8" /></div>
-                <h4 className="text-xl font-bold mb-2 uppercase text-navy">{t}</h4>
+                <h4 className="text-lg font-bold mb-2 text-navy">{t}</h4>
                 <p className="text-slate-500 text-sm">{d}</p>
               </div>
             ))}
@@ -166,8 +115,8 @@ function Index() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest">
               Trusted by
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold uppercase text-navy" style={{ letterSpacing: "-0.02em" }}>
-              WHAT CLIENTS SAY ABOUT US
+            <h2 className="text-3xl md:text-4xl font-bold text-navy" style={{ letterSpacing: "-0.02em" }}>
+              What clients say
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
@@ -199,14 +148,12 @@ function Index() {
                 <div className="inline-block mb-6 px-4 py-1 rounded-sm text-xs font-bold uppercase tracking-widest border-l-2 text-mas-orange border-mas-orange bg-white/10">
                   Built on experience
                 </div>
-                <h2 className="text-3xl md:text-5xl font-black italic text-white mb-8 uppercase" style={{ letterSpacing: "-0.02em" }}>
-                  FROM WORKSHOP OWNERS,<br />
-                  <span className="text-mas-orange">FOR WORKSHOP OWNERS</span>
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6" style={{ letterSpacing: "-0.02em" }}>
+                  From workshop owners,<br />
+                  <span className="text-mas-orange">for workshop owners</span>
                 </h2>
-                <div className="space-y-6 text-slate-300 text-lg leading-relaxed text-left">
-                  <p>We didn't just open a trading company; <span className="text-white font-bold italic">we created a solution to our own problems.</span></p>
-                  <p>Our experience is based on running a total of 4 of our own workshops, so we perfectly understand the challenges you face every day. We know the stress of a car blocking a lift because of a missing bolt.</p>
-                  <p>MAS Parts was created to effectively solve one of the key problems in the industry: <span className="text-mas-orange font-bold uppercase">Logistics.</span> We take the problems on ourselves so you can focus on the work.</p>
+                <div className="space-y-4 text-slate-300 text-base md:text-lg leading-relaxed text-left">
+                  <p>We run 4 workshops ourselves. We know the stress of a car blocking a lift because of a missing bolt — so we built MAS Parts to fix the one thing that always slows the job down: <span className="text-mas-orange font-semibold">logistics.</span></p>
                 </div>
                 <div className="mt-12 flex flex-wrap items-center gap-8 md:gap-12 border-t border-slate-800 pt-8">
                   {[["4","Own workshops"],["99%","Available parts"],["11+","B2B Partners"]].map(([num, lbl], i) => (
@@ -249,10 +196,9 @@ function Index() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest">
               Knowledge
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold uppercase leading-tight text-navy" style={{ letterSpacing: "-0.02em" }}>
-              FREQUENT <span className="italic text-mas-orange">QUESTIONS</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-navy" style={{ letterSpacing: "-0.02em" }}>
+              Frequent questions
             </h2>
-            <p className="text-slate-500 mt-4">Everything you need to know about working with MAS Parts in one place.</p>
           </div>
           <Accordion type="single" collapsible className="space-y-2">
             {FAQ.map(([q, a], i) => (
@@ -268,27 +214,15 @@ function Index() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 relative overflow-hidden bg-navy">
-        <div className="cta-pattern absolute inset-0" />
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h2 className="text-3xl md:text-5xl font-black italic mb-6 leading-tight text-white uppercase" style={{ letterSpacing: "-0.02em" }}>
-            GOT A LINK? <span className="text-mas-orange">SEND IT TO US.</span>
+      <section className="py-16 px-6 bg-navy">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white" style={{ letterSpacing: "-0.02em" }}>
+            Ready? Send us your link.
           </h2>
-          <p className="text-slate-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-            Paste the link, fill in your details, click send. We reply with the full price. You decide. That's the whole process.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="#order" className="text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest transition-all shadow-lg flex items-center gap-3 text-lg w-full sm:w-auto justify-center bg-mas-orange hover:opacity-90">
-              Get a Quote <ArrowUpRight className="w-6 h-6" />
-            </a>
-            <button onClick={() => setContactOpen(true)} className="bg-white/10 text-white border border-white/20 px-8 py-4 rounded-xl font-bold uppercase tracking-wider hover:bg-white/20 transition-all flex items-center gap-3 w-full sm:w-auto justify-center">
-              Have a Question <MessageCircle className="w-5 h-5" />
-            </button>
-          </div>
-          <p className="mt-8 text-sm text-slate-400 font-medium flex flex-wrap justify-center gap-4">
-            <span className="inline-flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-mas-orange" /> Secure VIN selection</span>
-            <span className="inline-flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-mas-orange" /> Fast shipping</span>
-          </p>
+          <p className="text-slate-300 mb-8">We'll reply with the full price. You decide if you go ahead.</p>
+          <a href="#order" className="inline-block text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg bg-mas-orange hover:opacity-90">
+            Get a quote
+          </a>
         </div>
       </section>
 
