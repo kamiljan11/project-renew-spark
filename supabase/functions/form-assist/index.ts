@@ -47,10 +47,68 @@ function detectVehicleContext(text: string): "truck" | "agri" | "car" {
   return "car";
 }
 
-function fallbackPartChips(params: { value: string; reply: string; history: Msg[] }): Chip[] {
-  const conversation = [...params.history.map((msg) => msg.content), params.value, params.reply].join(" \n ");
+const PLATE_RE = /\b[A-Z]{1,3}[\s-]?\d{1,3}[A-Z]?\b/i;
 
-  if (isNoPlateReply(conversation)) {
+function hasPlateInHistory(history: Msg[], value: string): boolean {
+  const all = [...history.map((m) => m.content), value].join(" \n ");
+  if (isNoPlateReply(all)) return false;
+  return PLATE_RE.test(all);
+}
+
+function fallbackPartChips(params: { value: string; reply: string; history: Msg[] }): Chip[] {
+  const reply = params.reply.toLowerCase();
+  const conversation = [...params.history.map((msg) => msg.content), params.value, params.reply].join(" \n ");
+  const plateKnown = hasPlateInHistory(params.history, params.value);
+
+  // Part-detail questions (asked AFTER vehicle is identified)
+  if (/(left|right|driver|passenger)/i.test(reply) && /(side|left|right)/i.test(reply)) {
+    return [
+      { label: "⬅️ Left", fill: "Left" },
+      { label: "➡️ Right", fill: "Right" },
+      { label: "Both", fill: "Both" },
+    ];
+  }
+  if (/(front|rear|back)/i.test(reply)) {
+    return [
+      { label: "Front", fill: "Front" },
+      { label: "Rear", fill: "Rear" },
+      { label: "Both", fill: "Both" },
+    ];
+  }
+  if (/brake/i.test(reply)) {
+    return [
+      { label: "🛑 Disc pads", fill: "Disc brake pads" },
+      { label: "💿 Discs/rotors", fill: "Brake discs" },
+      { label: "🥁 Drums", fill: "Brake drums" },
+      { label: "✏️ Other", fill: "Other: " },
+    ];
+  }
+  if (/(headlight|light|lamp|bulb)/i.test(reply)) {
+    return [
+      { label: "Halogen", fill: "Halogen" },
+      { label: "LED", fill: "LED" },
+      { label: "Xenon", fill: "Xenon" },
+      { label: "✏️ Other", fill: "Other: " },
+    ];
+  }
+  if (/(petrol|diesel|fuel|gasoline|engine type)/i.test(reply)) {
+    return [
+      { label: "⛽ Petrol", fill: "Petrol" },
+      { label: "🛢️ Diesel", fill: "Diesel" },
+      { label: "🔌 Hybrid/EV", fill: "Hybrid" },
+    ];
+  }
+  if (/year/i.test(reply)) {
+    const y = new Date().getFullYear();
+    return [
+      { label: `${y - 2}`, fill: `${y - 2}` },
+      { label: `${y - 5}`, fill: `${y - 5}` },
+      { label: `${y - 10}`, fill: `${y - 10}` },
+      { label: "✏️ Other", fill: "Year: " },
+    ];
+  }
+
+  if (isNoPlateReply(conversation) || /(brand|make|which (car|vehicle|truck))/i.test(reply)) {
     const context = detectVehicleContext(conversation);
     if (context === "truck") {
       return [
@@ -73,6 +131,13 @@ function fallbackPartChips(params: { value: string; reply: string; history: Msg[
       { label: "Kia", fill: "Kia " },
       { label: "VW", fill: "VW " },
       { label: "✏️ Other", fill: "Other: " },
+    ];
+  }
+
+  // If plate is already known, don't re-offer plate chips
+  if (plateKnown) {
+    return [
+      { label: "✏️ Type details", fill: "" },
     ];
   }
 
