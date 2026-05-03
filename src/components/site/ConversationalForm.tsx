@@ -135,6 +135,31 @@ export function ConversationalForm() {
     }
   };
 
+  const goBack = () => {
+    if (busy || step === 0) return;
+    const prev = step - 1;
+    const prevKey = STEPS[prev].key;
+    delete data[prevKey];
+    if (prevKey === "part_links") {
+      setPartItems([]);
+      setPartHistory([]);
+    }
+    setBubbles((b) => {
+      const arr = [...b].filter((x) => x.who !== "typing");
+      let lastUser = -1;
+      for (let i = arr.length - 1; i >= 0; i--) if (arr[i].who === "user") { lastUser = i; break; }
+      const trimmed = lastUser === -1 ? arr : arr.slice(0, lastUser);
+      return [...trimmed, { who: "bot", html: STEPS[prev].ask }];
+    });
+    setStep(prev);
+    setVal("");
+    setDynamicChips(null);
+    setAwaitingMoreParts(false);
+    setHintErr(false);
+    setHintMsg(STEPS[prev].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setTimeout(() => inputRef.current?.focus(), 50);
+  };
+
   const advanceStep = () => {
     setDynamicChips(null);
     const next = step + 1;
