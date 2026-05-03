@@ -38,7 +38,7 @@ async function callAI(system: string, messages: Msg[]): Promise<any> {
       model: "google/gemini-2.5-flash",
       messages: [
         { role: "system", content: system },
-        { role: "user", content: user },
+        ...messages,
       ],
       tools: [
         {
