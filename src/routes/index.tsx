@@ -11,6 +11,7 @@ import {
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useLang } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -32,15 +33,11 @@ const REVIEWS = [
   { q: "I was looking for a part that no one had in stock. Found it here immediately and at a good price. Quickly sorted.", n: "Gudjon", c: "Private Garage", color: "#e2e8f0" },
 ];
 
-const FAQ = [
-  ["How exactly does this work?", "Simple. Find a part on any website (Autodoc, eBay, a Polish shop, anywhere in Europe) and copy the link. Fill in our form, paste the link, and submit. We check the part, add up shipping to Iceland, and send you the total. If you agree, you pay and we handle everything else: buying, shipping, customs, and delivery to your door."],
-  ["Do you issue an Icelandic VAT invoice?", "Yes. We are a registered company in Iceland (ehf.) and every order comes with a full Icelandic VAT invoice. If you run a workshop or company, you can deduct it as a business expense."],
-  ["How long does part delivery take?", "It depends on where the part ships from, but we always tell you the estimated delivery time before you pay. Most European orders arrive within 5-10 business days. Express options are available."],
-  ["What if the ordered part doesn't fit?", "If we ordered the wrong part on our end, we replace it or refund you, no questions asked. If you sent us an incorrect link or wrong vehicle details, we'll do our best to help but the responsibility lies on your side. Always double-check the link before sending."],
-];
+const FAQ_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"] as const;
 
 function Index() {
   const [contactOpen, setContactOpen] = useState(false);
+  const { t } = useLang();
 
   return (
     <>
@@ -192,12 +189,12 @@ function Index() {
             </h2>
           </div>
           <Accordion type="single" collapsible className="space-y-2">
-            {FAQ.map(([q, a], i) => (
-              <AccordionItem key={i} value={`f-${i}`} className="rounded-xl border border-slate-200 bg-slate-50 px-5 data-[state=open]:bg-white data-[state=open]:shadow-sm transition-all">
+            {FAQ_KEYS.map((k, i) => (
+              <AccordionItem key={k} value={`f-${i}`} className="rounded-xl border border-slate-200 bg-slate-50 px-5 data-[state=open]:bg-white data-[state=open]:shadow-sm transition-all">
                 <AccordionTrigger className="hover:no-underline text-left text-base md:text-lg font-bold text-navy py-5">
-                  <span>{q}</span>
+                  <span>{t(`faq.q${k}`)}</span>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-600 leading-relaxed pb-5">{a}</AccordionContent>
+                <AccordionContent className="text-slate-600 leading-relaxed pb-5">{t(`faq.a${k}`)}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
