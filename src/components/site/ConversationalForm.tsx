@@ -38,6 +38,7 @@ export function ConversationalForm() {
   const [hintErr, setHintErr] = useState(false);
   const [busy, setBusy] = useState(false);
   const [data] = useState<Record<string, string>>({});
+  const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [done, setDone] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
