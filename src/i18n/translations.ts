@@ -307,7 +307,7 @@ const is: Dict = {
   "form.of": "af",
   "form.privacy": "Gögnin þín eru aðeins notuð fyrir þessa beiðni.",
   "form.sending": "Sendi...",
-  "form.allDone": "Tilbúið! Sendi beiðnina þína núna...",
+  "form.allDone": "✅ Móttekið — sendi beiðnina. Við svörum yfirleitt innan nokkurra klukkustunda á virkum dögum.",
   "form.failed":
     "Eitthvað fór úrskeiðis. Reyndu aftur eða sendu póst á parts@masgroup.is",
 
