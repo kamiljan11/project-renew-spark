@@ -364,7 +364,7 @@ Deno.serve(async (req) => {
       return json({ valid: false, normalized: "", reply: "Unknown step." }, 400);
     }
     const allowedLangs = new Set(["en", "pl", "is"]);
-    const safeLang = allowedLangs.has(lang) ? lang : "en";
+    const safeLang: L = (allowedLangs.has(lang) ? lang : "en") as L;
     const v = (value ?? "").trim().slice(0, 2000); // hard cap input
     const trimmedHistory = Array.isArray(history) ? history.slice(-8) : []; // keep cost bounded
 
@@ -374,7 +374,7 @@ Deno.serve(async (req) => {
       return json({
         valid: ok,
         normalized: v.toLowerCase(),
-        reply: ok ? "Perfect, got it. ✓" : "Hmm, that doesn't look like a valid email. Try again?",
+        reply: ok ? tr("emailOk", safeLang) : tr("emailBad", safeLang),
       });
     }
     if (step === "phone") {
@@ -383,17 +383,17 @@ Deno.serve(async (req) => {
       return json({
         valid: ok,
         normalized: v.replace(/\s+/g, " "),
-        reply: ok ? "Great, noted. ✓" : "Please enter a valid phone number (with country code if outside Iceland).",
+        reply: ok ? tr("phoneOk", safeLang) : tr("phoneBad", safeLang),
       });
     }
     if (step === "license_plate") {
-      if (!v) return json({ valid: true, normalized: "", reply: "No problem, skipping." });
+      if (!v) return json({ valid: true, normalized: "", reply: tr("plateSkip", safeLang) });
       const norm = plateNormalize(v);
       const ok = norm.length >= 2 && norm.length <= 8;
       return json({
         valid: ok,
         normalized: norm,
-        reply: ok ? `Noted: <strong>${norm}</strong>` : "That doesn't look like a plate. You can also skip.",
+        reply: ok ? `${tr("plateOk", safeLang)}: <strong>${norm}</strong>` : tr("plateBad", safeLang),
       });
     }
 
