@@ -40,7 +40,7 @@ const STEPS: Step[] = [
   },
   {
     key: "phone", apiStep: "phone",
-    ask: "Got it! Your <strong>phone number</strong>?<br><small style='opacity:0.7'>We'll send the quote here.</small>",
+    ask: "Got it! Your <strong>phone number</strong>?<br><small style='opacity:0.7'>So we can reach you if we need to confirm details.</small>",
     hint: "e.g. +354 787 8617",
   },
   { key: "email", apiStep: "email", ask: "And your <strong>email</strong>?", hint: "e.g. you@workshop.is" },
