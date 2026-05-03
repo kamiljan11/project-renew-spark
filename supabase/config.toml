@@ -1,1 +1,4 @@
 project_id = "zvxyynbyrrmiwfjogmhg"
+
+[functions.form-assist]
+verify_jwt = false
