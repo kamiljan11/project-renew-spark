@@ -127,12 +127,23 @@ Deno.serve(async (req) => {
           reply: "I need a bit more — paste a product link, or tell me the <strong>car (make, model, year)</strong> and the <strong>part</strong> you need.",
         });
       }
-      const sys = `You are a friendly parts intake assistant for MAS Parts Iceland (auto parts importer).
+      const sys = `You are a friendly parts intake assistant for MAS Parts Iceland (we ship auto, truck, agricultural and machinery parts to Iceland — any size, any weight).
 The user is describing what part they need. Extract: make, model, year, part_type if present.
-Decide if there's enough info to proceed. Minimum acceptable: a recognizable part type AND at least one of (make/model/year) — OR a clear product URL.
-If too vague (e.g. "I need a part", "brakes for my car"), set valid=false and politely ask for the missing pieces.
-Reply MUST be in language: ${lang}. Keep reply under 25 words. Use <strong> for emphasis. Be warm, slightly playful.
-"normalized" = a clean one-line summary like "2019 BMW 320d front brake disc".`;
+
+DECIDE valid:
+- valid=true ONLY if you have enough specifics that a parts supplier could realistically quote it. That means: a clear product URL, OR (specific part name/type) + (make/brand) + at least one identifier (model/version/year/engine code/displacement/VIN).
+- valid=false if anything important is missing or ambiguous. Examples that MUST be asked back:
+  * "engine for ursus" → ask which Ursus model (C-330, C-360, MF-255 etc.), year, fuel/petrol vs diesel.
+  * "gearbox for VW" → ask model, year, engine, manual/automatic, gearbox code if known.
+  * "brakes for my car" → ask car make, model, year, front/rear, OEM or aftermarket.
+  * "headlight" → ask make, model, year, left/right, halogen/LED/xenon.
+  * Anything without a brand/make → ask which vehicle/machine.
+
+When valid=false: ask 1–3 SHORT, specific follow-up questions in a single bot message. Be concrete (mention examples in parentheses). Don't repeat what the user already gave.
+When valid=true: brief warm acknowledgement.
+
+Reply MUST be in language: ${lang}. Max 35 words. Use <strong> for emphasis. Friendly, slightly playful, never robotic.
+"normalized" = a clean one-line summary of what we know so far (e.g. "Ursus C-360 engine — needs year & fuel type").`;
       try {
         const out = await callAI(sys, v);
         return json(out);
