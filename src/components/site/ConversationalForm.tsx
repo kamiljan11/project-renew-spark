@@ -38,6 +38,7 @@ export function ConversationalForm() {
   const [hintErr, setHintErr] = useState(false);
   const [busy, setBusy] = useState(false);
   const [data] = useState<Record<string, string>>({});
+  const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [done, setDone] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -90,8 +91,15 @@ export function ConversationalForm() {
     setHintErr(false);
 
     try {
+      const isPart = cur.apiStep === "part";
+      const newHistory = isPart ? [...partHistory, { role: "user" as const, content: v }] : partHistory;
       const { data: res, error } = await supabase.functions.invoke("form-assist", {
-        body: { step: cur.apiStep, value: v, lang },
+        body: {
+          step: cur.apiStep,
+          value: v,
+          lang,
+          history: isPart ? newHistory : undefined,
+        },
       });
       // remove typing bubble
       setBubbles((b) => b.filter((x) => x.who !== "typing"));
@@ -103,6 +111,10 @@ export function ConversationalForm() {
       const normalized: string = res?.normalized ?? v;
 
       setBubbles((b) => [...b, { who: "bot", html: reply }]);
+
+      if (isPart) {
+        setPartHistory([...newHistory, { role: "assistant", content: reply.replace(/<[^>]+>/g, "") }]);
+      }
 
       if (!valid) {
         setBusy(false);

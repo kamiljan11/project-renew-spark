@@ -9,10 +9,12 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+type Msg = { role: "user" | "assistant"; content: string };
 type ReqBody = {
-  step: string; // "part" | "phone" | "email" | "company" | "license_plate" | "address"
+  step: string;
   value: string;
   lang?: "en" | "pl" | "is";
+  history?: Msg[];
 };
 
 const URL_RE = /https?:\/\/[^\s]+/i;
@@ -23,7 +25,7 @@ function plateNormalize(v: string) {
   return v.toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
-async function callAI(system: string, user: string): Promise<any> {
+async function callAI(system: string, messages: Msg[]): Promise<any> {
   const apiKey = Deno.env.get("LOVABLE_API_KEY");
   if (!apiKey) throw new Error("LOVABLE_API_KEY not set");
   const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -36,7 +38,7 @@ async function callAI(system: string, user: string): Promise<any> {
       model: "google/gemini-2.5-flash",
       messages: [
         { role: "system", content: system },
-        { role: "user", content: user },
+        ...messages,
       ],
       tools: [
         {
@@ -78,7 +80,7 @@ async function callAI(system: string, user: string): Promise<any> {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
-    const { step, value, lang = "en" }: ReqBody = await req.json();
+    const { step, value, lang = "en", history = [] }: ReqBody = await req.json();
     const v = (value ?? "").trim();
 
     // ---------- Heuristic fast-paths (no AI call) ----------
@@ -127,14 +129,26 @@ Deno.serve(async (req) => {
           reply: "I need a bit more — paste a product link, or tell me the <strong>car (make, model, year)</strong> and the <strong>part</strong> you need.",
         });
       }
-      const sys = `You are a friendly parts intake assistant for MAS Parts Iceland (auto parts importer).
+      const sys = `You are a friendly parts intake assistant for MAS Parts Iceland (we ship auto, truck, agricultural and machinery parts to Iceland — any size, any weight).
 The user is describing what part they need. Extract: make, model, year, part_type if present.
-Decide if there's enough info to proceed. Minimum acceptable: a recognizable part type AND at least one of (make/model/year) — OR a clear product URL.
-If too vague (e.g. "I need a part", "brakes for my car"), set valid=false and politely ask for the missing pieces.
-Reply MUST be in language: ${lang}. Keep reply under 25 words. Use <strong> for emphasis. Be warm, slightly playful.
-"normalized" = a clean one-line summary like "2019 BMW 320d front brake disc".`;
+
+DECIDE valid:
+- valid=true ONLY if you have enough specifics that a parts supplier could realistically quote it. That means: a clear product URL, OR (specific part name/type) + (make/brand) + at least one identifier (model/version/year/engine code/displacement/VIN).
+- valid=false if anything important is missing or ambiguous. Examples that MUST be asked back:
+  * "engine for ursus" → ask which Ursus model (C-330, C-360, MF-255 etc.), year, fuel/petrol vs diesel.
+  * "gearbox for VW" → ask model, year, engine, manual/automatic, gearbox code if known.
+  * "brakes for my car" → ask car make, model, year, front/rear, OEM or aftermarket.
+  * "headlight" → ask make, model, year, left/right, halogen/LED/xenon.
+  * Anything without a brand/make → ask which vehicle/machine.
+
+When valid=false: ask 1–3 SHORT, specific follow-up questions in a single bot message. Be concrete (mention examples in parentheses). Don't repeat what the user already gave.
+When valid=true: brief warm acknowledgement.
+
+Reply MUST be in language: ${lang}. Max 35 words. Use <strong> for emphasis. Friendly, slightly playful, never robotic.
+"normalized" = a clean one-line summary of what we know so far (e.g. "Ursus C-360 engine — needs year & fuel type").`;
       try {
-        const out = await callAI(sys, v);
+        const msgs: Msg[] = history.length ? history : [{ role: "user", content: v }];
+        const out = await callAI(sys, msgs);
         return json(out);
       } catch (e) {
         // Graceful fallback: accept if reasonably long
