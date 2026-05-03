@@ -160,9 +160,35 @@ export function ConversationalForm() {
     setTimeout(() => inputRef.current?.focus(), 50);
   };
 
+  // Detect if the user already gave plate or vehicle (make+year) info during the parts step,
+  // so we can skip the redundant license_plate question.
+  const PLATE_RE = /\b[A-Z]{2,3}[\s-]?\d{2,3}\b/;
+  const YEAR_RE = /\b(19|20)\d{2}\b/;
+  const MAKE_RE = /\b(toyota|kia|hyundai|vw|volkswagen|skoda|seat|audi|bmw|mercedes|benz|ford|opel|renault|peugeot|citroen|fiat|nissan|mazda|honda|suzuki|subaru|mitsubishi|volvo|saab|jeep|chrysler|dodge|tesla|porsche|land\s?rover|range\s?rover|jaguar|mini|dacia|lexus|infiniti|scania|man|daf|iveco|ursus|massey|john\s?deere|new\s?holland|kubota|jcb|caterpillar|komatsu)\b/i;
+
+  const inferVehicleFromParts = (): string | null => {
+    const blob = [...partHistory.map((m) => m.content), ...partItems].join(" \n ");
+    const upper = blob.toUpperCase();
+    const plateMatch = upper.match(PLATE_RE);
+    if (plateMatch) return plateMatch[0].replace(/[\s-]/g, "");
+    if (MAKE_RE.test(blob) && YEAR_RE.test(blob)) {
+      // Pull a compact summary line
+      const line = blob.split(/\n+/).find((l) => MAKE_RE.test(l) && YEAR_RE.test(l));
+      return (line ?? blob).trim().slice(0, 120);
+    }
+    return null;
+  };
+
   const advanceStep = () => {
     setDynamicChips(null);
-    const next = step + 1;
+    let next = step + 1;
+    // Auto-skip license_plate if vehicle/plate info was already given in the parts step.
+    while (next < STEPS.length && STEPS[next].key === "license_plate" && !data["license_plate"]) {
+      const inferred = inferVehicleFromParts();
+      if (!inferred) break;
+      data["license_plate"] = inferred;
+      next++;
+    }
     if (next < STEPS.length) {
       setTimeout(() => {
         setBubbles((b) => [...b, { who: "bot", html: STEPS[next].ask }]);
