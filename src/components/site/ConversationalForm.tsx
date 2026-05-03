@@ -233,7 +233,7 @@ export function ConversationalForm() {
       }, 350);
     } else {
       setBusy(false);
-      submit();
+      openReview();
     }
   };
 
