@@ -431,6 +431,83 @@ export function ConversationalForm() {
         )}
       </div>
 
+      {/* Review & Confirm screen — shown after the last step, before submit */}
+      {!done && reviewing && (() => {
+        void force;
+        const reviewItems = STEPS.map((s, idx) => {
+          let value = "";
+          if (s.key === "photos") {
+            value = photoUrls.length ? `${photoUrls.length} photo${photoUrls.length > 1 ? "s" : ""}` : "";
+          } else {
+            value = data[s.key] ?? "";
+          }
+          const labelMap: Record<string, string> = {
+            part_links: lang === "pl" ? "Część / link" : lang === "is" ? "Hlutur / hlekkur" : "Part / link",
+            phone: lang === "pl" ? "Telefon" : lang === "is" ? "Sími" : "Phone",
+            email: lang === "pl" ? "E-mail" : "Email",
+            company: lang === "pl" ? "Imię / firma" : lang === "is" ? "Nafn / fyrirtæki" : "Name / company",
+            license_plate: lang === "pl" ? "Tablica / pojazd" : lang === "is" ? "Skráningarn. / ökutæki" : "Plate / vehicle",
+            address: lang === "pl" ? "Adres dostawy" : lang === "is" ? "Heimilisfang" : "Delivery address",
+            delivery_preference: lang === "pl" ? "Dostawa" : lang === "is" ? "Sending" : "Shipping",
+            photos: lang === "pl" ? "Zdjęcia" : lang === "is" ? "Myndir" : "Photos",
+          };
+          return { idx, key: s.key, label: labelMap[s.key], value };
+        });
+        const heading = lang === "pl"
+          ? "Sprawdź swoje odpowiedzi 👇"
+          : lang === "is"
+            ? "Yfirfarðu svörin þín 👇"
+            : "Review your answers 👇";
+        const sub = lang === "pl"
+          ? "Wszystko się zgadza? Możesz edytować dowolny krok."
+          : lang === "is"
+            ? "Er allt rétt? Þú getur breytt hverju skrefi."
+            : "All correct? You can edit any step.";
+        const editLbl = lang === "pl" ? "Edytuj" : lang === "is" ? "Breyta" : "Edit";
+        const sendLbl = lang === "pl" ? "✅ Wyślij zapytanie" : lang === "is" ? "✅ Senda beiðni" : "✅ Send request";
+        const emptyLbl = lang === "pl" ? "(pominięte)" : lang === "is" ? "(sleppt)" : "(skipped)";
+        return (
+          <div className="px-4 pb-3">
+            <div className="rounded-xl border-2 border-mas-orange/30 bg-orange-50/50 p-3 mb-3">
+              <div className="font-extrabold text-navy text-sm mb-0.5" style={{ fontFamily: "Exo 2" }}>{heading}</div>
+              <div className="text-xs text-muted-foreground">{sub}</div>
+            </div>
+            <ul className="flex flex-col gap-2">
+              {reviewItems.map((it) => (
+                <li key={it.key} className="flex items-start justify-between gap-3 rounded-lg border border-slate-200 bg-white p-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{it.label}</div>
+                    <div className={`text-sm mt-0.5 break-words whitespace-pre-wrap ${it.value ? "text-navy" : "text-muted-foreground italic"}`}>
+                      {it.value || emptyLbl}
+                    </div>
+                    {it.key === "photos" && photoUrls.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {photoUrls.map((url) => (
+                          <img key={url} src={url} alt="" className="w-10 h-10 rounded object-cover border border-border" />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => editStep(it.idx)}
+                    className="shrink-0 text-xs font-semibold text-mas-orange hover:underline px-2 py-1"
+                    aria-label={`${editLbl} ${it.label}`}
+                  >
+                    {editLbl}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={submit}
+              className="mt-4 w-full rounded-xl bg-mas-orange text-white font-bold text-base py-3.5 hover:opacity-90 transition"
+            >
+              {sendLbl}
+            </button>
+          </div>
+        );
+      })()}
+
       {/* Multi-part loop: after a part is accepted, let the user add more or move on */}
       {!done && !busy && awaitingMoreParts && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
