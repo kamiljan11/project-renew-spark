@@ -115,8 +115,8 @@ function Index() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest">
               Trusted by
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold uppercase text-navy" style={{ letterSpacing: "-0.02em" }}>
-              WHAT CLIENTS SAY ABOUT US
+            <h2 className="text-3xl md:text-4xl font-bold text-navy" style={{ letterSpacing: "-0.02em" }}>
+              What clients say
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
