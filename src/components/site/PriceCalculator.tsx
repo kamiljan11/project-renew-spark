@@ -322,7 +322,10 @@ export function PriceCalculator({
           <ul className="flex flex-col divide-y divide-slate-100">
             {items.map((it, i) => (
               <li key={i} className="flex items-center justify-between gap-2 py-1.5 text-sm">
-                <span className="flex-1 min-w-0 truncate text-navy">{it.name}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="truncate text-navy">{it.name}</div>
+                  {it.link && <div className="truncate text-[10px] text-slate-500" title={it.link}>{it.link}</div>}
+                </div>
                 <span className="text-slate-600 tabular-nums">{fmtDec(it.pricePLN)} PLN</span>
                 <span className="text-slate-500 tabular-nums w-12 text-right">{it.weightKg.toFixed(1)} kg</span>
                 <button onClick={() => removeItem(i)} className="text-slate-400 hover:text-red-600 p-1"><Trash2 className="w-3.5 h-3.5" /></button>
