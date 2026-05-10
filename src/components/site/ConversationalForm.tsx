@@ -43,8 +43,16 @@ const STEPS: Step[] = [
     ],
   },
   {
+    key: "license_plate", apiStep: "license_plate",
+    ask: "<strong>License plate</strong> of the car?<br><small style='opacity:0.85'>That's all we need — from the plate we pull VIN, year, model, engine and colour automatically. No plate? Type make, model & year instead (e.g. \"VW Golf 2015 1.6 TDI\").</small>",
+    hint: "e.g. KEF 123",
+    optional: true,
+    maxLen: 120,
+    chips: [{ label: "Skip for now", submit: "", normalize: "" }],
+  },
+  {
     key: "part_links", apiStep: "part",
-    ask: "Hi 👋 Tell us <strong>what part</strong> you need and <strong>exactly where it sits on the car</strong> — the more precise, the easier it is to source.<br><small style='opacity:0.85'>Examples: <em>front-left headlight</em>, <em>rear-right ABS sensor</em>, <em>turbo intercooler hose under the engine bay</em>. If you have a link or OEM number — paste it. You can also add <strong>photos of the part</strong> at the end (very helpful!).</small>",
+    ask: "Great — now tell us <strong>what exact part</strong> you need and <strong>where it sits on the car</strong>.<br><small style='opacity:0.85'>Examples: <em>front-left headlight</em>, <em>rear-right ABS sensor</em>, <em>turbo intercooler hose under the engine bay</em>. If you have a link or OEM number — paste it here. You can also add <strong>photos of the part</strong> at the end.</small>",
     hint: "e.g. front-left headlight / OEM 1K6941005C / link",
     multiline: true,
     maxLen: 2000,
@@ -66,14 +74,6 @@ const STEPS: Step[] = [
   },
   { key: "email", apiStep: "email", ask: "And your <strong>email</strong>?", hint: "e.g. you@workshop.is" },
   { key: "company", apiStep: "company", ask: "Your <strong>name or company</strong>?", hint: "e.g. Workshop ehf.", maxLen: 120 },
-  {
-    key: "license_plate", apiStep: "license_plate",
-    ask: "<strong>License plate</strong> of the car?<br><small style='opacity:0.85'>That's all we need — from the plate we pull VIN, year, model, engine and colour automatically. No plate? Type make, model & year instead (e.g. \"VW Golf 2015 1.6 TDI\").</small>",
-    hint: "e.g. KEF 123",
-    optional: true,
-    maxLen: 120,
-    chips: [{ label: "Skip for now", submit: "", normalize: "" }],
-  },
   {
     key: "address", apiStep: "address",
     ask: "<strong>Delivery address</strong> in Iceland?",
@@ -376,18 +376,18 @@ export function ConversationalForm() {
       setHintMsg("");
       return;
     }
-    const firstAsk = p === "link"
+    const intro = p === "link"
       ? (lang === "pl"
-        ? "Świetnie! 🔗 Wklej <strong>link (lub kilka linków)</strong> do części — jeden na linijkę. Płacisz tylko części + wysyłkę (cło wliczone)."
+        ? "Świetnie! Jeśli masz <strong>link albo numer OEM</strong>, dodasz go za chwilę po potwierdzeniu auta."
         : lang === "is"
-          ? "Frábært! 🔗 Sendu <strong>hlekk (eða nokkra)</strong> á varahlutinn — einn á línu. Þú borgar aðeins varahluti + sendingu (tollur innifalinn)."
-          : "Great! 🔗 Paste the <strong>link (or several links)</strong> to the part — one per line. You only pay parts + shipping (customs included).")
+          ? "Frábært! Ef þú ert með <strong>hlekk eða OEM númer</strong> geturðu bætt því við rétt á eftir þegar bíllinn hefur verið staðfestur."
+          : "Great! If you have a <strong>link or OEM number</strong>, you'll add it right after we confirm the car.")
       : (lang === "pl"
         ? "Rozumiem 🔍 — wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Opłata za wyszukiwanie: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, płatna z góry. Jeśli kupisz znalezioną przez nas część — kwota zostaje <strong>zaliczona na poczet zamówienia</strong>. Jeśli nie — opłata pozostaje u nas.<br><br>Opisz, czego potrzebujesz (część, OEM, model auta)."
         : lang === "is"
           ? "Skil 🔍 — þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Leitargjald: <strong>4 960 ISK (4 000 + 24% VSK)</strong>, greitt fyrirfram. Ef þú kaupir hlutinn sem við finnum — gjaldið <strong>dregst frá pöntuninni</strong>. Annars heldum við gjaldinu.<br><br>Lýstu því sem þú þarft (varahlutur, OEM, bíltegund)."
           : "Got it 🔍 — you're hiring us as <strong>your buyer in Europe</strong>. Search fee: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, paid upfront. If you buy the part we find — the fee is <strong>credited toward your order</strong>. If not, we keep it.<br><br>Describe what you need (part, OEM, car model).");
-    setBubbles([{ who: "bot", html: STEPS[0].ask }]);
+    setBubbles([{ who: "bot", html: intro }, { who: "bot", html: STEPS[0].ask }]);
     setStep(0);
     setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
     setTimeout(() => inputRef.current?.focus(), 100);
@@ -405,11 +405,11 @@ export function ConversationalForm() {
     setPartItems([summary]);
     setBubbles((b) => [...b,
       { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
-      { who: "bot", html: STEPS[2].ask },
+      { who: "bot", html: STEPS[3].ask },
     ]);
-    setStep(2);
+    setStep(3);
     setHintMsg("Press Enter to continue");
-    persist({ step: 2, data: newData, partItems: [summary] });
+    persist({ step: 3, data: newData, partItems: [summary] });
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
@@ -424,7 +424,7 @@ export function ConversationalForm() {
     setBubbles((b) => [...b, { who: "bot", html: t("form.allDone") }]);
     try {
       const payload: Record<string, unknown> = {};
-      for (const k of ["need_overview", "part_links", "phone", "email", "company", "license_plate", "address", "delivery_preference"] as const) {
+      for (const k of ["part_links", "phone", "email", "company", "license_plate", "address", "delivery_preference"] as const) {
         if (data[k]) payload[k] = data[k];
       }
       if (photoUrls.length) payload.photo_urls = photoUrls;
@@ -979,6 +979,7 @@ export function ConversationalForm() {
             value = data[s.key] ?? "";
           }
           const labelMap: Record<string, string> = {
+            need_overview: lang === "pl" ? "Potrzeba" : lang === "is" ? "Þörf" : "Need",
             part_links: lang === "pl" ? "Część / link" : lang === "is" ? "Hlutur / hlekkur" : "Part / link",
             phone: lang === "pl" ? "Telefon" : lang === "is" ? "Sími" : "Phone",
             email: lang === "pl" ? "E-mail" : "Email",
