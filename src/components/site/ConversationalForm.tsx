@@ -157,6 +157,8 @@ export function ConversationalForm() {
   const [copied, setCopied] = useState(false);
   const [whyOpen, setWhyOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [path, setPath] = useState<Path | null>(null);
+  const [calcSnapshot, setCalcSnapshot] = useState<CalcSnapshot | null>(null);
   const editingReturnRef = useRef(false);
   useEffect(() => { setMounted(true); }, []);
   const chatRef = useRef<HTMLDivElement>(null);
