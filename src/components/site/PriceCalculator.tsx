@@ -36,8 +36,9 @@ function ppCost(w: number): number {
 
 // ---- i18n ----
 type T = {
-  title: string; addTitle: string; nameLbl: string; priceLbl: string; weightLbl: string;
+  title: string; addTitle: string; nameLbl: string; linkLbl: string; priceLbl: string; weightLbl: string;
   dimTitle: string; dimL: string; dimW: string; dimH: string; addBtn: string;
+  introHint: string;
   orderTitle: string; colName: string; colPLN: string; colKg: string; clearBtn: string;
   shipTitle: string; shipNamePP: string; hintPP: string; hintDHL: string;
   rProducts: string; rShip: string; rTotal: string; rTotalNetto: string; footer: string;
@@ -48,9 +49,10 @@ type T = {
 const TR: Record<Lang, T> = {
   pl: {
     title: "Kalkulator wyceny", addTitle: "Dodaj produkt",
-    nameLbl: "Nazwa produktu (opcjonalnie)", priceLbl: "Cena w PL (PLN)", weightLbl: "Waga (kg)",
+    nameLbl: "Nazwa produktu (opcjonalnie)", linkLbl: "Link do części lub numer OEM (opcjonalnie)", priceLbl: "Cena w PL (PLN)", weightLbl: "Waga (kg)",
     dimTitle: "Wymiary opakowania — opcjonalne", dimL: "Dług. cm", dimW: "Szer. cm", dimH: "Wys. cm",
     addBtn: "+ Dodaj do zamówienia",
+    introHint: "Otwórz swój link → skopiuj cenę (PLN) i wagę (kg) → wklej tutaj. Możesz dodać kilka produktów do jednego zamówienia.",
     orderTitle: "Twoje produkty", colName: "Produkt", colPLN: "PLN", colKg: "kg",
     clearBtn: "↺ Wyczyść",
     shipTitle: "Wysyłka", shipNamePP: "Poczta", hintPP: "Taniej, wolniej", hintDHL: "Szybciej, drożej",
@@ -70,9 +72,10 @@ const TR: Record<Lang, T> = {
   },
   is: {
     title: "Verðreiknir", addTitle: "Bæta við vöru",
-    nameLbl: "Heiti vöru (valfrjálst)", priceLbl: "Verð í PL (PLN)", weightLbl: "Þyngd (kg)",
+    nameLbl: "Heiti vöru (valfrjálst)", linkLbl: "Hlekkur á hlut eða OEM númer (valfrjálst)", priceLbl: "Verð í PL (PLN)", weightLbl: "Þyngd (kg)",
     dimTitle: "Mál á pakka — valfrjálst", dimL: "Lengd cm", dimW: "Breidd cm", dimH: "Hæð cm",
     addBtn: "+ Bæta við pöntun",
+    introHint: "Opnaðu hlekkinn þinn → afritaðu verð (PLN) og þyngd (kg) → settu hér. Þú getur bætt við mörgum vörum í eina pöntun.",
     orderTitle: "Vörurnar þínar", colName: "Vara", colPLN: "PLN", colKg: "kg",
     clearBtn: "↺ Hreinsa",
     shipTitle: "Sending", shipNamePP: "Pósturinn", hintPP: "Ódýrara, hægar", hintDHL: "Hraðar, dýrara",
@@ -92,9 +95,10 @@ const TR: Record<Lang, T> = {
   },
   en: {
     title: "Price calculator", addTitle: "Add product",
-    nameLbl: "Product name (optional)", priceLbl: "Price in PL (PLN)", weightLbl: "Weight (kg)",
+    nameLbl: "Product name (optional)", linkLbl: "Part link or OEM number (optional)", priceLbl: "Price in PL (PLN)", weightLbl: "Weight (kg)",
     dimTitle: "Package dimensions — optional", dimL: "Length cm", dimW: "Width cm", dimH: "Height cm",
     addBtn: "+ Add to order",
+    introHint: "Open your link → copy price (PLN) and weight (kg) → paste here. You can add several products to a single order.",
     orderTitle: "Your products", colName: "Product", colPLN: "PLN", colKg: "kg",
     clearBtn: "↺ Clear",
     shipTitle: "Shipping", shipNamePP: "Post", hintPP: "Cheaper, slower", hintDHL: "Faster, pricier",
@@ -117,6 +121,7 @@ const TR: Record<Lang, T> = {
 // ---- Types ----
 export type CalcItem = {
   name: string;
+  link?: string;
   pricePLN: number;
   weightKg: number;
   L?: number; W?: number; H?: number;
@@ -153,6 +158,7 @@ export function PriceCalculator({
   const [items, setItems] = useState<CalcItem[]>([]);
   const [ship, setShip] = useState<"pp" | "dhl">("pp");
   const [name, setName] = useState("");
+  const [link, setLink] = useState("");
   const [price, setPrice] = useState("");
   const [weight, setWeight] = useState("");
   const [dimsOpen, setDimsOpen] = useState(false);
@@ -163,10 +169,10 @@ export function PriceCalculator({
     const p = parseFloat(price); const w = parseFloat(weight);
     if (!(p > 0) || !(w > 0)) { setFieldErr(t.errFields); return; }
     setItems((arr) => [...arr, {
-      name: name.trim() || "—", pricePLN: p, weightKg: w,
+      name: name.trim() || "—", link: link.trim() || undefined, pricePLN: p, weightKg: w,
       L: parseFloat(L) || 0, W: parseFloat(W) || 0, H: parseFloat(H) || 0,
     }]);
-    setName(""); setPrice(""); setWeight(""); setL(""); setW(""); setH(""); setFieldErr("");
+    setName(""); setLink(""); setPrice(""); setWeight(""); setL(""); setW(""); setH(""); setFieldErr("");
   };
   const removeItem = (i: number) => setItems((arr) => arr.filter((_, idx) => idx !== i));
   const clearAll = () => setItems([]);
@@ -254,12 +260,19 @@ export function PriceCalculator({
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-3 sm:p-4 flex flex-col gap-3">
+      <p className="text-[11px] text-slate-600 leading-relaxed px-1">{t.introHint}</p>
       {/* Add product */}
       <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3">
         <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">{t.addTitle}</div>
         <input
           type="text" value={name} onChange={(e) => setName(e.target.value)}
           placeholder={t.nameLbl}
+          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-mas-orange mb-2"
+          style={{ fontSize: "16px" }}
+        />
+        <input
+          type="text" value={link} onChange={(e) => setLink(e.target.value)}
+          placeholder={t.linkLbl}
           className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-mas-orange mb-2"
           style={{ fontSize: "16px" }}
         />
@@ -309,7 +322,10 @@ export function PriceCalculator({
           <ul className="flex flex-col divide-y divide-slate-100">
             {items.map((it, i) => (
               <li key={i} className="flex items-center justify-between gap-2 py-1.5 text-sm">
-                <span className="flex-1 min-w-0 truncate text-navy">{it.name}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="truncate text-navy">{it.name}</div>
+                  {it.link && <div className="truncate text-[10px] text-slate-500" title={it.link}>{it.link}</div>}
+                </div>
                 <span className="text-slate-600 tabular-nums">{fmtDec(it.pricePLN)} PLN</span>
                 <span className="text-slate-500 tabular-nums w-12 text-right">{it.weightKg.toFixed(1)} kg</span>
                 <button onClick={() => removeItem(i)} className="text-slate-400 hover:text-red-600 p-1"><Trash2 className="w-3.5 h-3.5" /></button>
