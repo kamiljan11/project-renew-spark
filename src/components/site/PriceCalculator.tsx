@@ -49,9 +49,10 @@ type T = {
 const TR: Record<Lang, T> = {
   pl: {
     title: "Kalkulator wyceny", addTitle: "Dodaj produkt",
-    nameLbl: "Nazwa produktu (opcjonalnie)", priceLbl: "Cena w PL (PLN)", weightLbl: "Waga (kg)",
+    nameLbl: "Nazwa produktu (opcjonalnie)", linkLbl: "Link do części lub numer OEM (opcjonalnie)", priceLbl: "Cena w PL (PLN)", weightLbl: "Waga (kg)",
     dimTitle: "Wymiary opakowania — opcjonalne", dimL: "Dług. cm", dimW: "Szer. cm", dimH: "Wys. cm",
     addBtn: "+ Dodaj do zamówienia",
+    introHint: "Otwórz swój link → skopiuj cenę (PLN) i wagę (kg) → wklej tutaj. Możesz dodać kilka produktów do jednego zamówienia.",
     orderTitle: "Twoje produkty", colName: "Produkt", colPLN: "PLN", colKg: "kg",
     clearBtn: "↺ Wyczyść",
     shipTitle: "Wysyłka", shipNamePP: "Poczta", hintPP: "Taniej, wolniej", hintDHL: "Szybciej, drożej",
