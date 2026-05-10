@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Package, Upload, X, Image as ImageIcon, RotateCcw, Info, AlertTriangle, Copy, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Package, Upload, X, Image as ImageIcon, RotateCcw, Info, AlertTriangle, Copy, Check, Link2, Search, Calculator } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/i18n/LanguageContext";
 import { useNavigate } from "@tanstack/react-router";
+import { PriceCalculator, type CalcSnapshot } from "./PriceCalculator";
+
+type Path = "link" | "search_paid" | "calculator";
 
 type Chip = {
   label: string;
