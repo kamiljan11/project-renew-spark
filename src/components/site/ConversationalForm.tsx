@@ -32,8 +32,8 @@ type Step = {
 const STEPS: Step[] = [
   {
     key: "part_links", apiStep: "part",
-    ask: "Hi 👋 Tell us what car part you need.<br><small style='opacity:0.85'>1. <strong>Got a link (or several)?</strong> Paste them all — one per line is perfect. You pay for the parts + shipping (customs clearance included).<br>2. <strong>No link?</strong> <strong>We become your buyer in Europe</strong> — we hunt the part across our trusted EU suppliers, <strong>negotiate the best price on your behalf</strong>, verify it fits your vehicle and handle the paperwork. Sourcing fee <strong>4 960 ISK (incl. VAT)</strong> upfront — credited toward your order if you buy.</small>",
-    hint: "Paste one or more links (one per line), OEM number, or describe the part",
+    ask: "Hi 👋 Tell us <strong>what part you need</strong> and <strong>where it sits on the car</strong> (front/rear, left/right, engine bay, interior…).<br><small style='opacity:0.85'>If you have a link or OEM number — paste it. Otherwise just describe the part. You can add photos at the end.</small>",
+    hint: "e.g. front-left headlight / OEM 1K6941005C / link",
     multiline: true,
     maxLen: 2000,
     chips: [
@@ -56,8 +56,8 @@ const STEPS: Step[] = [
   { key: "company", apiStep: "company", ask: "Your <strong>name or company</strong>?", hint: "e.g. Workshop ehf.", maxLen: 120 },
   {
     key: "license_plate", apiStep: "license_plate",
-    ask: "<strong>License plate</strong> or <strong>car make, model & year</strong>?<br><small style='opacity:0.85'>Either works — a plate is fastest (we can look the car up from it). Otherwise just type something like \"VW Golf 2015 1.6 TDI\".</small>",
-    hint: "e.g. KEF 123  —  or  —  VW Golf 2015 1.6 TDI",
+    ask: "<strong>License plate</strong> of the car?<br><small style='opacity:0.85'>That's all we need — from the plate we pull VIN, year, model, engine and colour automatically. No plate? Type make, model & year instead (e.g. \"VW Golf 2015 1.6 TDI\").</small>",
+    hint: "e.g. KEF 123",
     optional: true,
     maxLen: 120,
     chips: [{ label: "Skip for now", submit: "", normalize: "" }],
