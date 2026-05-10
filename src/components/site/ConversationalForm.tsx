@@ -32,14 +32,14 @@ type Step = {
 const STEPS: Step[] = [
   {
     key: "part_links", apiStep: "part",
-    ask: "Hi 👋 Tell us <strong>what part you need</strong> and <strong>where it sits on the car</strong> (front/rear, left/right, engine bay, interior…).<br><small style='opacity:0.85'>If you have a link or OEM number — paste it. Otherwise just describe the part. You can add photos at the end.</small>",
+    ask: "Hi 👋 Tell us <strong>what part</strong> you need and <strong>exactly where it sits on the car</strong> — the more precise, the easier it is to source.<br><small style='opacity:0.85'>Examples: <em>front-left headlight</em>, <em>rear-right ABS sensor</em>, <em>turbo intercooler hose under the engine bay</em>. If you have a link or OEM number — paste it. You can also add <strong>photos of the part</strong> at the end (very helpful!).</small>",
     hint: "e.g. front-left headlight / OEM 1K6941005C / link",
     multiline: true,
     maxLen: 2000,
     chips: [
       { label: "🔗 I have link(s)", fill: "" },
       { label: "🔢 OEM number", fill: "OEM number: " },
-      { label: "✏️ Describe the part", fill: "" },
+      { label: "📍 Describe + location", fill: "" },
     ],
   },
   {
