@@ -613,19 +613,8 @@ export function ConversationalForm() {
     setBusy(true);
     setHintErr(false);
 
-    if (cur.key === "need_overview") {
-      const newData = { ...data, need_overview: v };
-      setData(newData);
-      setBubbles((b) => b.filter((x) => x.who !== "typing"));
-      setBubbles((b) => [...b, { who: "bot", html: lang === "pl"
-        ? "Rozumiem. Teraz podaj <strong>numer rejestracyjny</strong>, a pobiorę dane auta i pokażę VIN do potwierdzenia."
-        : lang === "is"
-          ? "Skil. Sláðu nú inn <strong>skráningarnúmerið</strong> og ég sæki gögn bílsins og sýni VIN til staðfestingar."
-          : "Got it. Now enter the <strong>license plate</strong> and I'll fetch the vehicle data and show the VIN for confirmation." }]);
-      setVal("");
-      advanceStep(newData);
-      return;
-    }
+
+
 
     // License-plate lookup: query autoparts.is registry directly from the browser.
     if (cur.key === "license_plate") {
