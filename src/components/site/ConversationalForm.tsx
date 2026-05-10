@@ -394,11 +394,11 @@ export function ConversationalForm() {
     setPartItems([summary]);
     setBubbles((b) => [...b,
       { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
-      { who: "bot", html: STEPS[3].ask },
+      { who: "bot", html: STEPS[2].ask },
     ]);
-    setStep(3);
+    setStep(2);
     setHintMsg("Press Enter to continue");
-    persist({ step: 3, data: newData, partItems: [summary] });
+    persist({ step: 2, data: newData, partItems: [summary] });
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
