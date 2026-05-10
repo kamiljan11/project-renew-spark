@@ -84,7 +84,7 @@ const STEPS: Step[] = [
   },
   {
     key: "photos", apiStep: "photos",
-    ask: "Last step! 📸 Add <strong>photos of the part or car</strong> (optional but speeds things up a lot).<br><small style='opacity:0.85'>Up to 5 photos, max 10 MB each.</small>",
+    ask: "Last step! 📸 Add <strong>photos of the part</strong> (and the car if useful) — close-ups of labels, codes or the mounting point speed up sourcing a lot.<br><small style='opacity:0.85'>Up to 5 photos, max 10 MB each. Optional but very welcome.</small>",
     hint: "",
     optional: true,
     upload: true,
