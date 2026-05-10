@@ -359,7 +359,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
     const body = await req.json().catch(() => ({}));
-    const { step, value, lang = "en", history = [] }: ReqBody = body ?? {};
+    const { step, value, lang = "en", history = [], vehicle = "" }: ReqBody = body ?? {};
     const allowedSteps = new Set(["email", "phone", "license_plate", "part", "company", "address", "freeform"]);
     if (!step || !allowedSteps.has(step)) {
       return json({ valid: false, normalized: "", reply: "Unknown step." }, 400);
@@ -367,7 +367,13 @@ Deno.serve(async (req) => {
     const allowedLangs = new Set(["en", "pl", "is"]);
     const safeLang: L = (allowedLangs.has(lang) ? lang : "en") as L;
     const v = (value ?? "").trim().slice(0, 2000); // hard cap input
-    const trimmedHistory = Array.isArray(history) ? history.slice(-8) : []; // keep cost bounded
+    const vehicleCtx = (vehicle ?? "").toString().trim().slice(0, 400);
+    const baseHistory = Array.isArray(history) ? history.slice(-8) : [];
+    // Inject known vehicle (from license-plate lookup) as a synthetic prior user message,
+    // so the AI never re-asks for make/model/year/engine/VIN.
+    const trimmedHistory: Msg[] = vehicleCtx && step === "part"
+      ? [{ role: "user", content: `[VEHICLE ALREADY CONFIRMED FROM PLATE LOOKUP — DO NOT ASK FOR VEHICLE DETAILS AGAIN]: ${vehicleCtx}` }, ...baseHistory]
+      : baseHistory;
 
     // ---------- Heuristic fast-paths (no AI call) ----------
     if (step === "email") {
