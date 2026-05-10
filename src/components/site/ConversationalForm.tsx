@@ -852,6 +852,63 @@ export function ConversationalForm() {
         )}
       </div>
 
+      {/* Path selector — shown before any path is chosen */}
+      {!done && !reviewing && !path && !resumePromptShown && (
+        <div className="px-4 pb-4 pt-2 flex flex-col gap-2">
+          <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-1">
+            {lang === "pl" ? "Jak chcesz zacząć?" : lang === "is" ? "Hvernig viltu byrja?" : "How would you like to start?"}
+          </div>
+          <button
+            onClick={() => choosePath("link")}
+            className="text-left rounded-xl border-2 border-slate-200 hover:border-mas-orange hover:bg-orange-50/40 transition-colors p-3 flex gap-3 items-start"
+          >
+            <Link2 className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Mam link do części" : lang === "is" ? "Ég er með hlekk" : "I have a link"}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Wklej link, my kupimy i wyślemy. Płacisz tylko części + dostawę." : lang === "is" ? "Sendu hlekk — við kaupum og sendum. Þú borgar varahluti + sendingu." : "Paste a link, we buy and ship it. You only pay parts + delivery."}</div>
+            </div>
+          </button>
+          <button
+            onClick={() => choosePath("calculator")}
+            className="text-left rounded-xl border-2 border-slate-200 hover:border-mas-orange hover:bg-orange-50/40 transition-colors p-3 flex gap-3 items-start"
+          >
+            <Calculator className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Mam cenę i wagę — policz dostawę" : lang === "is" ? "Ég er með verð og þyngd — reikna sendingu" : "I have price + weight — calculate delivery"}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Natychmiastowy szacunek kosztu z dostawą do Islandii." : lang === "is" ? "Strax áætlað verð til Íslands." : "Instant estimate of total cost delivered to Iceland."}</div>
+            </div>
+          </button>
+          <button
+            onClick={() => choosePath("search_paid")}
+            className="text-left rounded-xl border-2 border-slate-200 hover:border-mas-orange hover:bg-orange-50/40 transition-colors p-3 flex gap-3 items-start"
+          >
+            <Search className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Znajdźcie część za mnie" : lang === "is" ? "Finnið hlutinn fyrir mig" : "Find the part for me"}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "4 960 ISK (z VAT) z góry — kwota wraca jako rabat, jeśli kupisz." : lang === "is" ? "4 960 ISK (m. VSK) fyrirfram — dregst frá ef þú kaupir." : "4,960 ISK (incl. VAT) upfront — credited toward your order if you buy."}</div>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* Calculator (path === 'calculator', before quote accepted) */}
+      {!done && !reviewing && path === "calculator" && !calcSnapshot && (
+        <div className="px-4 pb-3 pt-1">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-mas-orange">
+              {lang === "pl" ? "Kalkulator" : lang === "is" ? "Reiknir" : "Calculator"}
+            </span>
+            <button
+              onClick={() => { setPath(null); setBubbles([]); setHintMsg(""); persistPath(null); }}
+              className="text-[11px] text-slate-500 hover:text-navy underline"
+            >
+              {lang === "pl" ? "← Zmień ścieżkę" : lang === "is" ? "← Skipta um leið" : "← Change path"}
+            </button>
+          </div>
+          <PriceCalculator onOrder={onCalcOrder} />
+        </div>
+      )}
+
       {/* Honeypot — hidden from humans */}
       <input
         ref={honeypotRef}
