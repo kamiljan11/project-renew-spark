@@ -36,8 +36,9 @@ function ppCost(w: number): number {
 
 // ---- i18n ----
 type T = {
-  title: string; addTitle: string; nameLbl: string; priceLbl: string; weightLbl: string;
+  title: string; addTitle: string; nameLbl: string; linkLbl: string; priceLbl: string; weightLbl: string;
   dimTitle: string; dimL: string; dimW: string; dimH: string; addBtn: string;
+  introHint: string;
   orderTitle: string; colName: string; colPLN: string; colKg: string; clearBtn: string;
   shipTitle: string; shipNamePP: string; hintPP: string; hintDHL: string;
   rProducts: string; rShip: string; rTotal: string; rTotalNetto: string; footer: string;
