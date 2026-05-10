@@ -256,10 +256,8 @@ export function ConversationalForm() {
       }
     } catch { /* ignore */ }
     if (!restored) {
-      setTimeout(() => {
-        setBubbles([{ who: "bot", html: STEPS[0].ask }]);
-        setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
-      }, 400);
+      // Show path selector first instead of jumping to step 0.
+      // Bubbles + chat input remain hidden until user picks a path.
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
