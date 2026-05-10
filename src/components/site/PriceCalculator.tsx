@@ -356,7 +356,7 @@ export function PriceCalculator({
               className={`rounded-lg border-2 p-2.5 text-center transition-colors ${ship === "dhl" ? "border-mas-orange bg-orange-50" : "border-slate-200 bg-white hover:border-slate-300"}`}
             >
               <Truck className="w-5 h-5 mx-auto mb-1 text-navy" />
-              <div className="text-xs font-bold text-navy">DHL Express</div>
+              <div className="text-xs font-bold text-navy">{lang === "pl" ? "Kurier Express" : lang === "is" ? "Hraðsending" : "Express Courier"}</div>
               <div className="text-[10px] text-slate-500">{t.hintDHL}</div>
             </button>
           </div>
