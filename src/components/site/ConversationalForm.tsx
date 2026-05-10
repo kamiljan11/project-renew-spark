@@ -32,8 +32,8 @@ type Step = {
 const STEPS: Step[] = [
   {
     key: "part_links", apiStep: "part",
-    ask: "Hi 👋 Tell us what car part you need.<br><small style='opacity:0.85'>1. <strong>Got a link (or several)?</strong> Paste them all — one per line is perfect. You pay for the parts + shipping (customs clearance included).<br>2. <strong>No link?</strong> <strong>We become your buyer in Europe</strong> — we hunt the part across our trusted EU suppliers, <strong>negotiate the best price on your behalf</strong>, verify it fits your vehicle and handle the paperwork. Sourcing fee <strong>4 960 ISK (incl. VAT)</strong> upfront — credited toward your order if you buy.</small>",
-    hint: "Paste one or more links (one per line), OEM number, or describe the part",
+    ask: "Hi 👋 Tell us <strong>what part you need</strong> and <strong>where it sits on the car</strong> (front/rear, left/right, engine bay, interior…).<br><small style='opacity:0.85'>If you have a link or OEM number — paste it. Otherwise just describe the part. You can add photos at the end.</small>",
+    hint: "e.g. front-left headlight / OEM 1K6941005C / link",
     multiline: true,
     maxLen: 2000,
     chips: [
