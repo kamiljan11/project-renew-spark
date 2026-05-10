@@ -72,9 +72,10 @@ const TR: Record<Lang, T> = {
   },
   is: {
     title: "Verðreiknir", addTitle: "Bæta við vöru",
-    nameLbl: "Heiti vöru (valfrjálst)", priceLbl: "Verð í PL (PLN)", weightLbl: "Þyngd (kg)",
+    nameLbl: "Heiti vöru (valfrjálst)", linkLbl: "Hlekkur á hlut eða OEM númer (valfrjálst)", priceLbl: "Verð í PL (PLN)", weightLbl: "Þyngd (kg)",
     dimTitle: "Mál á pakka — valfrjálst", dimL: "Lengd cm", dimW: "Breidd cm", dimH: "Hæð cm",
     addBtn: "+ Bæta við pöntun",
+    introHint: "Opnaðu hlekkinn þinn → afritaðu verð (PLN) og þyngd (kg) → settu hér. Þú getur bætt við mörgum vörum í eina pöntun.",
     orderTitle: "Vörurnar þínar", colName: "Vara", colPLN: "PLN", colKg: "kg",
     clearBtn: "↺ Hreinsa",
     shipTitle: "Sending", shipNamePP: "Pósturinn", hintPP: "Ódýrara, hægar", hintDHL: "Hraðar, dýrara",
