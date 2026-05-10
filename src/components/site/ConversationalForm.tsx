@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/i18n/LanguageContext";
 import { useNavigate } from "@tanstack/react-router";
 import { PriceCalculator, type CalcSnapshot } from "./PriceCalculator";
+import { lookupVehicle, vehicleSummary } from "@/lib/vehicleLookup";
 
 type Path = "link" | "search_paid" | "calculator";
 
