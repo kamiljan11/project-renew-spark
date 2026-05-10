@@ -850,7 +850,7 @@ export function ConversationalForm() {
               <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" /> {t("form.back") || "Back"}
             </button>
           )}
-          {mounted && !done && (step > 0 || partItems.length > 0) && (
+          {mounted && !done && (
             <button
               onClick={handleReset}
               className="flex items-center gap-1 text-[12px] font-semibold text-slate-600 bg-white hover:bg-slate-100 transition-colors rounded-full px-3 py-1.5 border border-slate-300"
