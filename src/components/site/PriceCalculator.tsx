@@ -158,6 +158,7 @@ export function PriceCalculator({
   const [items, setItems] = useState<CalcItem[]>([]);
   const [ship, setShip] = useState<"pp" | "dhl">("pp");
   const [name, setName] = useState("");
+  const [link, setLink] = useState("");
   const [price, setPrice] = useState("");
   const [weight, setWeight] = useState("");
   const [dimsOpen, setDimsOpen] = useState(false);
@@ -168,10 +169,10 @@ export function PriceCalculator({
     const p = parseFloat(price); const w = parseFloat(weight);
     if (!(p > 0) || !(w > 0)) { setFieldErr(t.errFields); return; }
     setItems((arr) => [...arr, {
-      name: name.trim() || "—", pricePLN: p, weightKg: w,
+      name: name.trim() || "—", link: link.trim() || undefined, pricePLN: p, weightKg: w,
       L: parseFloat(L) || 0, W: parseFloat(W) || 0, H: parseFloat(H) || 0,
     }]);
-    setName(""); setPrice(""); setWeight(""); setL(""); setW(""); setH(""); setFieldErr("");
+    setName(""); setLink(""); setPrice(""); setWeight(""); setL(""); setW(""); setH(""); setFieldErr("");
   };
   const removeItem = (i: number) => setItems((arr) => arr.filter((_, idx) => idx !== i));
   const clearAll = () => setItems([]);
