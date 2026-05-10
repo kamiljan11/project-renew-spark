@@ -95,9 +95,10 @@ const TR: Record<Lang, T> = {
   },
   en: {
     title: "Price calculator", addTitle: "Add product",
-    nameLbl: "Product name (optional)", priceLbl: "Price in PL (PLN)", weightLbl: "Weight (kg)",
+    nameLbl: "Product name (optional)", linkLbl: "Part link or OEM number (optional)", priceLbl: "Price in PL (PLN)", weightLbl: "Weight (kg)",
     dimTitle: "Package dimensions — optional", dimL: "Length cm", dimW: "Width cm", dimH: "Height cm",
     addBtn: "+ Add to order",
+    introHint: "Open your link → copy price (PLN) and weight (kg) → paste here. You can add several products to a single order.",
     orderTitle: "Your products", colName: "Product", colPLN: "PLN", colKg: "kg",
     clearBtn: "↺ Clear",
     shipTitle: "Shipping", shipNamePP: "Post", hintPP: "Cheaper, slower", hintDHL: "Faster, pricier",
