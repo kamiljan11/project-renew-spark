@@ -340,9 +340,69 @@ export function ConversationalForm() {
     startFresh();
   };
 
+  // Persist path alongside other state
+  const persistPath = (p: Path | null) => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      parsed.path = p;
+      parsed.savedAt = Date.now();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    } catch { /* ignore */ }
+  };
+
+  const choosePath = (p: Path) => {
+    setPath(p);
+    persistPath(p);
+    startTimeRef.current = Date.now();
+    if (p === "calculator") {
+      setBubbles([{ who: "bot", html: lang === "pl"
+        ? "Świetnie! Wpisz cenę w PL (PLN) i wagę (kg) części, a od razu policzymy całkowity koszt z dostawą do Islandii."
+        : lang === "is"
+          ? "Frábært! Sláðu inn verð (PLN) og þyngd (kg) — við reiknum strax út heildarkostnað til Íslands."
+          : "Great! Enter the part's PL price (PLN) and weight (kg) — we'll instantly calculate the total cost delivered to Iceland." }]);
+      setHintMsg("");
+      return;
+    }
+    const firstAsk = p === "link"
+      ? (lang === "pl"
+        ? "Świetnie! 🔗 Wklej <strong>link (lub kilka linków)</strong> do części — jeden na linijkę. Płacisz tylko części + wysyłkę (cło wliczone)."
+        : lang === "is"
+          ? "Frábært! 🔗 Sendu <strong>hlekk (eða nokkra)</strong> á varahlutinn — einn á línu. Þú borgar aðeins varahluti + sendingu (tollur innifalinn)."
+          : "Great! 🔗 Paste the <strong>link (or several links)</strong> to the part — one per line. You only pay parts + shipping (customs included).")
+      : (lang === "pl"
+        ? "Rozumiem 🔍 — wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Opłata za wyszukiwanie: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, płatna z góry. Jeśli kupisz znalezioną przez nas część — kwota zostaje <strong>zaliczona na poczet zamówienia</strong>. Jeśli nie — opłata pozostaje u nas.<br><br>Opisz, czego potrzebujesz (część, OEM, model auta)."
+        : lang === "is"
+          ? "Skil 🔍 — þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Leitargjald: <strong>4 960 ISK (4 000 + 24% VSK)</strong>, greitt fyrirfram. Ef þú kaupir hlutinn sem við finnum — gjaldið <strong>dregst frá pöntuninni</strong>. Annars heldum við gjaldinu.<br><br>Lýstu því sem þú þarft (varahlutur, OEM, bíltegund)."
+          : "Got it 🔍 — you're hiring us as <strong>your buyer in Europe</strong>. Search fee: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, paid upfront. If you buy the part we find — the fee is <strong>credited toward your order</strong>. If not, we keep it.<br><br>Describe what you need (part, OEM, car model).");
+    setBubbles([{ who: "bot", html: firstAsk }]);
+    setStep(0);
+    setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
+
+  const onCalcOrder = (snap: CalcSnapshot) => {
+    setCalcSnapshot(snap);
+    const lines = snap.items.map((it, i) =>
+      `${i + 1}. ${it.name} — ${it.pricePLN.toFixed(2)} PLN · ${it.weightKg.toFixed(1)} kg`
+    ).join("\n");
+    const fmt = (v: number) => Math.round(v).toLocaleString("pl-PL");
+    const summary = `[Kalkulator] ${snap.ship === "pp" ? "Poczta" : "DHL Express"}\n${lines}\n— Razem (z VAT): ${fmt(snap.grandISK)} ISK · ${snap.grandPLN.toFixed(2)} PLN`;
+    const newData = { ...data, part_links: summary };
+    setData(newData);
+    setPartItems([summary]);
+    setBubbles((b) => [...b,
+      { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
+      { who: "bot", html: STEPS[1].ask },
+    ]);
+    setStep(1);
+    setHintMsg("Press Enter to continue");
+    persist({ step: 1, data: newData, partItems: [summary] });
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
+
   const submit = async () => {
-    // Anti-bot checks
-    if (honeypotRef.current?.value) return; // bot filled hidden field
+    if (honeypotRef.current?.value) return;
     if (Date.now() - startTimeRef.current < MIN_HUMAN_MS) {
       setBubbles((b) => [...b, { who: "bot", html: L.tooFast }]);
       return;
@@ -356,6 +416,8 @@ export function ConversationalForm() {
         if (data[k]) payload[k] = data[k];
       }
       if (photoUrls.length) payload.photo_urls = photoUrls;
+      if (path) payload.path = path;
+      if (calcSnapshot) payload.calc_snapshot = calcSnapshot as unknown;
       const { error } = await supabase.from("quotes").insert(payload as never);
       if (error) throw error;
       clearPersisted();
