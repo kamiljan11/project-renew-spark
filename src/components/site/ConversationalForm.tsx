@@ -32,14 +32,14 @@ type Step = {
 const STEPS: Step[] = [
   {
     key: "part_links", apiStep: "part",
-    ask: "Hi 👋 Tell us <strong>what part you need</strong> and <strong>where it sits on the car</strong> (front/rear, left/right, engine bay, interior…).<br><small style='opacity:0.85'>If you have a link or OEM number — paste it. Otherwise just describe the part. You can add photos at the end.</small>",
+    ask: "Hi 👋 Tell us <strong>what part</strong> you need and <strong>exactly where it sits on the car</strong> — the more precise, the easier it is to source.<br><small style='opacity:0.85'>Examples: <em>front-left headlight</em>, <em>rear-right ABS sensor</em>, <em>turbo intercooler hose under the engine bay</em>. If you have a link or OEM number — paste it. You can also add <strong>photos of the part</strong> at the end (very helpful!).</small>",
     hint: "e.g. front-left headlight / OEM 1K6941005C / link",
     multiline: true,
     maxLen: 2000,
     chips: [
       { label: "🔗 I have link(s)", fill: "" },
       { label: "🔢 OEM number", fill: "OEM number: " },
-      { label: "✏️ Describe the part", fill: "" },
+      { label: "📍 Describe + location", fill: "" },
     ],
   },
   {
@@ -84,7 +84,7 @@ const STEPS: Step[] = [
   },
   {
     key: "photos", apiStep: "photos",
-    ask: "Last step! 📸 Add <strong>photos of the part or car</strong> (optional but speeds things up a lot).<br><small style='opacity:0.85'>Up to 5 photos, max 10 MB each.</small>",
+    ask: "Last step! 📸 Add <strong>photos of the part</strong> (and the car if useful) — close-ups of labels, codes or the mounting point speed up sourcing a lot.<br><small style='opacity:0.85'>Up to 5 photos, max 10 MB each. Optional but very welcome.</small>",
     hint: "",
     optional: true,
     upload: true,
@@ -617,6 +617,45 @@ export function ConversationalForm() {
     setVal("");
     setBusy(true);
     setHintErr(false);
+
+    // License-plate bridge: try to look up the car via autoparts.is registry
+    // before bothering the AI. If we find it, ask the user to confirm.
+    if (cur.key === "license_plate") {
+      const plateNorm = v.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (plateNorm.length >= 4 && plateNorm.length <= 7) {
+        try {
+          const { data: car, error: carErr } = await supabase.functions.invoke("car-lookup", {
+            body: { plate: plateNorm },
+          });
+          if (!carErr && car?.found) {
+            setBubbles((b) => b.filter((x) => x.who !== "typing"));
+            const summary = car.summary as string;
+            const stored = `${car.plate} — ${summary}${car.vin ? ` · VIN ${car.vin}` : ""}`;
+            const confirmAsk = lang === "pl"
+              ? `Znalazłem pojazd: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Czy to ten samochód?`
+              : lang === "is"
+                ? `Fann ökutæki: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Er þetta bíllinn?`
+                : `Found vehicle: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Is this the car?`;
+            setBubbles((b) => [...b, { who: "bot", html: confirmAsk }]);
+            setDynamicChips([
+              {
+                label: lang === "pl" ? "✅ Tak, to ten" : lang === "is" ? "✅ Já, þetta er hann" : "✅ Yes, that's it",
+                submit: stored,
+                normalize: stored,
+              },
+              {
+                label: lang === "pl" ? "✏️ Zła tablica" : lang === "is" ? "✏️ Rangt númer" : "✏️ Wrong plate",
+                fill: "",
+              },
+            ]);
+            setBusy(false);
+            return;
+          }
+          // not found → fall through to AI step (which will store the raw plate)
+        } catch { /* network — fall through */ }
+      }
+    }
+
 
     try {
       const isPart = cur.apiStep === "part";
