@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Package, Upload, X, Image as ImageIcon, RotateCcw, Info, AlertTriangle, Copy, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Package, Upload, X, Image as ImageIcon, RotateCcw, Info, AlertTriangle, Copy, Check, Link2, Search, Calculator } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/i18n/LanguageContext";
 import { useNavigate } from "@tanstack/react-router";
+import { PriceCalculator, type CalcSnapshot } from "./PriceCalculator";
+
+type Path = "link" | "search_paid" | "calculator";
 
 type Chip = {
   label: string;
@@ -154,6 +157,8 @@ export function ConversationalForm() {
   const [copied, setCopied] = useState(false);
   const [whyOpen, setWhyOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [path, setPath] = useState<Path | null>(null);
+  const [calcSnapshot, setCalcSnapshot] = useState<CalcSnapshot | null>(null);
   const editingReturnRef = useRef(false);
   useEffect(() => { setMounted(true); }, []);
   const chatRef = useRef<HTMLDivElement>(null);
@@ -251,10 +256,8 @@ export function ConversationalForm() {
       }
     } catch { /* ignore */ }
     if (!restored) {
-      setTimeout(() => {
-        setBubbles([{ who: "bot", html: STEPS[0].ask }]);
-        setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
-      }, 400);
+      // Show path selector first instead of jumping to step 0.
+      // Bubbles + chat input remain hidden until user picks a path.
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -302,6 +305,7 @@ export function ConversationalForm() {
       setPartHistory(restoredHistory);
       setPhotoUrls(restoredPhotos);
       setStep(restoredStep);
+      setPath((p.path as Path) ?? "link");
       setDynamicChips(null);
       setBubbles([
         { who: "bot", html: lang === "pl" ? "Świetnie, kontynuujemy! 🚀" : lang === "is" ? "Frábært, höldum áfram! 🚀" : "Great, picking up where you left off! 🚀" },
@@ -321,13 +325,14 @@ export function ConversationalForm() {
     setPhotoUrls([]);
     setStep(0);
     setDynamicChips(null);
-    setBubbles([{ who: "bot", html: STEPS[0].ask }]);
-    setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setBubbles([]);
+    setHintMsg("");
     setResumePromptShown(false);
     setReviewing(false);
     setDone(false);
+    setPath(null);
+    setCalcSnapshot(null);
     startTimeRef.current = Date.now();
-    setTimeout(() => inputRef.current?.focus(), 100);
   };
 
   const handleReset = () => {
@@ -335,9 +340,69 @@ export function ConversationalForm() {
     startFresh();
   };
 
+  // Persist path alongside other state
+  const persistPath = (p: Path | null) => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      parsed.path = p;
+      parsed.savedAt = Date.now();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    } catch { /* ignore */ }
+  };
+
+  const choosePath = (p: Path) => {
+    setPath(p);
+    persistPath(p);
+    startTimeRef.current = Date.now();
+    if (p === "calculator") {
+      setBubbles([{ who: "bot", html: lang === "pl"
+        ? "Świetnie! Wpisz cenę w PL (PLN) i wagę (kg) części, a od razu policzymy całkowity koszt z dostawą do Islandii."
+        : lang === "is"
+          ? "Frábært! Sláðu inn verð (PLN) og þyngd (kg) — við reiknum strax út heildarkostnað til Íslands."
+          : "Great! Enter the part's PL price (PLN) and weight (kg) — we'll instantly calculate the total cost delivered to Iceland." }]);
+      setHintMsg("");
+      return;
+    }
+    const firstAsk = p === "link"
+      ? (lang === "pl"
+        ? "Świetnie! 🔗 Wklej <strong>link (lub kilka linków)</strong> do części — jeden na linijkę. Płacisz tylko części + wysyłkę (cło wliczone)."
+        : lang === "is"
+          ? "Frábært! 🔗 Sendu <strong>hlekk (eða nokkra)</strong> á varahlutinn — einn á línu. Þú borgar aðeins varahluti + sendingu (tollur innifalinn)."
+          : "Great! 🔗 Paste the <strong>link (or several links)</strong> to the part — one per line. You only pay parts + shipping (customs included).")
+      : (lang === "pl"
+        ? "Rozumiem 🔍 — wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Opłata za wyszukiwanie: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, płatna z góry. Jeśli kupisz znalezioną przez nas część — kwota zostaje <strong>zaliczona na poczet zamówienia</strong>. Jeśli nie — opłata pozostaje u nas.<br><br>Opisz, czego potrzebujesz (część, OEM, model auta)."
+        : lang === "is"
+          ? "Skil 🔍 — þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Leitargjald: <strong>4 960 ISK (4 000 + 24% VSK)</strong>, greitt fyrirfram. Ef þú kaupir hlutinn sem við finnum — gjaldið <strong>dregst frá pöntuninni</strong>. Annars heldum við gjaldinu.<br><br>Lýstu því sem þú þarft (varahlutur, OEM, bíltegund)."
+          : "Got it 🔍 — you're hiring us as <strong>your buyer in Europe</strong>. Search fee: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, paid upfront. If you buy the part we find — the fee is <strong>credited toward your order</strong>. If not, we keep it.<br><br>Describe what you need (part, OEM, car model).");
+    setBubbles([{ who: "bot", html: firstAsk }]);
+    setStep(0);
+    setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
+
+  const onCalcOrder = (snap: CalcSnapshot) => {
+    setCalcSnapshot(snap);
+    const lines = snap.items.map((it, i) =>
+      `${i + 1}. ${it.name} — ${it.pricePLN.toFixed(2)} PLN · ${it.weightKg.toFixed(1)} kg`
+    ).join("\n");
+    const fmt = (v: number) => Math.round(v).toLocaleString("pl-PL");
+    const summary = `[Kalkulator] ${snap.ship === "pp" ? "Poczta" : "DHL Express"}\n${lines}\n— Razem (z VAT): ${fmt(snap.grandISK)} ISK · ${snap.grandPLN.toFixed(2)} PLN`;
+    const newData = { ...data, part_links: summary };
+    setData(newData);
+    setPartItems([summary]);
+    setBubbles((b) => [...b,
+      { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
+      { who: "bot", html: STEPS[1].ask },
+    ]);
+    setStep(1);
+    setHintMsg("Press Enter to continue");
+    persist({ step: 1, data: newData, partItems: [summary] });
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
+
   const submit = async () => {
-    // Anti-bot checks
-    if (honeypotRef.current?.value) return; // bot filled hidden field
+    if (honeypotRef.current?.value) return;
     if (Date.now() - startTimeRef.current < MIN_HUMAN_MS) {
       setBubbles((b) => [...b, { who: "bot", html: L.tooFast }]);
       return;
@@ -351,6 +416,8 @@ export function ConversationalForm() {
         if (data[k]) payload[k] = data[k];
       }
       if (photoUrls.length) payload.photo_urls = photoUrls;
+      if (path) payload.path = path;
+      if (calcSnapshot) payload.calc_snapshot = calcSnapshot as unknown;
       const { error } = await supabase.from("quotes").insert(payload as never);
       if (error) throw error;
       clearPersisted();
@@ -785,6 +852,63 @@ export function ConversationalForm() {
         )}
       </div>
 
+      {/* Path selector — shown before any path is chosen */}
+      {!done && !reviewing && !path && !resumePromptShown && (
+        <div className="px-4 pb-4 pt-2 flex flex-col gap-2">
+          <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-1">
+            {lang === "pl" ? "Jak chcesz zacząć?" : lang === "is" ? "Hvernig viltu byrja?" : "How would you like to start?"}
+          </div>
+          <button
+            onClick={() => choosePath("link")}
+            className="text-left rounded-xl border-2 border-slate-200 hover:border-mas-orange hover:bg-orange-50/40 transition-colors p-3 flex gap-3 items-start"
+          >
+            <Link2 className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Mam link do części" : lang === "is" ? "Ég er með hlekk" : "I have a link"}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Wklej link, my kupimy i wyślemy. Płacisz tylko części + dostawę." : lang === "is" ? "Sendu hlekk — við kaupum og sendum. Þú borgar varahluti + sendingu." : "Paste a link, we buy and ship it. You only pay parts + delivery."}</div>
+            </div>
+          </button>
+          <button
+            onClick={() => choosePath("calculator")}
+            className="text-left rounded-xl border-2 border-slate-200 hover:border-mas-orange hover:bg-orange-50/40 transition-colors p-3 flex gap-3 items-start"
+          >
+            <Calculator className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Mam cenę i wagę — policz dostawę" : lang === "is" ? "Ég er með verð og þyngd — reikna sendingu" : "I have price + weight — calculate delivery"}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Natychmiastowy szacunek kosztu z dostawą do Islandii." : lang === "is" ? "Strax áætlað verð til Íslands." : "Instant estimate of total cost delivered to Iceland."}</div>
+            </div>
+          </button>
+          <button
+            onClick={() => choosePath("search_paid")}
+            className="text-left rounded-xl border-2 border-slate-200 hover:border-mas-orange hover:bg-orange-50/40 transition-colors p-3 flex gap-3 items-start"
+          >
+            <Search className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Znajdźcie część za mnie" : lang === "is" ? "Finnið hlutinn fyrir mig" : "Find the part for me"}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "4 960 ISK (z VAT) z góry — kwota wraca jako rabat, jeśli kupisz." : lang === "is" ? "4 960 ISK (m. VSK) fyrirfram — dregst frá ef þú kaupir." : "4,960 ISK (incl. VAT) upfront — credited toward your order if you buy."}</div>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* Calculator (path === 'calculator', before quote accepted) */}
+      {!done && !reviewing && path === "calculator" && !calcSnapshot && (
+        <div className="px-4 pb-3 pt-1">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-mas-orange">
+              {lang === "pl" ? "Kalkulator" : lang === "is" ? "Reiknir" : "Calculator"}
+            </span>
+            <button
+              onClick={() => { setPath(null); setBubbles([]); setHintMsg(""); persistPath(null); }}
+              className="text-[11px] text-slate-500 hover:text-navy underline"
+            >
+              {lang === "pl" ? "← Zmień ścieżkę" : lang === "is" ? "← Skipta um leið" : "← Change path"}
+            </button>
+          </div>
+          <PriceCalculator onOrder={onCalcOrder} />
+        </div>
+      )}
+
       {/* Honeypot — hidden from humans */}
       <input
         ref={honeypotRef}
@@ -893,7 +1017,7 @@ export function ConversationalForm() {
       })()}
 
       {/* Multi-part loop */}
-      {!done && !reviewing && !busy && awaitingMoreParts && (
+      {!done && !reviewing && !busy && awaitingMoreParts && path && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           <button
             onClick={() => { setAwaitingMoreParts(false); setVal(""); inputRef.current?.focus(); }}
@@ -935,7 +1059,7 @@ export function ConversationalForm() {
       )}
 
       {/* Quick-reply chips */}
-      {!done && !reviewing && !busy && !awaitingMoreParts && !!(dynamicChips?.length || cur.chips?.length) && (
+      {!done && !reviewing && !busy && !awaitingMoreParts && path && !!(dynamicChips?.length || cur.chips?.length) && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           {(dynamicChips?.length ? dynamicChips : cur.chips ?? []).map((chip) => (
             <button
@@ -1021,7 +1145,7 @@ export function ConversationalForm() {
       )}
 
       {/* Text input */}
-      {!done && !reviewing && !cur.upload && (
+      {!done && !reviewing && !cur.upload && path && !(path === "calculator" && !calcSnapshot) && (
         <div className="px-5 pb-5">
           <div className="relative">
             <textarea

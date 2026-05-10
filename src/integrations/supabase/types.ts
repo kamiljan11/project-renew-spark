@@ -17,6 +17,7 @@ export type Database = {
       quotes: {
         Row: {
           address: string | null
+          calc_snapshot: Json | null
           comment: string | null
           company: string | null
           created_at: string
@@ -33,6 +34,7 @@ export type Database = {
           order_total: string | null
           part: string | null
           part_links: string | null
+          path: string
           phone: string | null
           photo_urls: string[]
           standard_delivery: string | null
@@ -44,6 +46,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          calc_snapshot?: Json | null
           comment?: string | null
           company?: string | null
           created_at?: string
@@ -60,6 +63,7 @@ export type Database = {
           order_total?: string | null
           part?: string | null
           part_links?: string | null
+          path?: string
           phone?: string | null
           photo_urls?: string[]
           standard_delivery?: string | null
@@ -71,6 +75,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          calc_snapshot?: Json | null
           comment?: string | null
           company?: string | null
           created_at?: string
@@ -87,6 +92,7 @@ export type Database = {
           order_total?: string | null
           part?: string | null
           part_links?: string | null
+          path?: string
           phone?: string | null
           photo_urls?: string[]
           standard_delivery?: string | null
