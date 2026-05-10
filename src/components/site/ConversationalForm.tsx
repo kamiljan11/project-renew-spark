@@ -853,7 +853,7 @@ export function ConversationalForm() {
       </div>
 
       {/* Path selector — shown before any path is chosen */}
-      {!done && !reviewing && !path && !resumePromptShown && (
+      {mounted && !done && !reviewing && !path && !resumePromptShown && (
         <div className="px-4 pb-4 pt-2 flex flex-col gap-2">
           <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-1">
             {lang === "pl" ? "Jak chcesz zacząć?" : lang === "is" ? "Hvernig viltu byrja?" : "How would you like to start?"}
