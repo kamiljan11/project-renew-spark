@@ -56,8 +56,8 @@ const STEPS: Step[] = [
   { key: "company", apiStep: "company", ask: "Your <strong>name or company</strong>?", hint: "e.g. Workshop ehf.", maxLen: 120 },
   {
     key: "license_plate", apiStep: "license_plate",
-    ask: "<strong>License plate</strong> or <strong>car make, model & year</strong>?<br><small style='opacity:0.85'>Either works — a plate is fastest (we can look the car up from it). Otherwise just type something like \"VW Golf 2015 1.6 TDI\".</small>",
-    hint: "e.g. KEF 123  —  or  —  VW Golf 2015 1.6 TDI",
+    ask: "<strong>License plate</strong> of the car?<br><small style='opacity:0.85'>That's all we need — from the plate we pull VIN, year, model, engine and colour automatically. No plate? Type make, model & year instead (e.g. \"VW Golf 2015 1.6 TDI\").</small>",
+    hint: "e.g. KEF 123",
     optional: true,
     maxLen: 120,
     chips: [{ label: "Skip for now", submit: "", normalize: "" }],
