@@ -638,41 +638,37 @@ export function ConversationalForm() {
       return;
     }
 
-    // License-plate bridge: try to look up the car via autoparts.is registry
-    // before bothering the AI. If we find it, ask the user to confirm.
+    // License-plate lookup: query autoparts.is registry directly from the browser.
     if (cur.key === "license_plate") {
       const plateNorm = v.toUpperCase().replace(/[^A-Z0-9]/g, "");
       if (plateNorm.length >= 4 && plateNorm.length <= 7) {
-        try {
-          const { data: car, error: carErr } = await supabase.functions.invoke("car-lookup", {
-            body: { plate: plateNorm },
-          });
-          if (!carErr && car?.found) {
-            setBubbles((b) => b.filter((x) => x.who !== "typing"));
-            const summary = car.summary as string;
-            const stored = `${car.plate} — ${summary}${car.vin ? ` · VIN ${car.vin}` : ""}`;
-            const confirmAsk = lang === "pl"
-              ? `Znalazłem pojazd: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Czy to jest Twój samochód?`
-              : lang === "is"
-                ? `Fann ökutæki: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Er þetta bíllinn þinn?`
-                : `Found vehicle: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Is this your car?`;
-            setBubbles((b) => [...b, { who: "bot", html: confirmAsk }]);
-            setDynamicChips([
-              {
-                label: lang === "pl" ? "✅ Tak, to ten" : lang === "is" ? "✅ Já, þetta er hann" : "✅ Yes, that's it",
-                submit: stored,
-                normalize: stored,
-              },
-              {
-                label: lang === "pl" ? "✏️ Zła tablica" : lang === "is" ? "✏️ Rangt númer" : "✏️ Wrong plate",
-                fill: "",
-              },
-            ]);
-            setBusy(false);
-            return;
-          }
-          // not found → fall through to AI step (which will store the raw plate)
-        } catch { /* network — fall through */ }
+        const result = await lookupVehicle(plateNorm);
+        if (result.success && result.data) {
+          const car = result.data;
+          const summary = vehicleSummary(car);
+          const stored = `${car.plate} — ${summary}${car.vin ? ` · VIN ${car.vin}` : ""}`;
+          setBubbles((b) => b.filter((x) => x.who !== "typing"));
+          const confirmAsk = lang === "pl"
+            ? `Znalazłem pojazd: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Czy to jest Twój samochód?`
+            : lang === "is"
+              ? `Fann ökutæki: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Er þetta bíllinn þinn?`
+              : `Found vehicle: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Is this your car?`;
+          setBubbles((b) => [...b, { who: "bot", html: confirmAsk }]);
+          setDynamicChips([
+            {
+              label: lang === "pl" ? "✅ Tak, to ten" : lang === "is" ? "✅ Já, þetta er hann" : "✅ Yes, that's it",
+              submit: stored,
+              normalize: stored,
+            },
+            {
+              label: lang === "pl" ? "✏️ Zła tablica" : lang === "is" ? "✏️ Rangt númer" : "✏️ Wrong plate",
+              fill: "",
+            },
+          ]);
+          setBusy(false);
+          return;
+        }
+        // not found → fall through to AI step (stores the raw plate)
       }
     }
 
