@@ -384,7 +384,7 @@ export function ConversationalForm() {
   const onCalcOrder = (snap: CalcSnapshot) => {
     setCalcSnapshot(snap);
     const lines = snap.items.map((it, i) =>
-      `${i + 1}. ${it.name} — ${it.pricePLN.toFixed(2)} PLN · ${it.weightKg.toFixed(1)} kg`
+      `${i + 1}. ${it.name}${it.link ? ` — ${it.link}` : ""} — ${it.pricePLN.toFixed(2)} PLN · ${it.weightKg.toFixed(1)} kg`
     ).join("\n");
     const fmt = (v: number) => Math.round(v).toLocaleString("pl-PL");
     const summary = `[Kalkulator] ${snap.ship === "pp" ? "Poczta" : "DHL Express"}\n${lines}\n— Razem (z VAT): ${fmt(snap.grandISK)} ISK · ${snap.grandPLN.toFixed(2)} PLN`;
