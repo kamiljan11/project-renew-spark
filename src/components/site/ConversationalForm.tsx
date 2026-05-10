@@ -1017,7 +1017,7 @@ export function ConversationalForm() {
       })()}
 
       {/* Multi-part loop */}
-      {!done && !reviewing && !busy && awaitingMoreParts && (
+      {!done && !reviewing && !busy && awaitingMoreParts && path && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           <button
             onClick={() => { setAwaitingMoreParts(false); setVal(""); inputRef.current?.focus(); }}
