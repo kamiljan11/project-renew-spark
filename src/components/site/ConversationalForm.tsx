@@ -305,6 +305,7 @@ export function ConversationalForm() {
       setPartHistory(restoredHistory);
       setPhotoUrls(restoredPhotos);
       setStep(restoredStep);
+      setPath((p.path as Path) ?? "link");
       setDynamicChips(null);
       setBubbles([
         { who: "bot", html: lang === "pl" ? "Świetnie, kontynuujemy! 🚀" : lang === "is" ? "Frábært, höldum áfram! 🚀" : "Great, picking up where you left off! 🚀" },
@@ -324,13 +325,14 @@ export function ConversationalForm() {
     setPhotoUrls([]);
     setStep(0);
     setDynamicChips(null);
-    setBubbles([{ who: "bot", html: STEPS[0].ask }]);
-    setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setBubbles([]);
+    setHintMsg("");
     setResumePromptShown(false);
     setReviewing(false);
     setDone(false);
+    setPath(null);
+    setCalcSnapshot(null);
     startTimeRef.current = Date.now();
-    setTimeout(() => inputRef.current?.focus(), 100);
   };
 
   const handleReset = () => {
