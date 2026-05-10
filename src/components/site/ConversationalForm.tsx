@@ -618,6 +618,45 @@ export function ConversationalForm() {
     setBusy(true);
     setHintErr(false);
 
+    // License-plate bridge: try to look up the car via autoparts.is registry
+    // before bothering the AI. If we find it, ask the user to confirm.
+    if (cur.key === "license_plate") {
+      const plateNorm = v.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (plateNorm.length >= 4 && plateNorm.length <= 7) {
+        try {
+          const { data: car, error: carErr } = await supabase.functions.invoke("car-lookup", {
+            body: { plate: plateNorm },
+          });
+          if (!carErr && car?.found) {
+            setBubbles((b) => b.filter((x) => x.who !== "typing"));
+            const summary = car.summary as string;
+            const stored = `${car.plate} — ${summary}${car.vin ? ` · VIN ${car.vin}` : ""}`;
+            const confirmAsk = lang === "pl"
+              ? `Znalazłem pojazd: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Czy to ten samochód?`
+              : lang === "is"
+                ? `Fann ökutæki: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Er þetta bíllinn?`
+                : `Found vehicle: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Is this the car?`;
+            setBubbles((b) => [...b, { who: "bot", html: confirmAsk }]);
+            setDynamicChips([
+              {
+                label: lang === "pl" ? "✅ Tak, to ten" : lang === "is" ? "✅ Já, þetta er hann" : "✅ Yes, that's it",
+                submit: stored,
+                normalize: stored,
+              },
+              {
+                label: lang === "pl" ? "✏️ Zła tablica" : lang === "is" ? "✏️ Rangt númer" : "✏️ Wrong plate",
+                fill: "",
+              },
+            ]);
+            setBusy(false);
+            return;
+          }
+          // not found → fall through to AI step (which will store the raw plate)
+        } catch { /* network — fall through */ }
+      }
+    }
+
+
     try {
       const isPart = cur.apiStep === "part";
       const newHistory = isPart ? [...partHistory, { role: "user" as const, content: v }] : partHistory;
