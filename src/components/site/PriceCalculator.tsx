@@ -260,12 +260,19 @@ export function PriceCalculator({
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-3 sm:p-4 flex flex-col gap-3">
+      <p className="text-[11px] text-slate-600 leading-relaxed px-1">{t.introHint}</p>
       {/* Add product */}
       <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3">
         <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">{t.addTitle}</div>
         <input
           type="text" value={name} onChange={(e) => setName(e.target.value)}
           placeholder={t.nameLbl}
+          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-mas-orange mb-2"
+          style={{ fontSize: "16px" }}
+        />
+        <input
+          type="text" value={link} onChange={(e) => setLink(e.target.value)}
+          placeholder={t.linkLbl}
           className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-mas-orange mb-2"
           style={{ fontSize: "16px" }}
         />
