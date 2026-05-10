@@ -2,6 +2,3 @@ project_id = "zvxyynbyrrmiwfjogmhg"
 
 [functions.form-assist]
 verify_jwt = false
-
-[functions.car-lookup]
-verify_jwt = false
