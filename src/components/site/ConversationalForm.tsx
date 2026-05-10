@@ -859,23 +859,13 @@ export function ConversationalForm() {
             {lang === "pl" ? "Jak chcesz zacząć?" : lang === "is" ? "Hvernig viltu byrja?" : "How would you like to start?"}
           </div>
           <button
-            onClick={() => choosePath("link")}
-            className="text-left rounded-xl border-2 border-slate-200 hover:border-mas-orange hover:bg-orange-50/40 transition-colors p-3 flex gap-3 items-start"
-          >
-            <Link2 className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
-            <div>
-              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Mam link do części" : lang === "is" ? "Ég er með hlekk" : "I have a link"}</div>
-              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Wklej link, my kupimy i wyślemy. Płacisz tylko części + dostawę." : lang === "is" ? "Sendu hlekk — við kaupum og sendum. Þú borgar varahluti + sendingu." : "Paste a link, we buy and ship it. You only pay parts + delivery."}</div>
-            </div>
-          </button>
-          <button
             onClick={() => choosePath("calculator")}
             className="text-left rounded-xl border-2 border-slate-200 hover:border-mas-orange hover:bg-orange-50/40 transition-colors p-3 flex gap-3 items-start"
           >
             <Calculator className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
             <div>
-              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Mam cenę i wagę — policz dostawę" : lang === "is" ? "Ég er með verð og þyngd — reikna sendingu" : "I have price + weight — calculate delivery"}</div>
-              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Natychmiastowy szacunek kosztu z dostawą do Islandii." : lang === "is" ? "Strax áætlað verð til Íslands." : "Instant estimate of total cost delivered to Iceland."}</div>
+              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Mam link / OEM — policz mi cenę" : lang === "is" ? "Ég er með hlekk / OEM — reiknið verðið" : "I have a link / OEM — calculate the price"}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Wklej cenę PL (PLN) i wagę z linku — kalkulator pokaże cenę końcową z dostawą do Islandii. Możesz dodać kilka produktów do jednego zamówienia." : lang === "is" ? "Settu inn PL verð (PLN) og þyngd af hlekknum — reiknirinn sýnir lokaverð með sendingu til Íslands. Þú getur bætt við mörgum vörum í eina pöntun." : "Paste the PL price (PLN) and weight from your link — the calculator shows the final price delivered to Iceland. Add multiple products to one order."}</div>
             </div>
           </button>
           <button
