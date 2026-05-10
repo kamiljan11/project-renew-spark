@@ -121,6 +121,7 @@ const TR: Record<Lang, T> = {
 // ---- Types ----
 export type CalcItem = {
   name: string;
+  link?: string;
   pricePLN: number;
   weightKg: number;
   L?: number; W?: number; H?: number;
