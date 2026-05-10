@@ -1145,7 +1145,7 @@ export function ConversationalForm() {
       )}
 
       {/* Text input */}
-      {!done && !reviewing && !cur.upload && (
+      {!done && !reviewing && !cur.upload && path && !(path === "calculator" && !calcSnapshot) && (
         <div className="px-5 pb-5">
           <div className="relative">
             <textarea
