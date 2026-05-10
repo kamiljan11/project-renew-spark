@@ -853,7 +853,7 @@ export function ConversationalForm() {
       </div>
 
       {/* Path selector — shown before any path is chosen */}
-      {!done && !reviewing && !path && !resumePromptShown && (
+      {mounted && !done && !reviewing && !path && !resumePromptShown && (
         <div className="px-4 pb-4 pt-2 flex flex-col gap-2">
           <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-1">
             {lang === "pl" ? "Jak chcesz zacząć?" : lang === "is" ? "Hvernig viltu byrja?" : "How would you like to start?"}
@@ -892,7 +892,7 @@ export function ConversationalForm() {
       )}
 
       {/* Calculator (path === 'calculator', before quote accepted) */}
-      {!done && !reviewing && path === "calculator" && !calcSnapshot && (
+      {mounted && !done && !reviewing && path === "calculator" && !calcSnapshot && (
         <div className="px-4 pb-3 pt-1">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] font-bold uppercase tracking-wider text-mas-orange">
@@ -1017,7 +1017,7 @@ export function ConversationalForm() {
       })()}
 
       {/* Multi-part loop */}
-      {!done && !reviewing && !busy && awaitingMoreParts && path && (
+      {mounted && !done && !reviewing && !busy && awaitingMoreParts && path && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           <button
             onClick={() => { setAwaitingMoreParts(false); setVal(""); inputRef.current?.focus(); }}
@@ -1059,7 +1059,7 @@ export function ConversationalForm() {
       )}
 
       {/* Quick-reply chips */}
-      {!done && !reviewing && !busy && !awaitingMoreParts && path && !!(dynamicChips?.length || cur.chips?.length) && (
+      {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && !!(dynamicChips?.length || cur.chips?.length) && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           {(dynamicChips?.length ? dynamicChips : cur.chips ?? []).map((chip) => (
             <button
