@@ -16,8 +16,8 @@ type Chip = {
 };
 
 type Step = {
-  key: "need_overview" | "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
-  apiStep: "need_overview" | "part" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
+  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
+  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
   ask: string;
   hint: string;
   multiline?: boolean;
@@ -32,24 +32,12 @@ type Step = {
 
 const STEPS: Step[] = [
   {
-    key: "need_overview", apiStep: "need_overview",
-    ask: "Hi 👋 Tell us <strong>what you need</strong> in one short sentence.<br><small style='opacity:0.85'>Example: <em>I need a front bumper</em>, <em>I'm looking for a left headlight</em>, <em>I need brake discs</em>.</small>",
-    hint: "e.g. front bumper / left headlight / brake discs",
-    multiline: true,
-    maxLen: 500,
-    chips: [
-      { label: "🧩 Engine part", fill: "I need an engine part: " },
-      { label: "💡 Lighting", fill: "I need a light part: " },
-      { label: "🛞 Suspension / brakes", fill: "I need a suspension or brake part: " },
-    ],
-  },
-  {
     key: "license_plate", apiStep: "license_plate",
-    ask: "<strong>License plate</strong> of the car?<br><small style='opacity:0.85'>That's all we need — from the plate we pull VIN, year, model, engine and colour automatically. No plate? Type make, model & year instead (e.g. \"VW Golf 2015 1.6 TDI\").</small>",
-    hint: "e.g. KEF 123",
+    ask: "Cześć 👋 Do jakiego auta szukasz części? Podaj <strong>numer rejestracyjny</strong>, a pobiorę markę, model, rok, VIN i silnik automatycznie i poproszę Cię o potwierdzenie.<br><small style='opacity:0.85'>Nie masz tablicy? Wpisz markę, model i rok (np. \"VW Golf 2015 1.6 TDI\").</small>",
+    hint: "np. KEF123 / AUP72",
     optional: true,
     maxLen: 120,
-    chips: [{ label: "Skip for now", submit: "", normalize: "" }],
+    chips: [{ label: "Nie mam tablicy — wpiszę ręcznie", fill: "" }],
   },
   {
     key: "part_links", apiStep: "part",
@@ -406,11 +394,11 @@ export function ConversationalForm() {
     setPartItems([summary]);
     setBubbles((b) => [...b,
       { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
-      { who: "bot", html: STEPS[3].ask },
+      { who: "bot", html: STEPS[2].ask },
     ]);
-    setStep(3);
+    setStep(2);
     setHintMsg("Press Enter to continue");
-    persist({ step: 3, data: newData, partItems: [summary] });
+    persist({ step: 2, data: newData, partItems: [summary] });
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
@@ -625,19 +613,8 @@ export function ConversationalForm() {
     setBusy(true);
     setHintErr(false);
 
-    if (cur.key === "need_overview") {
-      const newData = { ...data, need_overview: v };
-      setData(newData);
-      setBubbles((b) => b.filter((x) => x.who !== "typing"));
-      setBubbles((b) => [...b, { who: "bot", html: lang === "pl"
-        ? "Rozumiem. Teraz podaj <strong>numer rejestracyjny</strong>, a pobiorę dane auta i pokażę VIN do potwierdzenia."
-        : lang === "is"
-          ? "Skil. Sláðu nú inn <strong>skráningarnúmerið</strong> og ég sæki gögn bílsins og sýni VIN til staðfestingar."
-          : "Got it. Now enter the <strong>license plate</strong> and I'll fetch the vehicle data and show the VIN for confirmation." }]);
-      setVal("");
-      advanceStep(newData);
-      return;
-    }
+
+
 
     // License-plate lookup: query autoparts.is registry directly from the browser.
     if (cur.key === "license_plate") {
