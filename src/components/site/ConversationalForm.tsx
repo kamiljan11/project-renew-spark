@@ -892,7 +892,7 @@ export function ConversationalForm() {
       )}
 
       {/* Calculator (path === 'calculator', before quote accepted) */}
-      {!done && !reviewing && path === "calculator" && !calcSnapshot && (
+      {mounted && !done && !reviewing && path === "calculator" && !calcSnapshot && (
         <div className="px-4 pb-3 pt-1">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] font-bold uppercase tracking-wider text-mas-orange">
