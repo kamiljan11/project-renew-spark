@@ -15,8 +15,8 @@ type Chip = {
 };
 
 type Step = {
-  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
-  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
+  key: "need_overview" | "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
+  apiStep: "need_overview" | "part" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
   ask: string;
   hint: string;
   multiline?: boolean;
@@ -30,6 +30,18 @@ type Step = {
 };
 
 const STEPS: Step[] = [
+  {
+    key: "need_overview", apiStep: "need_overview",
+    ask: "Hi 👋 Tell us <strong>what you need</strong> in one short sentence.<br><small style='opacity:0.85'>Example: <em>I need a front bumper</em>, <em>I'm looking for a left headlight</em>, <em>I need brake discs</em>.</small>",
+    hint: "e.g. front bumper / left headlight / brake discs",
+    multiline: true,
+    maxLen: 500,
+    chips: [
+      { label: "🧩 Engine part", fill: "I need an engine part: " },
+      { label: "💡 Lighting", fill: "I need a light part: " },
+      { label: "🛞 Suspension / brakes", fill: "I need a suspension or brake part: " },
+    ],
+  },
   {
     key: "part_links", apiStep: "part",
     ask: "Hi 👋 Tell us <strong>what part</strong> you need and <strong>exactly where it sits on the car</strong> — the more precise, the easier it is to source.<br><small style='opacity:0.85'>Examples: <em>front-left headlight</em>, <em>rear-right ABS sensor</em>, <em>turbo intercooler hose under the engine bay</em>. If you have a link or OEM number — paste it. You can also add <strong>photos of the part</strong> at the end (very helpful!).</small>",
@@ -375,7 +387,7 @@ export function ConversationalForm() {
         : lang === "is"
           ? "Skil 🔍 — þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Leitargjald: <strong>4 960 ISK (4 000 + 24% VSK)</strong>, greitt fyrirfram. Ef þú kaupir hlutinn sem við finnum — gjaldið <strong>dregst frá pöntuninni</strong>. Annars heldum við gjaldinu.<br><br>Lýstu því sem þú þarft (varahlutur, OEM, bíltegund)."
           : "Got it 🔍 — you're hiring us as <strong>your buyer in Europe</strong>. Search fee: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, paid upfront. If you buy the part we find — the fee is <strong>credited toward your order</strong>. If not, we keep it.<br><br>Describe what you need (part, OEM, car model).");
-    setBubbles([{ who: "bot", html: firstAsk }]);
+    setBubbles([{ who: "bot", html: STEPS[0].ask }]);
     setStep(0);
     setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
     setTimeout(() => inputRef.current?.focus(), 100);
@@ -387,17 +399,17 @@ export function ConversationalForm() {
       `${i + 1}. ${it.name}${it.link ? ` — ${it.link}` : ""} — ${it.pricePLN.toFixed(2)} PLN · ${it.weightKg.toFixed(1)} kg`
     ).join("\n");
     const fmt = (v: number) => Math.round(v).toLocaleString("pl-PL");
-    const summary = `[Kalkulator] ${snap.ship === "pp" ? "Poczta" : "DHL Express"}\n${lines}\n— Razem (z VAT): ${fmt(snap.grandISK)} ISK · ${snap.grandPLN.toFixed(2)} PLN`;
+    const summary = `[Kalkulator] ${snap.ship === "pp" ? "Poczta" : "Kurier Express"}\n${lines}\n— Razem (z VAT): ${fmt(snap.grandISK)} ISK · ${snap.grandPLN.toFixed(2)} PLN`;
     const newData = { ...data, part_links: summary };
     setData(newData);
     setPartItems([summary]);
     setBubbles((b) => [...b,
       { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
-      { who: "bot", html: STEPS[1].ask },
+      { who: "bot", html: STEPS[2].ask },
     ]);
-    setStep(1);
+    setStep(2);
     setHintMsg("Press Enter to continue");
-    persist({ step: 1, data: newData, partItems: [summary] });
+    persist({ step: 2, data: newData, partItems: [summary] });
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
@@ -412,7 +424,7 @@ export function ConversationalForm() {
     setBubbles((b) => [...b, { who: "bot", html: t("form.allDone") }]);
     try {
       const payload: Record<string, unknown> = {};
-      for (const k of ["part_links", "phone", "email", "company", "license_plate", "address", "delivery_preference"] as const) {
+      for (const k of ["need_overview", "part_links", "phone", "email", "company", "license_plate", "address", "delivery_preference"] as const) {
         if (data[k]) payload[k] = data[k];
       }
       if (photoUrls.length) payload.photo_urls = photoUrls;
@@ -517,12 +529,6 @@ export function ConversationalForm() {
     }
     let next = step + 1;
     const workingData = { ...baseData };
-    while (next < STEPS.length && STEPS[next].key === "license_plate" && !workingData["license_plate"]) {
-      const inferred = inferVehicleFromParts();
-      if (!inferred) break;
-      workingData["license_plate"] = inferred;
-      next++;
-    }
     setData(workingData);
     if (next < STEPS.length) {
       setTimeout(() => {
@@ -618,6 +624,20 @@ export function ConversationalForm() {
     setBusy(true);
     setHintErr(false);
 
+    if (cur.key === "need_overview") {
+      const newData = { ...data, need_overview: v };
+      setData(newData);
+      setBubbles((b) => b.filter((x) => x.who !== "typing"));
+      setBubbles((b) => [...b, { who: "bot", html: lang === "pl"
+        ? "Rozumiem. Teraz podaj <strong>numer rejestracyjny</strong>, a pobiorę dane auta i pokażę VIN do potwierdzenia."
+        : lang === "is"
+          ? "Skil. Sláðu nú inn <strong>skráningarnúmerið</strong> og ég sæki gögn bílsins og sýni VIN til staðfestingar."
+          : "Got it. Now enter the <strong>license plate</strong> and I'll fetch the vehicle data and show the VIN for confirmation." }]);
+      setVal("");
+      advanceStep(newData);
+      return;
+    }
+
     // License-plate bridge: try to look up the car via autoparts.is registry
     // before bothering the AI. If we find it, ask the user to confirm.
     if (cur.key === "license_plate") {
@@ -632,10 +652,10 @@ export function ConversationalForm() {
             const summary = car.summary as string;
             const stored = `${car.plate} — ${summary}${car.vin ? ` · VIN ${car.vin}` : ""}`;
             const confirmAsk = lang === "pl"
-              ? `Znalazłem pojazd: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Czy to ten samochód?`
+              ? `Znalazłem pojazd: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Czy to jest Twój samochód?`
               : lang === "is"
-                ? `Fann ökutæki: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Er þetta bíllinn?`
-                : `Found vehicle: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Is this the car?`;
+                ? `Fann ökutæki: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Er þetta bíllinn þinn?`
+                : `Found vehicle: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Is this your car?`;
             setBubbles((b) => [...b, { who: "bot", html: confirmAsk }]);
             setDynamicChips([
               {
@@ -658,7 +678,7 @@ export function ConversationalForm() {
 
 
     try {
-      const isPart = cur.apiStep === "part";
+       const isPart = cur.apiStep === "part";
       const newHistory = isPart ? [...partHistory, { role: "user" as const, content: v }] : partHistory;
       const { data: res, error } = await supabase.functions.invoke("form-assist", {
         body: {
