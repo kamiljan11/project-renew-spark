@@ -15,6 +15,7 @@ type ReqBody = {
   value: string;
   lang?: "en" | "pl" | "is";
   history?: Msg[];
+  vehicle?: string;
 };
 type Chip = { label: string; fill?: string; info?: string };
 
