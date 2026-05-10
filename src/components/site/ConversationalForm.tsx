@@ -1059,7 +1059,7 @@ export function ConversationalForm() {
       )}
 
       {/* Quick-reply chips */}
-      {!done && !reviewing && !busy && !awaitingMoreParts && !!(dynamicChips?.length || cur.chips?.length) && (
+      {!done && !reviewing && !busy && !awaitingMoreParts && path && !!(dynamicChips?.length || cur.chips?.length) && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           {(dynamicChips?.length ? dynamicChips : cur.chips ?? []).map((chip) => (
             <button
