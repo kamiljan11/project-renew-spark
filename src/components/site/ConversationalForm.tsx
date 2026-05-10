@@ -660,6 +660,7 @@ export function ConversationalForm() {
           value: v,
           lang,
           history: isPart ? newHistory.slice(-8) : undefined,
+          vehicle: isPart ? (data.license_plate || undefined) : undefined,
         },
       });
       setBubbles((b) => b.filter((x) => x.who !== "typing"));
