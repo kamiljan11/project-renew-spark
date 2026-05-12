@@ -148,6 +148,7 @@ export function ConversationalForm() {
   const [uploading, setUploading] = useState(false);
   const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [partItems, setPartItems] = useState<string[]>([]);
+  const [partShopQueries, setPartShopQueries] = useState<string[]>([]);
   const [awaitingMoreParts, setAwaitingMoreParts] = useState(false);
   const [dynamicChips, setDynamicChips] = useState<Chip[] | null>(null);
   const [done, setDone] = useState(false);
@@ -213,12 +214,13 @@ export function ConversationalForm() {
   ];
 
   // ---- Persistence ----
-  const persist = (next?: Partial<{ step: number; data: Record<string, string>; partItems: string[]; partHistory: typeof partHistory; photoUrls: string[] }>) => {
+  const persist = (next?: Partial<{ step: number; data: Record<string, string>; partItems: string[]; partShopQueries: string[]; partHistory: typeof partHistory; photoUrls: string[] }>) => {
     try {
       const payload = {
         step: next?.step ?? step,
         data: next?.data ?? data,
         partItems: next?.partItems ?? partItems,
+        partShopQueries: next?.partShopQueries ?? partShopQueries,
         partHistory: next?.partHistory ?? partHistory,
         photoUrls: next?.photoUrls ?? photoUrls,
         savedAt: Date.now(),
@@ -299,10 +301,12 @@ export function ConversationalForm() {
       const restoredData = p.data ?? {};
       const restoredItems = p.partItems ?? [];
       const restoredHistory = p.partHistory ?? [];
+      const restoredShopQueries = p.partShopQueries ?? restoredItems;
       const restoredPhotos = p.photoUrls ?? [];
       const restoredStep = Math.min(p.step ?? 0, STEPS.length - 1);
       setData(restoredData);
       setPartItems(restoredItems);
+      setPartShopQueries(restoredShopQueries);
       setPartHistory(restoredHistory);
       setPhotoUrls(restoredPhotos);
       setStep(restoredStep);
@@ -322,6 +326,7 @@ export function ConversationalForm() {
     clearPersisted();
     setData({});
     setPartItems([]);
+    setPartShopQueries([]);
     setPartHistory([]);
     setPhotoUrls([]);
     setStep(0);
@@ -392,13 +397,14 @@ export function ConversationalForm() {
     const newData = { ...data, part_links: summary };
     setData(newData);
     setPartItems([summary]);
+    setPartShopQueries([summary]);
     setBubbles((b) => [...b,
       { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
       { who: "bot", html: STEPS[2].ask },
     ]);
     setStep(2);
     setHintMsg("Press Enter to continue");
-    persist({ step: 2, data: newData, partItems: [summary] });
+    persist({ step: 2, data: newData, partItems: [summary], partShopQueries: [summary] });
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
@@ -446,6 +452,7 @@ export function ConversationalForm() {
     setData(newData);
     if (k === "part_links") {
       setPartItems([]);
+      setPartShopQueries([]);
       setPartHistory([]);
     }
     if (k === "photos") {
@@ -470,6 +477,7 @@ export function ConversationalForm() {
     setData(newData);
     if (prevKey === "part_links") {
       setPartItems([]);
+      setPartShopQueries([]);
       setPartHistory([]);
     }
     setBubbles((b) => {
@@ -690,6 +698,7 @@ export function ConversationalForm() {
       const reply: string = res?.reply || "OK!";
       const valid: boolean = !!res?.valid;
       const normalized: string = res?.normalized ?? v;
+      const shopQuery: string = typeof res?.shop_query === "string" ? res.shop_query.trim() : "";
 
       setBubbles((b) => [...b, { who: "bot", html: reply }]);
 
@@ -714,12 +723,14 @@ export function ConversationalForm() {
       setDynamicChips(null);
       if (isPart) {
         const updated = [...partItems, normalized];
+        const updatedShopQueries = [...partShopQueries, shopQuery || v];
         setPartItems(updated);
+        setPartShopQueries(updatedShopQueries);
         const newData = { ...data, [cur.key]: updated.join("\n---\n") };
         setData(newData);
         setAwaitingMoreParts(true);
         setBusy(false);
-        persist({ data: newData, partItems: updated });
+        persist({ data: newData, partItems: updated, partShopQueries: updatedShopQueries });
         return;
       }
       const newData = { ...data, [cur.key]: normalized };
@@ -1119,7 +1130,7 @@ export function ConversationalForm() {
         const raw = data.license_plate || "";
         const afterDash = raw.split(" — ")[1] || raw;
         const vehicleBase = (afterDash.split(" · ")[0] || "").trim();
-        const partText = (val.trim() || partItems[partItems.length - 1] || "").trim();
+        const partText = (val.trim() || partShopQueries[partShopQueries.length - 1] || partItems[partItems.length - 1] || "").trim();
         const queryParts = [partText, vehicleBase].filter(Boolean);
         const hasQuery = queryParts.length > 0;
         const query = queryParts.join(" ");
@@ -1139,17 +1150,7 @@ export function ConversationalForm() {
               <div className="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">{label}</div>
               <div className="flex flex-wrap gap-1.5">
                 {RETAILERS.map((r) => {
-                  let url = hasQuery ? r.url(query) : "#";
-                  // Google Translate doesn't support Icelandic as a target — fall back to English
-                  // so Icelandic users at least get a translated (EN) shop instead of a broken link.
-                  if (hasQuery && lang === "is") {
-                    try {
-                      const u = new URL(url);
-                      const host = u.hostname.replace(/\./g, "-") + ".translate.goog";
-                      const params = u.search ? u.search + "&" : "?";
-                      url = `https://${host}${u.pathname}${params}_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en`;
-                    } catch { /* keep original url */ }
-                  }
+                  const url = hasQuery ? r.url(query) : "#";
                   return (
                     <a
                       key={r.name}
