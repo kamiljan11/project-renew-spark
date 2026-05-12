@@ -1107,7 +1107,7 @@ export function ConversationalForm() {
       {/* Quick search retailers — only on part step.
           - link path: always visible, framed as "we accept links only from these stores".
           - search_paid path: only after the client has described the part, framed as a free DIY alternative. */}
-      {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && cur.key === "part_links" && (path === "link" || (path === "search_paid" && val.trim().length >= 3)) && (() => {
+      {mounted && !done && !reviewing && !busy && path && cur.key === "part_links" && (path === "link" || (path === "search_paid" && (val.trim().length >= 3 || partItems.length > 0))) && (() => {
         const RETAILERS = [
           { name: "Allegro", url: (q: string) => `https://allegro.pl/listing?string=${encodeURIComponent(q)}` },
           { name: "Autofixer", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:pl.autofixer.com ${q}`)}` },
@@ -1119,7 +1119,7 @@ export function ConversationalForm() {
         const raw = data.license_plate || "";
         const afterDash = raw.split(" — ")[1] || raw;
         const vehicleBase = (afterDash.split(" · ")[0] || "").trim();
-        const partText = val.trim();
+        const partText = (val.trim() || partItems[partItems.length - 1] || "").trim();
         const queryParts = [partText, vehicleBase].filter(Boolean);
         const hasQuery = queryParts.length > 0;
         const query = queryParts.join(" ");
