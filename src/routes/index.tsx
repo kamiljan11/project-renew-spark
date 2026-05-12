@@ -59,7 +59,7 @@ function Index() {
               SHIPPED TO <span className="text-mas-orange">ICELAND.</span>
             </h1>
             <p className="mt-6 text-lg text-white/85 max-w-xl leading-relaxed">
-              Need a car part? Send us a link to one you found online, or just tell us what you need <span className="hidden lg:inline">in the form on the right</span><span className="lg:hidden">in the form below</span> — we'll buy it, ship it to Iceland, and deliver to your door. Full Icelandic VAT invoice, no customs to deal with.
+              We don't just ship parts to Iceland — <span className="text-mas-orange font-semibold">we handle the entire process for you.</span> Send us a link or describe what you need <span className="hidden lg:inline">in the form on the right</span><span className="lg:hidden">in the form below</span>. We source it, buy it, clear customs, and deliver to your door. You don't deal with suppliers, shipping, or paperwork — you just receive an <span className="font-semibold text-white">Icelandic VAT invoice</span>. We take care of the rest.
             </p>
             <p className="mt-4 lg:hidden text-sm text-white/70">
               👉 Scroll down and request your quote in the form below — we usually reply within hours.
