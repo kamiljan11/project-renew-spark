@@ -1086,11 +1086,12 @@ export function ConversationalForm() {
       {/* Quick search retailers — only on part step */}
       {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && cur.key === "part_links" && (() => {
         const RETAILERS = [
-          { name: "Autofixer", domain: "pl.autofixer.com" },
-          { name: "Autodoc", domain: "autodoc.pl" },
-          { name: "iParts", domain: "iparts.pl" },
-          { name: "Europarts", domain: "europarts.pl" },
-          { name: "Signeda", domain: "signeda.pl" },
+          { name: "Allegro", url: (q: string) => `https://allegro.pl/listing?string=${encodeURIComponent(q)}` },
+          { name: "Autofixer", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:pl.autofixer.com ${q}`)}` },
+          { name: "Autodoc", url: (q: string) => `https://www.autodoc.pl/search?keyword=${encodeURIComponent(q)}` },
+          { name: "iParts", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:iparts.pl ${q}`)}` },
+          { name: "Europarts", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:europarts.pl ${q}`)}` },
+          { name: "Signeda", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:signeda.pl ${q}`)}` },
         ];
         // Extract "Make Model Year" from stored vehicle: "PLATE — Make Model Year · color · fuel..."
         const raw = data.license_plate || "";
