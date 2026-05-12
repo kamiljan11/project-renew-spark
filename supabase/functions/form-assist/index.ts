@@ -317,7 +317,7 @@ async function callAI(system: string, messages: Msg[]): Promise<any> {
                 valid: { type: "boolean", description: "Is the input usable for this step?" },
                 reply: { type: "string", description: "Short friendly bot reply (1-2 sentences). HTML <strong> ok. If valid: brief acknowledgement. If invalid: ask for what's missing." },
                 normalized: { type: "string", description: "Cleaned/normalized version of the user input to store" },
-                shop_query: { type: "string", description: "English retailer search phrase with no Icelandic words. Include only the part name and the most useful fit details known so far. Empty string if there is not enough product detail yet." },
+                shop_query: { type: "string", description: "Polish retailer search phrase (these are Polish shops). No Icelandic, no English. Use natural Polish part names. Examples: 'klocki hamulcowe tył Toyota Yaris 2016', 'reflektor lewy Kia Ceed 2013'. Include only the part name and the most useful fit details known so far. Empty string if not enough product detail yet." },
                 chips: {
                   type: "array",
                   description: "2-4 short quick-reply suggestions tailored to your follow-up question. Each chip pre-fills the input so the user can edit before sending. Empty array if no helpful suggestions.",
