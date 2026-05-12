@@ -214,12 +214,13 @@ export function ConversationalForm() {
   ];
 
   // ---- Persistence ----
-  const persist = (next?: Partial<{ step: number; data: Record<string, string>; partItems: string[]; partHistory: typeof partHistory; photoUrls: string[] }>) => {
+  const persist = (next?: Partial<{ step: number; data: Record<string, string>; partItems: string[]; partShopQueries: string[]; partHistory: typeof partHistory; photoUrls: string[] }>) => {
     try {
       const payload = {
         step: next?.step ?? step,
         data: next?.data ?? data,
         partItems: next?.partItems ?? partItems,
+        partShopQueries: next?.partShopQueries ?? partShopQueries,
         partHistory: next?.partHistory ?? partHistory,
         photoUrls: next?.photoUrls ?? photoUrls,
         savedAt: Date.now(),
@@ -300,10 +301,12 @@ export function ConversationalForm() {
       const restoredData = p.data ?? {};
       const restoredItems = p.partItems ?? [];
       const restoredHistory = p.partHistory ?? [];
+      const restoredShopQueries = p.partShopQueries ?? restoredItems;
       const restoredPhotos = p.photoUrls ?? [];
       const restoredStep = Math.min(p.step ?? 0, STEPS.length - 1);
       setData(restoredData);
       setPartItems(restoredItems);
+      setPartShopQueries(restoredShopQueries);
       setPartHistory(restoredHistory);
       setPhotoUrls(restoredPhotos);
       setStep(restoredStep);
@@ -323,6 +326,7 @@ export function ConversationalForm() {
     clearPersisted();
     setData({});
     setPartItems([]);
+    setPartShopQueries([]);
     setPartHistory([]);
     setPhotoUrls([]);
     setStep(0);
@@ -393,13 +397,14 @@ export function ConversationalForm() {
     const newData = { ...data, part_links: summary };
     setData(newData);
     setPartItems([summary]);
+    setPartShopQueries([summary]);
     setBubbles((b) => [...b,
       { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
       { who: "bot", html: STEPS[2].ask },
     ]);
     setStep(2);
     setHintMsg("Press Enter to continue");
-    persist({ step: 2, data: newData, partItems: [summary] });
+    persist({ step: 2, data: newData, partItems: [summary], partShopQueries: [summary] });
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
