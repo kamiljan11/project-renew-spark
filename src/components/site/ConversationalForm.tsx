@@ -386,10 +386,10 @@ export function ConversationalForm() {
           ? `Frábært! Ef þú ert með <strong>hlekk eða OEM númer</strong> geturðu bætt því við rétt á eftir þegar bíllinn hefur verið staðfestur.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> ${SHOP_LINKS_HTML}. Flýtileiðir birtast við lýsingarreitinn.<br><br>⚠️ <strong>Mikilvægt:</strong> þegar þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort hluturinn passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>. Ef þú vilt að við staðfestum að hluturinn passi, veldu „Finnið hlutinn fyrir mig“.`
           : `Great! If you have a <strong>link or OEM number</strong>, you'll add it right after we confirm the car.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> ${SHOP_LINKS_HTML}. Shortcuts appear next to the part description field.<br><br>⚠️ <strong>Important:</strong> when you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify the part fits your car. The purchase is <strong>non-returnable</strong>. If you'd like us to verify the fit, choose „Find the part for me” instead.`)
       : (lang === "pl"
-        ? "Rozumiem 🔍 — wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Opłata za wyszukiwanie: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, płatna z góry. Jeśli kupisz znalezioną przez nas część — kwota zostaje <strong>zaliczona na poczet zamówienia</strong>. Jeśli nie — opłata pozostaje u nas.<br><br>Opisz, czego potrzebujesz (część, OEM, model auta)."
+        ? "Jasne 🔍 — opisz, czego potrzebujesz (część, OEM, model auta). Na podstawie Twojego opisu pokażemy Ci sklepy, w których możesz <strong>poszukać sam za darmo</strong>. Jeśli wolisz, abyśmy zrobili to za Ciebie — pojawi się taka opcja przy sklepach."
         : lang === "is"
-          ? "Skil 🔍 — þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Leitargjald: <strong>4 960 ISK (4 000 + 24% VSK)</strong>, greitt fyrirfram. Ef þú kaupir hlutinn sem við finnum — gjaldið <strong>dregst frá pöntuninni</strong>. Annars heldum við gjaldinu.<br><br>Lýstu því sem þú þarft (varahlutur, OEM, bíltegund)."
-          : "Got it 🔍 — you're hiring us as <strong>your buyer in Europe</strong>. Search fee: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, paid upfront. If you buy the part we find — the fee is <strong>credited toward your order</strong>. If not, we keep it.<br><br>Describe what you need (part, OEM, car model).");
+          ? "Skil 🔍 — lýstu því sem þú þarft (varahlutur, OEM, bíltegund). Út frá lýsingunni sýnum við þér verslanir þar sem þú getur <strong>leitað sjálf/ur ókeypis</strong>. Ef þú vilt frekar að við gerum það fyrir þig — sá möguleiki birtist við verslanirnar."
+          : "Sure 🔍 — describe what you need (part, OEM, car model). Based on your description we'll show you shops where you can <strong>search yourself for free</strong>. If you'd rather have us do it — that option appears next to the shops.");
     setBubbles([{ who: "bot", html: intro }, { who: "bot", html: STEPS[0].ask }]);
     setStep(0);
     setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
@@ -949,7 +949,7 @@ export function ConversationalForm() {
             <Search className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
             <div>
               <div className="font-bold text-sm text-navy">{lang === "pl" ? "Znajdźcie część za mnie" : lang === "is" ? "Finnið hlutinn fyrir mig" : "Find the part for me"}</div>
-              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "4 960 ISK (z VAT) z góry — kwota wraca jako rabat, jeśli kupisz." : lang === "is" ? "4 960 ISK (m. VSK) fyrirfram — dregst frá ef þú kaupir." : "4,960 ISK (incl. VAT) upfront — credited toward your order if you buy."}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Opisz, czego potrzebujesz — sprawdzimy dopasowanie do auta i znajdziemy najlepszą opcję." : lang === "is" ? "Lýstu því sem þú þarft — við staðfestum að passi við bílinn og finnum bestu leiðina." : "Describe what you need — we'll verify fit for your car and find the best option."}</div>
             </div>
           </button>
         </div>
@@ -1145,13 +1145,13 @@ export function ConversationalForm() {
         const isLink = path === "link";
         const label = isLink
           ? (lang === "pl" ? "🛒 Akceptujemy linki tylko z tych sklepów:" : lang === "is" ? "🛒 Við tökum aðeins við hlekkjum frá þessum verslunum:" : "🛒 We accept links only from these retailers:")
-          : (lang === "pl" ? "💡 Wolisz poszukać sam za darmo? Sprawdź te sklepy:" : lang === "is" ? "💡 Viltu leita sjálf/ur ókeypis? Skoðaðu þessar verslanir:" : "💡 Prefer to search yourself for free? Try these shops:");
+          : (lang === "pl" ? "💡 Możesz poszukać sam w tych sklepach — to nic nie kosztuje:" : lang === "is" ? "💡 Þú getur leitað sjálf/ur í þessum verslunum — það er ókeypis:" : "💡 You can search yourself in these shops — it's free:");
         const hint = !hasQuery
           ? (lang === "pl" ? "Wpisz nazwę części powyżej, a klik wyszuka ją w wybranym sklepie." : lang === "is" ? "Skrifaðu hluta hér að ofan til að leita í verslun." : "Type the part name above, then click a shop to search.")
           : (lang === "pl" ? `Szukasz: "${query}"` : lang === "is" ? `Leitarstrengur: "${query}"` : `Search query: "${query}"`);
         const footer = isLink
           ? (lang === "pl" ? "Po znalezieniu wklej link tutaj 👇" : lang === "is" ? "Þegar þú finnur, líma hlekkinn hér 👇" : "When you find it, paste the link below 👇")
-          : (lang === "pl" ? "Znajdziesz sam? Wróć z linkiem — pominiesz opłatę 4 960 ISK." : lang === "is" ? "Finnurðu sjálf/ur? Komdu með hlekkinn — sleppur við 4 960 ISK gjaldið." : "Found it yourself? Come back with the link — skip the 4 960 ISK fee.");
+          : (lang === "pl" ? "Nie chcesz szukać sam? Zlecisz nam wyszukiwanie za <strong>4 960 ISK (z VAT)</strong> — opisz część poniżej i wyślij formularz. Kwota <strong>wraca jako rabat</strong>, gdy kupisz znalezioną przez nas część." : lang === "is" ? "Viltu ekki leita sjálf/ur? Þú getur falið okkur leitina fyrir <strong>4 960 ISK (m. VSK)</strong> — lýstu hlutnum hér að neðan og sendu formið. Gjaldið <strong>dregst frá</strong> ef þú kaupir hlutinn sem við finnum." : "Don't want to search yourself? Hire us to do it for <strong>4,960 ISK (incl. VAT)</strong> — describe the part below and submit the form. The fee is <strong>credited</strong> toward your order if you buy the part we find.");
         return (
           <div className="px-4 pb-2 pt-1">
             <div className={`rounded-xl border px-3 py-2.5 ${isLink ? "border-mas-orange/40 bg-orange-50" : "border-slate-200 bg-slate-50"}`}>
@@ -1172,9 +1172,8 @@ export function ConversationalForm() {
                   );
                 })}
               </div>
-              <div className="text-[11px] text-slate-500 mt-1.5">
-                {hint} · {footer}
-              </div>
+              <div className="text-[11px] text-slate-500 mt-1.5" dangerouslySetInnerHTML={{ __html: `${hint} · ${footer}` }} />
+
             </div>
           </div>
         );
