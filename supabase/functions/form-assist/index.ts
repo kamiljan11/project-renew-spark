@@ -317,6 +317,7 @@ async function callAI(system: string, messages: Msg[]): Promise<any> {
                 valid: { type: "boolean", description: "Is the input usable for this step?" },
                 reply: { type: "string", description: "Short friendly bot reply (1-2 sentences). HTML <strong> ok. If valid: brief acknowledgement. If invalid: ask for what's missing." },
                 normalized: { type: "string", description: "Cleaned/normalized version of the user input to store" },
+                shop_query: { type: "string", description: "English retailer search phrase with no Icelandic words. Include only the part name and the most useful fit details known so far. Empty string if there is not enough product detail yet." },
                 chips: {
                   type: "array",
                   description: "2-4 short quick-reply suggestions tailored to your follow-up question. Each chip pre-fills the input so the user can edit before sending. Empty array if no helpful suggestions.",
@@ -335,7 +336,7 @@ async function callAI(system: string, messages: Msg[]): Promise<any> {
                 year: { type: "string" },
                 part_type: { type: "string" },
               },
-              required: ["valid", "reply", "normalized", "chips"],
+              required: ["valid", "reply", "normalized", "shop_query", "chips"],
               additionalProperties: false,
             },
           },
@@ -466,14 +467,14 @@ Return valid=false so the flow stays here. chips=[].`;
         try {
           const msgs: Msg[] = trimmedHistory.length ? [...trimmedHistory, { role: "user", content: v }] : [{ role: "user", content: v }];
           const out = await callAI(faqSys, msgs);
-          return json({ valid: false, normalized: v, reply: out?.reply ?? "Sure — ask away!", chips: [] });
+          return json({ valid: false, normalized: v, shop_query: "", reply: out?.reply ?? "Sure — ask away!", chips: [] });
         } catch {
           const fallback = safeLang === "pl"
             ? "Po wysłaniu zapytania nasz zespół wyśle Ci e-mailem instrukcje płatności i finalną wycenę. Dodać kolejną część czy lecimy dalej?"
             : safeLang === "is"
               ? "Eftir að beiðnin er send sendir teymið okkar greiðsluleiðbeiningar og lokatilboð í tölvupósti. Bæta við hlut eða halda áfram?"
               : "Once you submit, our team emails you payment instructions and the final quote. Add another part or continue?";
-          return json({ valid: false, normalized: v, reply: fallback, chips: [] });
+          return json({ valid: false, normalized: v, shop_query: "", reply: fallback, chips: [] });
         }
       }
 
@@ -492,10 +493,10 @@ Return valid=false so the flow stays here. chips=[].`;
           : safeLang === "is"
             ? " Þarftu eitthvað fleira?"
             : " Need anything else?";
-        return json({ valid: true, normalized: v, reply: `${linkLine} ${pricingLine}${moreLine}` });
+        return json({ valid: true, normalized: v, shop_query: "", reply: `${linkLine} ${pricingLine}${moreLine}` });
       }
       if (!v || v.length < 4 || SKIP_RE.test(v)) {
-        return json({ valid: false, normalized: v, reply: tr("partThin", safeLang) });
+        return json({ valid: false, normalized: v, shop_query: "", reply: tr("partThin", safeLang) });
       }
       const langName = safeLang === "pl" ? "Polish (polski)" : safeLang === "is" ? "Icelandic (íslenska)" : "English";
       const sys = `LANGUAGE: You MUST reply in ${langName}. The entire "reply" field, every chip "label" and chip "fill", and the "normalized" summary MUST all be written in ${langName}. Even if the user writes in a different language, your reply stays in ${langName}. Do not mix languages. Do not translate part names that are commonly used in their original form (e.g. "OEM", "VIN", brand names).
