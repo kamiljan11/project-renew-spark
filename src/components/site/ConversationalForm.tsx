@@ -1118,7 +1118,16 @@ export function ConversationalForm() {
               <div className="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">{label}</div>
               <div className="flex flex-wrap gap-1.5">
                 {RETAILERS.map((r) => {
-                  const url = hasQuery ? r.url(query) : "#";
+                  let url = hasQuery ? r.url(query) : "#";
+                  // If user picked Icelandic, route through Google Translate proxy so the shop opens in IS.
+                  if (hasQuery && lang === "is") {
+                    try {
+                      const u = new URL(url);
+                      const host = u.hostname.replace(/\./g, "-") + ".translate.goog";
+                      const params = u.search ? u.search + "&" : "?";
+                      url = `https://${host}${u.pathname}${params}_x_tr_sl=auto&_x_tr_tl=is&_x_tr_hl=is`;
+                    } catch { /* keep original url */ }
+                  }
                   return (
                     <a
                       key={r.name}
