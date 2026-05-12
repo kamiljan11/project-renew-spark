@@ -1083,6 +1083,60 @@ export function ConversationalForm() {
         </div>
       )}
 
+      {/* Quick search retailers — only on part step */}
+      {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && cur.key === "part_links" && (() => {
+        const RETAILERS = [
+          { name: "Autofixer", domain: "pl.autofixer.com" },
+          { name: "Autodoc", domain: "autodoc.pl" },
+          { name: "iParts", domain: "iparts.pl" },
+          { name: "Europarts", domain: "europarts.pl" },
+          { name: "Signeda", domain: "signeda.pl" },
+        ];
+        // Extract "Make Model Year" from stored vehicle: "PLATE — Make Model Year · color · fuel..."
+        const raw = data.license_plate || "";
+        const afterDash = raw.split(" — ")[1] || raw;
+        const vehicleBase = (afterDash.split(" · ")[0] || "").trim();
+        const partText = val.trim();
+        const queryParts = [partText, vehicleBase].filter(Boolean);
+        const hasQuery = queryParts.length > 0;
+        const query = queryParts.join(" ");
+        const label = lang === "pl"
+          ? "🔎 Szukaj w sklepach (otworzy nową kartę):"
+          : lang === "is"
+            ? "🔎 Leita í verslunum (opnar nýjan flipa):"
+            : "🔎 Search retailers (opens new tab):";
+        const hint = !hasQuery
+          ? (lang === "pl" ? "Wpisz nazwę części powyżej, a klik wyszuka ją w wybranym sklepie." : lang === "is" ? "Skrifaðu hluta hér að ofan til að leita í verslun." : "Type the part name above, then click a shop to search.")
+          : (lang === "pl" ? `Szukasz: "${query}"` : lang === "is" ? `Leitarstrengur: "${query}"` : `Search query: "${query}"`);
+        return (
+          <div className="px-4 pb-2 pt-1">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">{label}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {RETAILERS.map((r) => {
+                  const q = hasQuery ? query : "";
+                  const url = `https://www.google.com/search?q=${encodeURIComponent(`site:${r.domain} ${q}`)}`;
+                  return (
+                    <a
+                      key={r.domain}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`text-xs font-semibold rounded-full px-3 py-1.5 border transition-colors ${hasQuery ? "bg-white text-navy border-slate-300 hover:border-mas-orange hover:bg-orange-50" : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed pointer-events-none"}`}
+                    >
+                      {r.name}
+                    </a>
+                  );
+                })}
+              </div>
+              <div className="text-[11px] text-slate-500 mt-1.5">
+                {hint} · {lang === "pl" ? "Po znalezieniu wklej link tutaj 👇" : lang === "is" ? "Þegar þú finnur, líma hlekkinn hér 👇" : "When you find it, paste the link below 👇"}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Quick-reply chips */}
       {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && !!(dynamicChips?.length || cur.chips?.length) && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
