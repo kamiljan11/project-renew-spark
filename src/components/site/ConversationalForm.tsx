@@ -367,10 +367,10 @@ export function ConversationalForm() {
     }
     const intro = p === "link"
       ? (lang === "pl"
-        ? "Świetnie! Jeśli masz <strong>link albo numer OEM</strong>, dodasz go za chwilę po potwierdzeniu auta."
+        ? "Świetnie! Jeśli masz <strong>link albo numer OEM</strong>, dodasz go za chwilę po potwierdzeniu auta.<br><br>⚠️ <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Skróty do nich pojawią się przy polu opisu części."
         : lang === "is"
-          ? "Frábært! Ef þú ert með <strong>hlekk eða OEM númer</strong> geturðu bætt því við rétt á eftir þegar bíllinn hefur verið staðfestur."
-          : "Great! If you have a <strong>link or OEM number</strong>, you'll add it right after we confirm the car.")
+          ? "Frábært! Ef þú ert með <strong>hlekk eða OEM númer</strong> geturðu bætt því við rétt á eftir þegar bíllinn hefur verið staðfestur.<br><br>⚠️ <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Flýtileiðir birtast við lýsingarreitinn."
+          : "Great! If you have a <strong>link or OEM number</strong>, you'll add it right after we confirm the car.<br><br>⚠️ <strong>We only accept links from our trusted retailers:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Shortcuts appear next to the part description field.")
       : (lang === "pl"
         ? "Rozumiem 🔍 — wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Opłata za wyszukiwanie: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, płatna z góry. Jeśli kupisz znalezioną przez nas część — kwota zostaje <strong>zaliczona na poczet zamówienia</strong>. Jeśli nie — opłata pozostaje u nas.<br><br>Opisz, czego potrzebujesz (część, OEM, model auta)."
         : lang === "is"
