@@ -357,25 +357,34 @@ export function ConversationalForm() {
     } catch { /* ignore */ }
   };
 
+  const SHOP_LINKS_HTML = [
+    ['Allegro', 'https://allegro.pl/'],
+    ['Autofixer', 'https://pl.autofixer.com/'],
+    ['Autodoc', 'https://www.autodoc.pl/'],
+    ['iParts', 'https://iparts.pl/'],
+    ['Europarts', 'https://europarts.pl/'],
+    ['Signeda', 'https://signeda.pl/'],
+  ].map(([n, u]) => `<a href="${u}" target="_blank" rel="noopener noreferrer" class="underline font-semibold text-mas-orange hover:opacity-80">${n}</a>`).join(', ');
+
   const choosePath = (p: Path) => {
     setPath(p);
     persistPath(p);
     startTimeRef.current = Date.now();
     if (p === "calculator") {
       setBubbles([{ who: "bot", html: lang === "pl"
-        ? "Świetnie! Wpisz cenę w PL (PLN) i wagę (kg) części, a od razu policzymy całkowity koszt z dostawą do Islandii.<br><br>🛒 <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br><br>⚠️ <strong>Ważne:</strong> jeśli podajesz własny link, kupujemy <strong>dokładnie to, co wskazałeś</strong> — nie weryfikujemy dopasowania do Twojego auta. Zakup jest <strong>bez możliwości zwrotu</strong>."
+        ? `Świetnie! Wpisz cenę w PL (PLN) i wagę (kg) części, a od razu policzymy całkowity koszt z dostawą do Islandii.<br><br>🛒 <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Ważne:</strong> jeśli podajesz własny link, kupujemy <strong>dokładnie to, co wskazałeś</strong> — nie weryfikujemy dopasowania do Twojego auta. Zakup jest <strong>bez możliwości zwrotu</strong>.`
         : lang === "is"
-          ? "Frábært! Sláðu inn verð (PLN) og þyngd (kg) — við reiknum strax út heildarkostnað til Íslands.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br><br>⚠️ <strong>Mikilvægt:</strong> ef þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort það passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>."
-          : "Great! Enter the part's PL price (PLN) and weight (kg) — we'll instantly calculate the total cost delivered to Iceland.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br><br>⚠️ <strong>Important:</strong> if you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify it fits your car. The purchase is <strong>non-returnable</strong>." }]);
+          ? `Frábært! Sláðu inn verð (PLN) og þyngd (kg) — við reiknum strax út heildarkostnað til Íslands.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Mikilvægt:</strong> ef þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort það passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>.`
+          : `Great! Enter the part's PL price (PLN) and weight (kg) — we'll instantly calculate the total cost delivered to Iceland.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Important:</strong> if you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify it fits your car. The purchase is <strong>non-returnable</strong>.` }]);
       setHintMsg("");
       return;
     }
     const intro = p === "link"
       ? (lang === "pl"
-        ? "Świetnie! Jeśli masz <strong>link albo numer OEM</strong>, dodasz go za chwilę po potwierdzeniu auta.<br><br>🛒 <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Skróty do nich pojawią się przy polu opisu części.<br><br>⚠️ <strong>Ważne:</strong> gdy podajesz własny link, kupujemy <strong>dokładnie to, co wskazałeś</strong> — nie sprawdzamy, czy część pasuje do Twojego auta. Zakup jest <strong>bez możliwości zwrotu</strong>. Jeśli chcesz, abyśmy zweryfikowali dopasowanie, wybierz opcję „Znajdźcie część za mnie”."
+        ? `Świetnie! Jeśli masz <strong>link albo numer OEM</strong>, dodasz go za chwilę po potwierdzeniu auta.<br><br>🛒 <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> ${SHOP_LINKS_HTML}. Skróty do nich pojawią się przy polu opisu części.<br><br>⚠️ <strong>Ważne:</strong> gdy podajesz własny link, kupujemy <strong>dokładnie to, co wskazałeś</strong> — nie sprawdzamy, czy część pasuje do Twojego auta. Zakup jest <strong>bez możliwości zwrotu</strong>. Jeśli chcesz, abyśmy zweryfikowali dopasowanie, wybierz opcję „Znajdźcie część za mnie”.`
         : lang === "is"
-          ? "Frábært! Ef þú ert með <strong>hlekk eða OEM númer</strong> geturðu bætt því við rétt á eftir þegar bíllinn hefur verið staðfestur.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Flýtileiðir birtast við lýsingarreitinn.<br><br>⚠️ <strong>Mikilvægt:</strong> þegar þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort hluturinn passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>. Ef þú vilt að við staðfestum að hluturinn passi, veldu „Finnið hlutinn fyrir mig“."
-          : "Great! If you have a <strong>link or OEM number</strong>, you'll add it right after we confirm the car.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Shortcuts appear next to the part description field.<br><br>⚠️ <strong>Important:</strong> when you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify the part fits your car. The purchase is <strong>non-returnable</strong>. If you'd like us to verify the fit, choose „Find the part for me” instead.")
+          ? `Frábært! Ef þú ert með <strong>hlekk eða OEM númer</strong> geturðu bætt því við rétt á eftir þegar bíllinn hefur verið staðfestur.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> ${SHOP_LINKS_HTML}. Flýtileiðir birtast við lýsingarreitinn.<br><br>⚠️ <strong>Mikilvægt:</strong> þegar þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort hluturinn passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>. Ef þú vilt að við staðfestum að hluturinn passi, veldu „Finnið hlutinn fyrir mig“.`
+          : `Great! If you have a <strong>link or OEM number</strong>, you'll add it right after we confirm the car.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> ${SHOP_LINKS_HTML}. Shortcuts appear next to the part description field.<br><br>⚠️ <strong>Important:</strong> when you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify the part fits your car. The purchase is <strong>non-returnable</strong>. If you'd like us to verify the fit, choose „Find the part for me” instead.`)
       : (lang === "pl"
         ? "Rozumiem 🔍 — wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Opłata za wyszukiwanie: <strong>4 960 ISK (4 000 + 24% VAT)</strong>, płatna z góry. Jeśli kupisz znalezioną przez nas część — kwota zostaje <strong>zaliczona na poczet zamówienia</strong>. Jeśli nie — opłata pozostaje u nas.<br><br>Opisz, czego potrzebujesz (część, OEM, model auta)."
         : lang === "is"
@@ -620,7 +629,6 @@ export function ConversationalForm() {
     setVal("");
     setBusy(true);
     setHintErr(false);
-
 
 
 
@@ -1088,10 +1096,10 @@ export function ConversationalForm() {
               setBubbles((b) => [...b, { who: "user", text: "🔗 I'll paste a link instead" }, {
                 who: "bot",
                 html: lang === "pl"
-                  ? "Świetnie! Wklej link do części (lub kilka linków, jeden na linijkę) — opłata wyszukiwania <strong>znika</strong>, płacisz tylko części + wysyłkę.<br><br>🛒 Akceptujemy linki tylko z: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br>⚠️ Kupujemy <strong>dokładnie to, co wskazałeś</strong> — bez weryfikacji dopasowania do auta, <strong>bez zwrotów</strong>."
+                  ? `Świetnie! Wklej link do części (lub kilka linków, jeden na linijkę) — opłata wyszukiwania <strong>znika</strong>, płacisz tylko części + wysyłkę.<br><br>🛒 Akceptujemy linki tylko z: ${SHOP_LINKS_HTML}.<br>⚠️ Kupujemy <strong>dokładnie to, co wskazałeś</strong> — bez weryfikacji dopasowania do auta, <strong>bez zwrotów</strong>.`
                   : lang === "is"
-                    ? "Frábært! Sendu hlekk á hlutinn (eða nokkra, einn á línu) — leitargjaldið <strong>fellur niður</strong>, þú borgar aðeins varahluti + sendingu.<br><br>🛒 Við tökum aðeins við hlekkjum frá: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br>⚠️ Við kaupum <strong>nákvæmlega það sem þú vísar á</strong> — án staðfestingar á að það passi við bílinn, <strong>án skilaréttar</strong>."
-                    : "Great! Paste the link(s) to the part — one per line. The search fee <strong>disappears</strong>, you only pay parts + shipping.<br><br>🛒 We only accept links from: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br>⚠️ We buy <strong>exactly what you pointed to</strong> — no fit verification, <strong>no returns</strong>.",
+                    ? `Frábært! Sendu hlekk á hlutinn (eða nokkra, einn á línu) — leitargjaldið <strong>fellur niður</strong>, þú borgar aðeins varahluti + sendingu.<br><br>🛒 Við tökum aðeins við hlekkjum frá: ${SHOP_LINKS_HTML}.<br>⚠️ Við kaupum <strong>nákvæmlega það sem þú vísar á</strong> — án staðfestingar á að það passi við bílinn, <strong>án skilaréttar</strong>.`
+                    : `Great! Paste the link(s) to the part — one per line. The search fee <strong>disappears</strong>, you only pay parts + shipping.<br><br>🛒 We only accept links from: ${SHOP_LINKS_HTML}.<br>⚠️ We buy <strong>exactly what you pointed to</strong> — no fit verification, <strong>no returns</strong>.`,
               }]);
               inputRef.current?.focus();
             }}
