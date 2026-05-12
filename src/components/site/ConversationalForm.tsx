@@ -1115,11 +1115,10 @@ export function ConversationalForm() {
               <div className="text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">{label}</div>
               <div className="flex flex-wrap gap-1.5">
                 {RETAILERS.map((r) => {
-                  const q = hasQuery ? query : "";
-                  const url = `https://www.google.com/search?q=${encodeURIComponent(`site:${r.domain} ${q}`)}`;
+                  const url = hasQuery ? r.url(query) : "#";
                   return (
                     <a
-                      key={r.domain}
+                      key={r.name}
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
