@@ -949,7 +949,7 @@ export function ConversationalForm() {
             <Search className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
             <div>
               <div className="font-bold text-sm text-navy">{lang === "pl" ? "Znajdźcie część za mnie" : lang === "is" ? "Finnið hlutinn fyrir mig" : "Find the part for me"}</div>
-              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "4 960 ISK (z VAT) z góry — kwota wraca jako rabat, jeśli kupisz." : lang === "is" ? "4 960 ISK (m. VSK) fyrirfram — dregst frá ef þú kaupir." : "4,960 ISK (incl. VAT) upfront — credited toward your order if you buy."}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Opisz, czego potrzebujesz — sprawdzimy dopasowanie do auta i znajdziemy najlepszą opcję." : lang === "is" ? "Lýstu því sem þú þarft — við staðfestum að passi við bílinn og finnum bestu leiðina." : "Describe what you need — we'll verify fit for your car and find the best option."}</div>
             </div>
           </button>
         </div>
