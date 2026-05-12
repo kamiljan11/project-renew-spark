@@ -1172,9 +1172,8 @@ export function ConversationalForm() {
                   );
                 })}
               </div>
-              <div className="text-[11px] text-slate-500 mt-1.5">
-                {hint} · {footer}
-              </div>
+              <div className="text-[11px] text-slate-500 mt-1.5" dangerouslySetInnerHTML={{ __html: `${hint} · ${footer}` }} />
+
             </div>
           </div>
         );
