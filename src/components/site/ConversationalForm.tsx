@@ -669,6 +669,7 @@ export function ConversationalForm() {
         setBusy(false);
         return;
       }
+    }
 
 
     try {
