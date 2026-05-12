@@ -1130,7 +1130,7 @@ export function ConversationalForm() {
         const raw = data.license_plate || "";
         const afterDash = raw.split(" — ")[1] || raw;
         const vehicleBase = (afterDash.split(" · ")[0] || "").trim();
-        const partText = (val.trim() || partShopQueries[partShopQueries.length - 1] || partItems[partItems.length - 1] || "").trim();
+        const partText = (partShopQueries[partShopQueries.length - 1] || val.trim() || partItems[partItems.length - 1] || "").trim();
         const queryParts = [partText, vehicleBase].filter(Boolean);
         const hasQuery = queryParts.length > 0;
         const query = queryParts.join(" ");
