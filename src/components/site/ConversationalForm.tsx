@@ -1088,10 +1088,10 @@ export function ConversationalForm() {
               setBubbles((b) => [...b, { who: "user", text: "🔗 I'll paste a link instead" }, {
                 who: "bot",
                 html: lang === "pl"
-                  ? "Świetnie! Wklej link do części (lub kilka linków, jeden na linijkę) — opłata wyszukiwania <strong>znika</strong>, płacisz tylko części + wysyłkę."
+                  ? "Świetnie! Wklej link do części (lub kilka linków, jeden na linijkę) — opłata wyszukiwania <strong>znika</strong>, płacisz tylko części + wysyłkę.<br><br>🛒 Akceptujemy linki tylko z: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br>⚠️ Kupujemy <strong>dokładnie to, co wskazałeś</strong> — bez weryfikacji dopasowania do auta, <strong>bez zwrotów</strong>."
                   : lang === "is"
-                    ? "Frábært! Sendu hlekk á hlutinn (eða nokkra, einn á línu) — leitargjaldið <strong>fellur niður</strong>, þú borgar aðeins varahluti + sendingu."
-                    : "Great! Paste the link(s) to the part — one per line. The search fee <strong>disappears</strong>, you only pay parts + shipping.",
+                    ? "Frábært! Sendu hlekk á hlutinn (eða nokkra, einn á línu) — leitargjaldið <strong>fellur niður</strong>, þú borgar aðeins varahluti + sendingu.<br><br>🛒 Við tökum aðeins við hlekkjum frá: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br>⚠️ Við kaupum <strong>nákvæmlega það sem þú vísar á</strong> — án staðfestingar á að það passi við bílinn, <strong>án skilaréttar</strong>."
+                    : "Great! Paste the link(s) to the part — one per line. The search fee <strong>disappears</strong>, you only pay parts + shipping.<br><br>🛒 We only accept links from: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda.<br>⚠️ We buy <strong>exactly what you pointed to</strong> — no fit verification, <strong>no returns</strong>.",
               }]);
               inputRef.current?.focus();
             }}
