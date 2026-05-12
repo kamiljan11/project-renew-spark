@@ -1145,13 +1145,13 @@ export function ConversationalForm() {
         const isLink = path === "link";
         const label = isLink
           ? (lang === "pl" ? "🛒 Akceptujemy linki tylko z tych sklepów:" : lang === "is" ? "🛒 Við tökum aðeins við hlekkjum frá þessum verslunum:" : "🛒 We accept links only from these retailers:")
-          : (lang === "pl" ? "💡 Wolisz poszukać sam za darmo? Sprawdź te sklepy:" : lang === "is" ? "💡 Viltu leita sjálf/ur ókeypis? Skoðaðu þessar verslanir:" : "💡 Prefer to search yourself for free? Try these shops:");
+          : (lang === "pl" ? "💡 Możesz poszukać sam w tych sklepach — to nic nie kosztuje:" : lang === "is" ? "💡 Þú getur leitað sjálf/ur í þessum verslunum — það er ókeypis:" : "💡 You can search yourself in these shops — it's free:");
         const hint = !hasQuery
           ? (lang === "pl" ? "Wpisz nazwę części powyżej, a klik wyszuka ją w wybranym sklepie." : lang === "is" ? "Skrifaðu hluta hér að ofan til að leita í verslun." : "Type the part name above, then click a shop to search.")
           : (lang === "pl" ? `Szukasz: "${query}"` : lang === "is" ? `Leitarstrengur: "${query}"` : `Search query: "${query}"`);
         const footer = isLink
           ? (lang === "pl" ? "Po znalezieniu wklej link tutaj 👇" : lang === "is" ? "Þegar þú finnur, líma hlekkinn hér 👇" : "When you find it, paste the link below 👇")
-          : (lang === "pl" ? "Znajdziesz sam? Wróć z linkiem — pominiesz opłatę 4 960 ISK." : lang === "is" ? "Finnurðu sjálf/ur? Komdu með hlekkinn — sleppur við 4 960 ISK gjaldið." : "Found it yourself? Come back with the link — skip the 4 960 ISK fee.");
+          : (lang === "pl" ? "Nie chcesz szukać sam? Zlecisz nam wyszukiwanie za <strong>4 960 ISK (z VAT)</strong> — opisz część poniżej i wyślij formularz. Kwota <strong>wraca jako rabat</strong>, gdy kupisz znalezioną przez nas część." : lang === "is" ? "Viltu ekki leita sjálf/ur? Þú getur falið okkur leitina fyrir <strong>4 960 ISK (m. VSK)</strong> — lýstu hlutnum hér að neðan og sendu formið. Gjaldið <strong>dregst frá</strong> ef þú kaupir hlutinn sem við finnum." : "Don't want to search yourself? Hire us to do it for <strong>4,960 ISK (incl. VAT)</strong> — describe the part below and submit the form. The fee is <strong>credited</strong> toward your order if you buy the part we find.");
         return (
           <div className="px-4 pb-2 pt-1">
             <div className={`rounded-xl border px-3 py-2.5 ${isLink ? "border-mas-orange/40 bg-orange-50" : "border-slate-200 bg-slate-50"}`}>
