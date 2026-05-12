@@ -621,16 +621,6 @@ export function ConversationalForm() {
     setBusy(true);
     setHintErr(false);
 
-  const SHOP_LINKS_HTML = [
-    ['Allegro', 'https://allegro.pl/'],
-    ['Autofixer', 'https://pl.autofixer.com/'],
-    ['Autodoc', 'https://www.autodoc.pl/'],
-    ['iParts', 'https://iparts.pl/'],
-    ['Europarts', 'https://europarts.pl/'],
-    ['Signeda', 'https://signeda.pl/'],
-  ].map(([n, u]) => `<a href="${u}" target="_blank" rel="noopener noreferrer" class="underline font-semibold text-mas-orange hover:opacity-80">${n}</a>`).join(', ');
-
-
 
 
     // License-plate lookup: query autoparts.is registry directly from the browser.
