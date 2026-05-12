@@ -646,9 +646,29 @@ export function ConversationalForm() {
           setBusy(false);
           return;
         }
-        // not found → fall through to AI step (stores the raw plate)
+        // Plate format looked valid but registry returned nothing → STOP, don't advance.
+        setBubbles((b) => b.filter((x) => x.who !== "typing"));
+        const notFound = lang === "pl"
+          ? `Nie znalazłem auta o tablicy <strong>${plateNorm}</strong> w islandzkim rejestrze. Sprawdź pisownię i spróbuj ponownie, albo kontynuuj bez tablicy — wtedy zapytam o markę i model.`
+          : lang === "is"
+            ? `Fann ekki bíl með númerinu <strong>${plateNorm}</strong> í íslenskri ökutækjaskrá. Athugaðu stafsetningu og reyndu aftur, eða haltu áfram án númers — þá spyr ég um tegund og árgerð.`
+            : `Couldn't find a car with plate <strong>${plateNorm}</strong> in the Icelandic registry. Double-check the spelling and try again, or continue without a plate — I'll ask for the make and model instead.`;
+        setBubbles((b) => [...b, { who: "bot", html: notFound }]);
+        setDynamicChips([
+          {
+            label: lang === "pl" ? "✏️ Wpisz ponownie" : lang === "is" ? "✏️ Slá inn aftur" : "✏️ Try again",
+            fill: "",
+          },
+          {
+            label: lang === "pl" ? "❌ Nie mam tablicy" : lang === "is" ? "❌ Ekkert númer" : "❌ No license plate",
+            submit: "—",
+            normalize: "—",
+          },
+        ]);
+        setVal("");
+        setBusy(false);
+        return;
       }
-    }
 
 
     try {
