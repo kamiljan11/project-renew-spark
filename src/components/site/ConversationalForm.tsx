@@ -1083,8 +1083,10 @@ export function ConversationalForm() {
         </div>
       )}
 
-      {/* Quick search retailers — only on part step */}
-      {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && cur.key === "part_links" && (() => {
+      {/* Quick search retailers — only on part step.
+          - link path: always visible, framed as "we accept links only from these stores".
+          - search_paid path: only after the client has described the part, framed as a free DIY alternative. */}
+      {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && cur.key === "part_links" && (path === "link" || (path === "search_paid" && val.trim().length >= 3)) && (() => {
         const RETAILERS = [
           { name: "Allegro", url: (q: string) => `https://allegro.pl/listing?string=${encodeURIComponent(q)}` },
           { name: "Autofixer", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:pl.autofixer.com ${q}`)}` },
@@ -1093,7 +1095,6 @@ export function ConversationalForm() {
           { name: "Europarts", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:europarts.pl ${q}`)}` },
           { name: "Signeda", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:signeda.pl ${q}`)}` },
         ];
-        // Extract "Make Model Year" from stored vehicle: "PLATE — Make Model Year · color · fuel..."
         const raw = data.license_plate || "";
         const afterDash = raw.split(" — ")[1] || raw;
         const vehicleBase = (afterDash.split(" · ")[0] || "").trim();
@@ -1101,18 +1102,20 @@ export function ConversationalForm() {
         const queryParts = [partText, vehicleBase].filter(Boolean);
         const hasQuery = queryParts.length > 0;
         const query = queryParts.join(" ");
-        const label = lang === "pl"
-          ? "🔎 Szukaj w sklepach (otworzy nową kartę):"
-          : lang === "is"
-            ? "🔎 Leita í verslunum (opnar nýjan flipa):"
-            : "🔎 Search retailers (opens new tab):";
+        const isLink = path === "link";
+        const label = isLink
+          ? (lang === "pl" ? "🛒 Akceptujemy linki tylko z tych sklepów:" : lang === "is" ? "🛒 Við tökum aðeins við hlekkjum frá þessum verslunum:" : "🛒 We accept links only from these retailers:")
+          : (lang === "pl" ? "💡 Wolisz poszukać sam za darmo? Sprawdź te sklepy:" : lang === "is" ? "💡 Viltu leita sjálf/ur ókeypis? Skoðaðu þessar verslanir:" : "💡 Prefer to search yourself for free? Try these shops:");
         const hint = !hasQuery
           ? (lang === "pl" ? "Wpisz nazwę części powyżej, a klik wyszuka ją w wybranym sklepie." : lang === "is" ? "Skrifaðu hluta hér að ofan til að leita í verslun." : "Type the part name above, then click a shop to search.")
           : (lang === "pl" ? `Szukasz: "${query}"` : lang === "is" ? `Leitarstrengur: "${query}"` : `Search query: "${query}"`);
+        const footer = isLink
+          ? (lang === "pl" ? "Po znalezieniu wklej link tutaj 👇" : lang === "is" ? "Þegar þú finnur, líma hlekkinn hér 👇" : "When you find it, paste the link below 👇")
+          : (lang === "pl" ? "Znajdziesz sam? Wróć z linkiem — pominiesz opłatę 4 960 ISK." : lang === "is" ? "Finnurðu sjálf/ur? Komdu með hlekkinn — sleppur við 4 960 ISK gjaldið." : "Found it yourself? Come back with the link — skip the 4 960 ISK fee.");
         return (
           <div className="px-4 pb-2 pt-1">
-            <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">{label}</div>
+            <div className={`rounded-xl border px-3 py-2.5 ${isLink ? "border-mas-orange/40 bg-orange-50" : "border-slate-200 bg-slate-50"}`}>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">{label}</div>
               <div className="flex flex-wrap gap-1.5">
                 {RETAILERS.map((r) => {
                   const url = hasQuery ? r.url(query) : "#";
@@ -1130,7 +1133,7 @@ export function ConversationalForm() {
                 })}
               </div>
               <div className="text-[11px] text-slate-500 mt-1.5">
-                {hint} · {lang === "pl" ? "Po znalezieniu wklej link tutaj 👇" : lang === "is" ? "Þegar þú finnur, líma hlekkinn hér 👇" : "When you find it, paste the link below 👇"}
+                {hint} · {footer}
               </div>
             </div>
           </div>
