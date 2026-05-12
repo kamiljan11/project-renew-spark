@@ -1086,11 +1086,12 @@ export function ConversationalForm() {
       {/* Quick search retailers — only on part step */}
       {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && cur.key === "part_links" && (() => {
         const RETAILERS = [
-          { name: "Autofixer", domain: "pl.autofixer.com" },
-          { name: "Autodoc", domain: "autodoc.pl" },
-          { name: "iParts", domain: "iparts.pl" },
-          { name: "Europarts", domain: "europarts.pl" },
-          { name: "Signeda", domain: "signeda.pl" },
+          { name: "Allegro", url: (q: string) => `https://allegro.pl/listing?string=${encodeURIComponent(q)}` },
+          { name: "Autofixer", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:pl.autofixer.com ${q}`)}` },
+          { name: "Autodoc", url: (q: string) => `https://www.autodoc.pl/search?keyword=${encodeURIComponent(q)}` },
+          { name: "iParts", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:iparts.pl ${q}`)}` },
+          { name: "Europarts", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:europarts.pl ${q}`)}` },
+          { name: "Signeda", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:signeda.pl ${q}`)}` },
         ];
         // Extract "Make Model Year" from stored vehicle: "PLATE — Make Model Year · color · fuel..."
         const raw = data.license_plate || "";
@@ -1114,11 +1115,10 @@ export function ConversationalForm() {
               <div className="text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">{label}</div>
               <div className="flex flex-wrap gap-1.5">
                 {RETAILERS.map((r) => {
-                  const q = hasQuery ? query : "";
-                  const url = `https://www.google.com/search?q=${encodeURIComponent(`site:${r.domain} ${q}`)}`;
+                  const url = hasQuery ? r.url(query) : "#";
                   return (
                     <a
-                      key={r.domain}
+                      key={r.name}
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
