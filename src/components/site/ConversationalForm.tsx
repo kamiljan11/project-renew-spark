@@ -452,6 +452,7 @@ export function ConversationalForm() {
     setData(newData);
     if (k === "part_links") {
       setPartItems([]);
+      setPartShopQueries([]);
       setPartHistory([]);
     }
     if (k === "photos") {
@@ -476,6 +477,7 @@ export function ConversationalForm() {
     setData(newData);
     if (prevKey === "part_links") {
       setPartItems([]);
+      setPartShopQueries([]);
       setPartHistory([]);
     }
     setBubbles((b) => {
@@ -728,7 +730,7 @@ export function ConversationalForm() {
         setData(newData);
         setAwaitingMoreParts(true);
         setBusy(false);
-        persist({ data: newData, partItems: updated });
+        persist({ data: newData, partItems: updated, partShopQueries: updatedShopQueries });
         return;
       }
       const newData = { ...data, [cur.key]: normalized };
