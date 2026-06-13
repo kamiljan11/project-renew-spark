@@ -63,7 +63,9 @@ export function Footer() {
         </div>
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-          <p className="text-slate-500 text-xs">{t("footer.copy")}</p>
+          <p className="text-slate-500 text-xs">{t("footer.copy")}{" · "}built by{" "}
+            <a href="https://kamiljan.com" target="_blank" rel="noopener noreferrer" className="hover:text-mas-orange transition-colors">Kamil Jan</a>
+          </p>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-slate-600 text-xs uppercase font-bold tracking-widest">{t("footer.support")}</span>
