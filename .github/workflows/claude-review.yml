@@ -1,0 +1,46 @@
+name: Claude Code Review
+# "Druga para oczu" seniora — swieza instancja Claude (zero kontekstu sesji,
+# zero przywiazania do wlasnego kodu) robi review KAZDEGO PR automatycznie.
+# Bez sekretu (CLAUDE_CODE_OAUTH_TOKEN lub ANTHROPIC_API_KEY) job grzecznie sie pomija.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - id: token
+        name: Check secret present
+        env:
+          HAS_OAUTH: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
+          HAS_API: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        run: echo "ok=$([ "$HAS_OAUTH" = "true" ] || [ "$HAS_API" = "true" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        if: steps.token.outputs.ok == 'true'
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        if: steps.token.outputs.ok == 'true'
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Zrob code review tego PR jak senior 20+ (poziom Google/bank). Po polsku.
+            Sprawdz w kolejnosci:
+            1. Poprawnosc i edge case'y (null/empty, race, timeout, partial failure, uprawnienia)
+            2. Bezpieczenstwo (injection, authz per-rekord, sekrety, walidacja inputu, dane wrazliwe w logach)
+            3. REDUNDANCJA: przeszukaj repo — czy ta logika juz istnieje? Wskaz duplikaty i zazadaj reuse.
+            4. Rozmiar/atomowosc diffa i zgodnosc z konwencjami repo (porownaj z sasiednimi plikami)
+            5. Testy: czy nowa logika ma testy w tym PR? Czego brakuje?
+            Werdykt na gorze: APPROVE albo REQUEST CHANGES.
+            Findings jako komentarze inline do konkretnych linii. Krytyczne oznacz [KRYTYCZNE].
+            Nie czepiaj sie stylu (od tego jest linter). Jesli PR jest czysty — napisz to krotko.
