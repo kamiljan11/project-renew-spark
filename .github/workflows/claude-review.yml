@@ -35,6 +35,8 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             Zrob code review tego PR jak senior 20+ (poziom Google/bank). Po polsku.
+            KROK 0 — PAMIEC: najpierw przeczytaj CLAUDE.md i docs/REVIEW-LEARNINGS.md (jesli istnieja)
+            i stosuj zawarte tam reguly — one maja pierwszenstwo przed ogolnymi zasadami.
             Sprawdz w kolejnosci:
             1. Poprawnosc i edge case'y (null/empty, race, timeout, partial failure, uprawnienia)
             2. Bezpieczenstwo (injection, authz per-rekord, sekrety, walidacja inputu, dane wrazliwe w logach)
@@ -44,3 +46,6 @@ jobs:
             Werdykt na gorze: APPROVE albo REQUEST CHANGES.
             Findings jako komentarze inline do konkretnych linii. Krytyczne oznacz [KRYTYCZNE].
             Nie czepiaj sie stylu (od tego jest linter). Jesli PR jest czysty — napisz to krotko.
+            Na koncu, jesli w dyskusji PR widac ze Kamil skorygowal wczesniejsza ocene recenzenta,
+            zaproponuj sekcje "Proposed learnings" z wpisami do docs/REVIEW-LEARNINGS.md
+            (format: - [RRRR-MM-DD] regula (zrodlo: PR #n)) — petla auto-improve je zapisze.
