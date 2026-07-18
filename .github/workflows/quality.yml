@@ -1,0 +1,54 @@
+name: Quality Gate
+# Twarda sciana L3 — na KAZDY push i PR, niezaleznie kto/co pisalo kod.
+# Kroki npm pomijaja sie same w repo bez package.json (assets/placeholder).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    name: Build + Lint + Typecheck + Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        if: hashFiles('package.json') != ''
+        with:
+          node-version: 20
+
+      - name: Install
+        if: hashFiles('package.json') != ''
+        run: npm ci || npm install
+
+      - name: Lint
+        if: hashFiles('package.json') != ''
+        run: npm run lint --if-present
+
+      - name: Typecheck
+        if: hashFiles('tsconfig.json') != ''
+        run: npx tsc --noEmit
+
+      - name: Tests
+        if: hashFiles('package.json') != ''
+        run: npm test --if-present -- --run
+
+      - name: Build
+        if: hashFiles('package.json') != ''
+        run: npm run build --if-present
+
+      - name: Dependency audit (high+)
+        if: hashFiles('package-lock.json') != ''
+        run: npm audit --audit-level=high
+
+  security:
+    name: Semgrep SAST
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+      - name: Semgrep scan
+        run: semgrep scan --config auto --error --exclude node_modules --exclude dist
