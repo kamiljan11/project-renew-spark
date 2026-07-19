@@ -51,6 +51,16 @@ jobs:
         if: hashFiles('package-lock.json') != ''
         run: npx --yes license-checker-rseidelsohn --production --summary --failOn "GPL;AGPL;SSPL"
 
+      - name: "Code health: duplikacja (jscpd, informacyjnie)"
+        if: hashFiles('package.json') != ''
+        continue-on-error: true
+        run: npx --yes jscpd src --min-lines 10 --threshold 5 --reporters consoleFull || echo "::warning::Duplikacja kodu powyzej 5% — auto-improve/review maja to zmniejszac"
+
+      - name: "Code health: martwy kod (knip, informacyjnie)"
+        if: hashFiles('package.json') != ''
+        continue-on-error: true
+        run: npx --yes knip --no-exit-code --reporter compact || true
+
   security:
     name: Semgrep SAST
     runs-on: ubuntu-latest
