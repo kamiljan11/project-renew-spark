@@ -55,7 +55,10 @@ function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 bg-background">
-      <form onSubmit={submit} className="w-full max-w-sm bg-white rounded-2xl border border-border p-7 shadow-lg">
+      <form
+        onSubmit={submit}
+        className="w-full max-w-sm bg-white rounded-2xl border border-border p-7 shadow-lg"
+      >
         <h1 className="text-2xl font-black text-navy mb-1" style={{ fontFamily: "Exo 2" }}>
           Admin {mode === "signup" ? "sign up" : "sign in"}
         </h1>
@@ -97,10 +100,14 @@ function AdminLogin() {
           onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
           className="w-full text-xs text-muted-foreground mt-3 underline"
         >
-          {mode === "signin" ? "First time? Create the admin account" : "Already have an account? Sign in"}
+          {mode === "signin"
+            ? "First time? Create the admin account"
+            : "Already have an account? Sign in"}
         </button>
 
-        <Link to="/" className="block text-center text-xs text-muted-foreground mt-4">← Back to site</Link>
+        <Link to="/" className="block text-center text-xs text-muted-foreground mt-4">
+          ← Back to site
+        </Link>
       </form>
     </div>
   );

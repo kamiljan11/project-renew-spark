@@ -9,14 +9,33 @@ const PLN_TO_EUR = 0.235;
 const VAT = 1.24;
 
 // Poczta Polska – Strefa A2 (Iceland), PLN/parcel; index = kg, max 20
-const ppA2 = [0, 76, 92, 105, 115, 129, 132, 140, 148, 157, 164, 171, 181, 188, 194, 202, 211, 221, 231, 238, 250];
+const ppA2 = [
+  0, 76, 92, 105, 115, 129, 132, 140, 148, 157, 164, 171, 181, 188, 194, 202, 211, 221, 231, 238,
+  250,
+];
 
 // DHL – Zone 4 (Iceland) with customs clearance, PLN
 const dhlTab: [number, number][] = [
-  [0.5, 115.06], [1, 138.6], [1.5, 160.82], [2, 183.04], [2.5, 203.94],
-  [3, 215.38], [3.5, 226.82], [4, 238.26], [4.5, 249.7], [5, 261.14],
-  [5.5, 271.26], [6, 281.38], [6.5, 291.5], [7, 301.62], [7.5, 311.74],
-  [8, 321.86], [8.5, 331.98], [9, 342.1], [9.5, 352.22], [10, 362.34],
+  [0.5, 115.06],
+  [1, 138.6],
+  [1.5, 160.82],
+  [2, 183.04],
+  [2.5, 203.94],
+  [3, 215.38],
+  [3.5, 226.82],
+  [4, 238.26],
+  [4.5, 249.7],
+  [5, 261.14],
+  [5.5, 271.26],
+  [6, 281.38],
+  [6.5, 291.5],
+  [7, 301.62],
+  [7.5, 311.74],
+  [8, 321.86],
+  [8.5, 331.98],
+  [9, 342.1],
+  [9.5, 352.22],
+  [10, 362.34],
 ];
 
 function dhlCost(w: number): number | null {
@@ -30,57 +49,127 @@ function dhlCost(w: number): number | null {
 }
 function ppCost(w: number): number {
   let c = 0;
-  while (w > 0) { c += ppA2[Math.min(Math.ceil(w), 20)]; w -= 20; }
+  while (w > 0) {
+    c += ppA2[Math.min(Math.ceil(w), 20)];
+    w -= 20;
+  }
   return c;
 }
 
 // ---- i18n ----
 type T = {
-  title: string; addTitle: string; nameLbl: string; linkLbl: string; priceLbl: string; weightLbl: string;
-  dimTitle: string; dimL: string; dimW: string; dimH: string; addBtn: string;
+  title: string;
+  addTitle: string;
+  nameLbl: string;
+  linkLbl: string;
+  priceLbl: string;
+  weightLbl: string;
+  dimTitle: string;
+  dimL: string;
+  dimW: string;
+  dimH: string;
+  addBtn: string;
   introHint: string;
-  orderTitle: string; colName: string; colPLN: string; colKg: string; clearBtn: string;
-  shipTitle: string; shipNamePP: string; hintPP: string; hintDHL: string;
-  rProducts: string; rShip: string; rTotal: string; rTotalNetto: string; footer: string;
-  errFields: string; errDhlDim: string; errDhlKg: string; errPPLen: string; errPPGirth: string;
-  warnPPSplit: string; errPPItemWeight: string; warnOversize: string;
-  orderNow: string; askQuote: string; emptyHint: string; addedHint: string;
+  orderTitle: string;
+  colName: string;
+  colPLN: string;
+  colKg: string;
+  clearBtn: string;
+  shipTitle: string;
+  shipNamePP: string;
+  hintPP: string;
+  hintDHL: string;
+  rProducts: string;
+  rShip: string;
+  rTotal: string;
+  rTotalNetto: string;
+  footer: string;
+  errFields: string;
+  errDhlDim: string;
+  errDhlKg: string;
+  errPPLen: string;
+  errPPGirth: string;
+  warnPPSplit: string;
+  errPPItemWeight: string;
+  warnOversize: string;
+  orderNow: string;
+  askQuote: string;
+  emptyHint: string;
+  addedHint: string;
 };
 const TR: Record<Lang, T> = {
   pl: {
-    title: "Kalkulator wyceny", addTitle: "Dodaj produkt",
-    nameLbl: "Nazwa produktu (opcjonalnie)", linkLbl: "Link do części lub numer OEM (opcjonalnie)", priceLbl: "Cena w PL (PLN)", weightLbl: "Waga (kg)",
-    dimTitle: "Wymiary opakowania — opcjonalne", dimL: "Dług. cm", dimW: "Szer. cm", dimH: "Wys. cm",
+    title: "Kalkulator wyceny",
+    addTitle: "Dodaj produkt",
+    nameLbl: "Nazwa produktu (opcjonalnie)",
+    linkLbl: "Link do części lub numer OEM (opcjonalnie)",
+    priceLbl: "Cena w PL (PLN)",
+    weightLbl: "Waga (kg)",
+    dimTitle: "Wymiary opakowania — opcjonalne",
+    dimL: "Dług. cm",
+    dimW: "Szer. cm",
+    dimH: "Wys. cm",
     addBtn: "+ Dodaj do zamówienia",
-    introHint: "Otwórz swój link → skopiuj cenę (PLN) i wagę (kg) → wklej tutaj. Możesz dodać kilka produktów do jednego zamówienia.",
-    orderTitle: "Twoje produkty", colName: "Produkt", colPLN: "PLN", colKg: "kg",
+    introHint:
+      "Otwórz swój link → skopiuj cenę (PLN) i wagę (kg) → wklej tutaj. Możesz dodać kilka produktów do jednego zamówienia.",
+    orderTitle: "Twoje produkty",
+    colName: "Produkt",
+    colPLN: "PLN",
+    colKg: "kg",
     clearBtn: "↺ Wyczyść",
-    shipTitle: "Wysyłka", shipNamePP: "Poczta", hintPP: "Taniej, wolniej", hintDHL: "Szybciej, drożej",
-    rProducts: "Produkty", rShip: "Wysyłka", rTotal: "Łącznie z VAT", rTotalNetto: "Łącznie bez VAT",
-    footer: "1 PLN ≈ 34 ISK · 1 PLN ≈ 0,235 EUR. Wycena szacunkowa — finalną cenę potwierdzamy po sprawdzeniu dostępności.",
+    shipTitle: "Wysyłka",
+    shipNamePP: "Poczta",
+    hintPP: "Taniej, wolniej",
+    hintDHL: "Szybciej, drożej",
+    rProducts: "Produkty",
+    rShip: "Wysyłka",
+    rTotal: "Łącznie z VAT",
+    rTotalNetto: "Łącznie bez VAT",
+    footer:
+      "1 PLN ≈ 34 ISK · 1 PLN ≈ 0,235 EUR. Wycena szacunkowa — finalną cenę potwierdzamy po sprawdzeniu dostępności.",
     errFields: "⚠ Podaj cenę (PLN) i wagę (kg).",
     errDhlDim: "❌ Wymiar opakowania przekracza 300 cm – DHL nie przyjmie tej paczki.",
     errDhlKg: "❌ Łączna waga przekracza 300 kg – DHL nie przyjmie zamówienia.",
     errPPLen: "❌ Najdłuższy bok przekracza 150 cm – Poczta Polska nie przyjmie paczki.",
     errPPGirth: "❌ Obwód (L+2·W+2·H) przekracza 300 cm – Poczta Polska nie przyjmie paczki.",
     warnPPSplit: "ℹ Łączna waga > 20 kg – Poczta Polska podzieli przesyłkę na kilka paczek.",
-    errPPItemWeight: "❌ Jeden produkt waży ponad 20 kg – Poczta Polska nie wyśle niepodzielnej paczki >20 kg.",
+    errPPItemWeight:
+      "❌ Jeden produkt waży ponad 20 kg – Poczta Polska nie wyśle niepodzielnej paczki >20 kg.",
     warnOversize: "ℹ Niestandardowy wymiar DHL (+87 PLN dopłata za każdą taką paczkę).",
-    orderNow: "✅ Zamów po tej cenie", askQuote: "💬 Zapytaj o tę wycenę",
+    orderNow: "✅ Zamów po tej cenie",
+    askQuote: "💬 Zapytaj o tę wycenę",
     emptyHint: "Wpisz cenę i wagę, aby zobaczyć szacunek dostawy do Islandii.",
     addedHint: "Możesz dodać kolejny produkt powyżej.",
   },
   is: {
-    title: "Verðreiknir", addTitle: "Bæta við vöru",
-    nameLbl: "Heiti vöru (valfrjálst)", linkLbl: "Hlekkur á hlut eða OEM númer (valfrjálst)", priceLbl: "Verð í PL (PLN)", weightLbl: "Þyngd (kg)",
-    dimTitle: "Mál á pakka — valfrjálst", dimL: "Lengd cm", dimW: "Breidd cm", dimH: "Hæð cm",
+    title: "Verðreiknir",
+    addTitle: "Bæta við vöru",
+    nameLbl: "Heiti vöru (valfrjálst)",
+    linkLbl: "Hlekkur á hlut eða OEM númer (valfrjálst)",
+    priceLbl: "Verð í PL (PLN)",
+    weightLbl: "Þyngd (kg)",
+    dimTitle: "Mál á pakka — valfrjálst",
+    dimL: "Lengd cm",
+    dimW: "Breidd cm",
+    dimH: "Hæð cm",
     addBtn: "+ Bæta við pöntun",
-    introHint: "Opnaðu hlekkinn þinn → afritaðu verð (PLN) og þyngd (kg) → settu hér. Þú getur bætt við mörgum vörum í eina pöntun.",
-    orderTitle: "Vörurnar þínar", colName: "Vara", colPLN: "PLN", colKg: "kg",
+    introHint:
+      "Opnaðu hlekkinn þinn → afritaðu verð (PLN) og þyngd (kg) → settu hér. Þú getur bætt við mörgum vörum í eina pöntun.",
+    orderTitle: "Vörurnar þínar",
+    colName: "Vara",
+    colPLN: "PLN",
+    colKg: "kg",
     clearBtn: "↺ Hreinsa",
-    shipTitle: "Sending", shipNamePP: "Pósturinn", hintPP: "Ódýrara, hægar", hintDHL: "Hraðar, dýrara",
-    rProducts: "Vörur", rShip: "Sending", rTotal: "Samtals m. VSK", rTotalNetto: "Samtals án VSK",
-    footer: "1 PLN ≈ 34 ISK · 1 PLN ≈ 0,235 EUR. Áætlað verð — endanlegt verð staðfest eftir að við athugum framboð.",
+    shipTitle: "Sending",
+    shipNamePP: "Pósturinn",
+    hintPP: "Ódýrara, hægar",
+    hintDHL: "Hraðar, dýrara",
+    rProducts: "Vörur",
+    rShip: "Sending",
+    rTotal: "Samtals m. VSK",
+    rTotalNetto: "Samtals án VSK",
+    footer:
+      "1 PLN ≈ 34 ISK · 1 PLN ≈ 0,235 EUR. Áætlað verð — endanlegt verð staðfest eftir að við athugum framboð.",
     errFields: "⚠ Sláðu inn verð (PLN) og þyngd (kg).",
     errDhlDim: "❌ Hlið fer yfir 300 cm – DHL getur ekki sent.",
     errDhlKg: "❌ Þyngd fer yfir 300 kg – DHL getur ekki sent.",
@@ -89,30 +178,51 @@ const TR: Record<Lang, T> = {
     warnPPSplit: "ℹ Heildaþyngd yfir 20 kg – Pósturinn skiptir í fleiri pakka.",
     errPPItemWeight: "❌ Ein vara yfir 20 kg – Pósturinn getur ekki sent óskiptanlegan pakka.",
     warnOversize: "ℹ Óstaðlað stærð DHL (+87 PLN/pakki).",
-    orderNow: "✅ Panta á þessu verði", askQuote: "💬 Spyrja um þetta verð",
+    orderNow: "✅ Panta á þessu verði",
+    askQuote: "💬 Spyrja um þetta verð",
     emptyHint: "Sláðu inn verð og þyngd til að sjá áætlað verð til Íslands.",
     addedHint: "Þú getur bætt við annarri vöru að ofan.",
   },
   en: {
-    title: "Price calculator", addTitle: "Add product",
-    nameLbl: "Product name (optional)", linkLbl: "Part link or OEM number (optional)", priceLbl: "Price in PL (PLN)", weightLbl: "Weight (kg)",
-    dimTitle: "Package dimensions — optional", dimL: "Length cm", dimW: "Width cm", dimH: "Height cm",
+    title: "Price calculator",
+    addTitle: "Add product",
+    nameLbl: "Product name (optional)",
+    linkLbl: "Part link or OEM number (optional)",
+    priceLbl: "Price in PL (PLN)",
+    weightLbl: "Weight (kg)",
+    dimTitle: "Package dimensions — optional",
+    dimL: "Length cm",
+    dimW: "Width cm",
+    dimH: "Height cm",
     addBtn: "+ Add to order",
-    introHint: "Open your link → copy price (PLN) and weight (kg) → paste here. You can add several products to a single order.",
-    orderTitle: "Your products", colName: "Product", colPLN: "PLN", colKg: "kg",
+    introHint:
+      "Open your link → copy price (PLN) and weight (kg) → paste here. You can add several products to a single order.",
+    orderTitle: "Your products",
+    colName: "Product",
+    colPLN: "PLN",
+    colKg: "kg",
     clearBtn: "↺ Clear",
-    shipTitle: "Shipping", shipNamePP: "Post", hintPP: "Cheaper, slower", hintDHL: "Faster, pricier",
-    rProducts: "Products", rShip: "Shipping", rTotal: "Total incl. VAT", rTotalNetto: "Total excl. VAT",
-    footer: "1 PLN ≈ 34 ISK · 1 PLN ≈ 0.235 EUR. Estimate only — final price confirmed after we check availability.",
+    shipTitle: "Shipping",
+    shipNamePP: "Post",
+    hintPP: "Cheaper, slower",
+    hintDHL: "Faster, pricier",
+    rProducts: "Products",
+    rShip: "Shipping",
+    rTotal: "Total incl. VAT",
+    rTotalNetto: "Total excl. VAT",
+    footer:
+      "1 PLN ≈ 34 ISK · 1 PLN ≈ 0.235 EUR. Estimate only — final price confirmed after we check availability.",
     errFields: "⚠ Enter price (PLN) and weight (kg).",
     errDhlDim: "❌ Package dimension exceeds 300 cm – DHL cannot ship.",
     errDhlKg: "❌ Total weight exceeds 300 kg – DHL cannot ship this order.",
     errPPLen: "❌ Longest side exceeds 150 cm – Poczta Polska cannot ship.",
     errPPGirth: "❌ Girth (L+2·W+2·H) exceeds 300 cm – Poczta Polska cannot ship.",
     warnPPSplit: "ℹ Total weight > 20 kg – Poczta Polska will split into multiple parcels.",
-    errPPItemWeight: "❌ One item weighs over 20 kg – Poczta Polska cannot ship a single parcel > 20 kg.",
+    errPPItemWeight:
+      "❌ One item weighs over 20 kg – Poczta Polska cannot ship a single parcel > 20 kg.",
     warnOversize: "ℹ DHL non-standard size (+87 PLN per parcel).",
-    orderNow: "✅ Order at this price", askQuote: "💬 Ask about this quote",
+    orderNow: "✅ Order at this price",
+    askQuote: "💬 Ask about this quote",
     emptyHint: "Enter price and weight to see your estimate to Iceland.",
     addedHint: "You can add another product above.",
   },
@@ -124,7 +234,9 @@ export type CalcItem = {
   link?: string;
   pricePLN: number;
   weightKg: number;
-  L?: number; W?: number; H?: number;
+  L?: number;
+  W?: number;
+  H?: number;
 };
 export type CalcSnapshot = {
   items: CalcItem[];
@@ -162,17 +274,38 @@ export function PriceCalculator({
   const [price, setPrice] = useState("");
   const [weight, setWeight] = useState("");
   const [dimsOpen, setDimsOpen] = useState(false);
-  const [L, setL] = useState(""); const [W, setW] = useState(""); const [H, setH] = useState("");
+  const [L, setL] = useState("");
+  const [W, setW] = useState("");
+  const [H, setH] = useState("");
   const [fieldErr, setFieldErr] = useState("");
 
   const addItem = () => {
-    const p = parseFloat(price); const w = parseFloat(weight);
-    if (!(p > 0) || !(w > 0)) { setFieldErr(t.errFields); return; }
-    setItems((arr) => [...arr, {
-      name: name.trim() || "—", link: link.trim() || undefined, pricePLN: p, weightKg: w,
-      L: parseFloat(L) || 0, W: parseFloat(W) || 0, H: parseFloat(H) || 0,
-    }]);
-    setName(""); setLink(""); setPrice(""); setWeight(""); setL(""); setW(""); setH(""); setFieldErr("");
+    const p = parseFloat(price);
+    const w = parseFloat(weight);
+    if (!(p > 0) || !(w > 0)) {
+      setFieldErr(t.errFields);
+      return;
+    }
+    setItems((arr) => [
+      ...arr,
+      {
+        name: name.trim() || "—",
+        link: link.trim() || undefined,
+        pricePLN: p,
+        weightKg: w,
+        L: parseFloat(L) || 0,
+        W: parseFloat(W) || 0,
+        H: parseFloat(H) || 0,
+      },
+    ]);
+    setName("");
+    setLink("");
+    setPrice("");
+    setWeight("");
+    setL("");
+    setW("");
+    setH("");
+    setFieldErr("");
   };
   const removeItem = (i: number) => setItems((arr) => arr.filter((_, idx) => idx !== i));
   const clearAll = () => setItems([]);
@@ -186,7 +319,9 @@ export function PriceCalculator({
     const warns: { cls: "error" | "caution" | "info"; msg: string }[] = [];
     let canShip = true;
     let oversizeCnt = 0;
-    let ppLenErr = false, ppGirthErr = false, dhlDimErr = false;
+    let ppLenErr = false,
+      ppGirthErr = false,
+      dhlDimErr = false;
 
     items.forEach((it) => {
       if (!it.L && !it.W && !it.H) return;
@@ -203,21 +338,34 @@ export function PriceCalculator({
 
     let shipBasePLN = 0;
     if (ship === "dhl") {
-      if (dhlDimErr) { canShip = false; warns.push({ cls: "error", msg: t.errDhlDim }); }
-      else if (totalKg > 300) { canShip = false; warns.push({ cls: "error", msg: t.errDhlKg }); }
-      else {
+      if (dhlDimErr) {
+        canShip = false;
+        warns.push({ cls: "error", msg: t.errDhlDim });
+      } else if (totalKg > 300) {
+        canShip = false;
+        warns.push({ cls: "error", msg: t.errDhlKg });
+      } else {
         const c = dhlCost(totalKg);
-        if (c == null) { canShip = false; warns.push({ cls: "error", msg: t.errDhlKg }); }
-        else {
+        if (c == null) {
+          canShip = false;
+          warns.push({ cls: "error", msg: t.errDhlKg });
+        } else {
           shipBasePLN = c + oversizeCnt * 87;
           if (oversizeCnt > 0) warns.push({ cls: "caution", msg: t.warnOversize });
         }
       }
     } else {
-      if (ppLenErr) { canShip = false; warns.push({ cls: "error", msg: t.errPPLen }); }
-      if (ppGirthErr) { canShip = false; warns.push({ cls: "error", msg: t.errPPGirth }); }
+      if (ppLenErr) {
+        canShip = false;
+        warns.push({ cls: "error", msg: t.errPPLen });
+      }
+      if (ppGirthErr) {
+        canShip = false;
+        warns.push({ cls: "error", msg: t.errPPGirth });
+      }
       if (canShip && items.some((it) => it.weightKg > 20)) {
-        canShip = false; warns.push({ cls: "error", msg: t.errPPItemWeight });
+        canShip = false;
+        warns.push({ cls: "error", msg: t.errPPItemWeight });
       }
       if (canShip) {
         shipBasePLN = ppCost(totalKg);
@@ -238,74 +386,134 @@ export function PriceCalculator({
     const nettoISK = grandISK / VAT;
 
     return {
-      canShip: true, warns,
-      totalCostPLN, totalKg, shipBasePLN, multiplier: mult,
-      prodISK, shipISK, grandISK, grandPLN, grandEUR, nettoISK,
+      canShip: true,
+      warns,
+      totalCostPLN,
+      totalKg,
+      shipBasePLN,
+      multiplier: mult,
+      prodISK,
+      shipISK,
+      grandISK,
+      grandPLN,
+      grandEUR,
+      nettoISK,
     } as const;
   }, [items, ship, t]);
 
   const snapshot: CalcSnapshot | null =
     calc && calc.canShip
       ? {
-          items, ship,
-          totalCostPLN: calc.totalCostPLN, totalKg: calc.totalKg, shipBasePLN: calc.shipBasePLN,
+          items,
+          ship,
+          totalCostPLN: calc.totalCostPLN,
+          totalKg: calc.totalKg,
+          shipBasePLN: calc.shipBasePLN,
           multiplier: calc.multiplier,
-          grandISK: calc.grandISK, grandPLN: calc.grandPLN, grandEUR: calc.grandEUR,
+          grandISK: calc.grandISK,
+          grandPLN: calc.grandPLN,
+          grandEUR: calc.grandEUR,
           nettoISK: calc.nettoISK,
         }
       : null;
 
   // Auto-clear field error after 3s
-  useEffect(() => { if (!fieldErr) return; const id = setTimeout(() => setFieldErr(""), 3000); return () => clearTimeout(id); }, [fieldErr]);
+  useEffect(() => {
+    if (!fieldErr) return;
+    const id = setTimeout(() => setFieldErr(""), 3000);
+    return () => clearTimeout(id);
+  }, [fieldErr]);
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-3 sm:p-4 flex flex-col gap-3">
       <p className="text-[11px] text-slate-600 leading-relaxed px-1">{t.introHint}</p>
       {/* Add product */}
       <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3">
-        <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">{t.addTitle}</div>
+        <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+          {t.addTitle}
+        </div>
         <input
-          type="text" value={name} onChange={(e) => setName(e.target.value)}
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder={t.nameLbl}
           className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-mas-orange mb-2"
           style={{ fontSize: "16px" }}
         />
         <input
-          type="text" value={link} onChange={(e) => setLink(e.target.value)}
+          type="text"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
           placeholder={t.linkLbl}
           className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-mas-orange mb-2"
           style={{ fontSize: "16px" }}
         />
         <div className="grid grid-cols-2 gap-2">
           <input
-            type="number" inputMode="decimal" min="0" step="0.01" value={price}
-            onChange={(e) => setPrice(e.target.value)} placeholder={t.priceLbl}
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder={t.priceLbl}
             className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-mas-orange"
             style={{ fontSize: "16px" }}
           />
           <input
-            type="number" inputMode="decimal" min="0" step="0.1" value={weight}
-            onChange={(e) => setWeight(e.target.value)} placeholder={t.weightLbl}
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.1"
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+            placeholder={t.weightLbl}
             className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-mas-orange"
             style={{ fontSize: "16px" }}
           />
         </div>
         <button
-          type="button" onClick={() => setDimsOpen((v) => !v)}
+          type="button"
+          onClick={() => setDimsOpen((v) => !v)}
           className="mt-2 text-[11px] font-semibold text-slate-500 hover:text-navy"
         >
           {dimsOpen ? "▼" : "▶"} {t.dimTitle}
         </button>
         {dimsOpen && (
           <div className="grid grid-cols-3 gap-2 mt-2">
-            <input type="number" inputMode="decimal" placeholder={t.dimL} value={L} onChange={(e) => setL(e.target.value)} className="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm outline-none focus:border-mas-orange" style={{ fontSize: "16px" }} />
-            <input type="number" inputMode="decimal" placeholder={t.dimW} value={W} onChange={(e) => setW(e.target.value)} className="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm outline-none focus:border-mas-orange" style={{ fontSize: "16px" }} />
-            <input type="number" inputMode="decimal" placeholder={t.dimH} value={H} onChange={(e) => setH(e.target.value)} className="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm outline-none focus:border-mas-orange" style={{ fontSize: "16px" }} />
+            <input
+              type="number"
+              inputMode="decimal"
+              placeholder={t.dimL}
+              value={L}
+              onChange={(e) => setL(e.target.value)}
+              className="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm outline-none focus:border-mas-orange"
+              style={{ fontSize: "16px" }}
+            />
+            <input
+              type="number"
+              inputMode="decimal"
+              placeholder={t.dimW}
+              value={W}
+              onChange={(e) => setW(e.target.value)}
+              className="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm outline-none focus:border-mas-orange"
+              style={{ fontSize: "16px" }}
+            />
+            <input
+              type="number"
+              inputMode="decimal"
+              placeholder={t.dimH}
+              value={H}
+              onChange={(e) => setH(e.target.value)}
+              className="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm outline-none focus:border-mas-orange"
+              style={{ fontSize: "16px" }}
+            />
           </div>
         )}
         {fieldErr && <div className="mt-2 text-xs font-semibold text-red-600">{fieldErr}</div>}
         <button
-          type="button" onClick={addItem}
+          type="button"
+          onClick={addItem}
           className="mt-3 w-full flex items-center justify-center gap-2 rounded-lg bg-navy text-white text-sm font-bold py-2.5 hover:opacity-90"
         >
           <Plus className="w-4 h-4" /> {t.addBtn}
@@ -316,19 +524,37 @@ export function PriceCalculator({
       {items.length > 0 ? (
         <div className="rounded-lg border border-slate-200 p-3">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">{t.orderTitle}</div>
-            <button onClick={clearAll} className="text-[11px] text-slate-500 hover:text-red-600 flex items-center gap-1"><RotateCcw className="w-3 h-3" /> {t.clearBtn}</button>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              {t.orderTitle}
+            </div>
+            <button
+              onClick={clearAll}
+              className="text-[11px] text-slate-500 hover:text-red-600 flex items-center gap-1"
+            >
+              <RotateCcw className="w-3 h-3" /> {t.clearBtn}
+            </button>
           </div>
           <ul className="flex flex-col divide-y divide-slate-100">
             {items.map((it, i) => (
               <li key={i} className="flex items-center justify-between gap-2 py-1.5 text-sm">
                 <div className="flex-1 min-w-0">
                   <div className="truncate text-navy">{it.name}</div>
-                  {it.link && <div className="truncate text-[10px] text-slate-500" title={it.link}>{it.link}</div>}
+                  {it.link && (
+                    <div className="truncate text-[10px] text-slate-500" title={it.link}>
+                      {it.link}
+                    </div>
+                  )}
                 </div>
                 <span className="text-slate-600 tabular-nums">{fmtDec(it.pricePLN)} PLN</span>
-                <span className="text-slate-500 tabular-nums w-12 text-right">{it.weightKg.toFixed(1)} kg</span>
-                <button onClick={() => removeItem(i)} className="text-slate-400 hover:text-red-600 p-1"><Trash2 className="w-3.5 h-3.5" /></button>
+                <span className="text-slate-500 tabular-nums w-12 text-right">
+                  {it.weightKg.toFixed(1)} kg
+                </span>
+                <button
+                  onClick={() => removeItem(i)}
+                  className="text-slate-400 hover:text-red-600 p-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
               </li>
             ))}
           </ul>
@@ -341,10 +567,13 @@ export function PriceCalculator({
       {/* Shipping toggle */}
       {items.length > 0 && (
         <div>
-          <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">{t.shipTitle}</div>
+          <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+            {t.shipTitle}
+          </div>
           <div className="grid grid-cols-2 gap-2">
             <button
-              type="button" onClick={() => setShip("pp")}
+              type="button"
+              onClick={() => setShip("pp")}
               className={`rounded-lg border-2 p-2.5 text-center transition-colors ${ship === "pp" ? "border-mas-orange bg-orange-50" : "border-slate-200 bg-white hover:border-slate-300"}`}
             >
               <Mail className="w-5 h-5 mx-auto mb-1 text-navy" />
@@ -352,11 +581,18 @@ export function PriceCalculator({
               <div className="text-[10px] text-slate-500">{t.hintPP}</div>
             </button>
             <button
-              type="button" onClick={() => setShip("dhl")}
+              type="button"
+              onClick={() => setShip("dhl")}
               className={`rounded-lg border-2 p-2.5 text-center transition-colors ${ship === "dhl" ? "border-mas-orange bg-orange-50" : "border-slate-200 bg-white hover:border-slate-300"}`}
             >
               <Truck className="w-5 h-5 mx-auto mb-1 text-navy" />
-              <div className="text-xs font-bold text-navy">{lang === "pl" ? "Kurier Express" : lang === "is" ? "Hraðsending" : "Express Courier"}</div>
+              <div className="text-xs font-bold text-navy">
+                {lang === "pl"
+                  ? "Kurier Express"
+                  : lang === "is"
+                    ? "Hraðsending"
+                    : "Express Courier"}
+              </div>
               <div className="text-[10px] text-slate-500">{t.hintDHL}</div>
             </button>
           </div>
@@ -370,11 +606,15 @@ export function PriceCalculator({
             <div
               key={i}
               className={`rounded-md px-3 py-2 text-xs ${
-                w.cls === "error" ? "bg-red-50 border border-red-200 text-red-700 font-semibold" :
-                w.cls === "caution" ? "bg-amber-50 border border-amber-200 text-amber-800" :
-                "bg-slate-50 border border-slate-200 text-slate-600"
+                w.cls === "error"
+                  ? "bg-red-50 border border-red-200 text-red-700 font-semibold"
+                  : w.cls === "caution"
+                    ? "bg-amber-50 border border-amber-200 text-amber-800"
+                    : "bg-slate-50 border border-slate-200 text-slate-600"
               }`}
-            >{w.msg}</div>
+            >
+              {w.msg}
+            </div>
           ))}
         </div>
       ) : null}
@@ -383,7 +623,9 @@ export function PriceCalculator({
       {calc?.canShip && (
         <div className="rounded-xl bg-navy text-white p-4">
           <div className="flex justify-between items-baseline mb-2">
-            <span className="text-[11px] uppercase tracking-wider text-white/60">{t.rProducts}</span>
+            <span className="text-[11px] uppercase tracking-wider text-white/60">
+              {t.rProducts}
+            </span>
             <span className="text-sm tabular-nums">{fmt(calc.prodISK)} kr</span>
           </div>
           <div className="flex justify-between items-baseline mb-2">
@@ -396,7 +638,9 @@ export function PriceCalculator({
               <span className="text-2xl font-black tabular-nums">{fmt(calc.grandISK)} kr</span>
             </div>
             <div className="flex justify-between items-baseline mt-1">
-              <span className="text-[10px] uppercase tracking-wider text-white/40">{t.rTotalNetto}</span>
+              <span className="text-[10px] uppercase tracking-wider text-white/40">
+                {t.rTotalNetto}
+              </span>
               <span className="text-xs tabular-nums text-white/50">{fmt(calc.nettoISK)} kr</span>
             </div>
             <div className="text-[10px] text-white/40 mt-1 text-right">
@@ -407,14 +651,16 @@ export function PriceCalculator({
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
             {onAskQuote && (
               <button
-                type="button" onClick={() => snapshot && onAskQuote(snapshot)}
+                type="button"
+                onClick={() => snapshot && onAskQuote(snapshot)}
                 className="flex items-center justify-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold py-2.5"
               >
                 {t.askQuote}
               </button>
             )}
             <button
-              type="button" onClick={() => snapshot && onOrder(snapshot)}
+              type="button"
+              onClick={() => snapshot && onOrder(snapshot)}
               className="flex items-center justify-center gap-2 rounded-lg bg-mas-orange hover:opacity-90 text-white text-sm font-bold py-2.5 sm:col-start-2"
             >
               <Send className="w-4 h-4" /> {t.orderNow}

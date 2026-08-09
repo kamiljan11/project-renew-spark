@@ -1,5 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Package, Upload, X, Image as ImageIcon, RotateCcw, Info, AlertTriangle, Copy, Check, Search, Calculator } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Package,
+  Upload,
+  X,
+  Image as ImageIcon,
+  RotateCcw,
+  Info,
+  AlertTriangle,
+  Copy,
+  Check,
+  Search,
+  Calculator,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/i18n/LanguageContext";
 import { useNavigate } from "@tanstack/react-router";
@@ -16,8 +30,24 @@ type Chip = {
 };
 
 type Step = {
-  key: "part_links" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
-  apiStep: "part" | "phone" | "email" | "company" | "license_plate" | "address" | "delivery_preference" | "photos";
+  key:
+    | "part_links"
+    | "phone"
+    | "email"
+    | "company"
+    | "license_plate"
+    | "address"
+    | "delivery_preference"
+    | "photos";
+  apiStep:
+    | "part"
+    | "phone"
+    | "email"
+    | "company"
+    | "license_plate"
+    | "address"
+    | "delivery_preference"
+    | "photos";
   ask: string;
   hint: string;
   multiline?: boolean;
@@ -32,7 +62,8 @@ type Step = {
 
 const STEPS: Step[] = [
   {
-    key: "license_plate", apiStep: "license_plate",
+    key: "license_plate",
+    apiStep: "license_plate",
     ask: "Cześć 👋 Do jakiego auta szukasz części? Podaj <strong>numer rejestracyjny</strong>, a pobiorę markę, model, rok, VIN i silnik automatycznie i poproszę Cię o potwierdzenie.<br><small style='opacity:0.85'>Nie masz tablicy? Wpisz markę, model i rok (np. \"VW Golf 2015 1.6 TDI\").</small>",
     hint: "np. KEF123 / AUP72",
     optional: true,
@@ -40,7 +71,8 @@ const STEPS: Step[] = [
     chips: [{ label: "Nie mam tablicy — wpiszę ręcznie", fill: "" }],
   },
   {
-    key: "part_links", apiStep: "part",
+    key: "part_links",
+    apiStep: "part",
     ask: "Great — now tell us <strong>what exact part</strong> you need and <strong>where it sits on the car</strong>.<br><small style='opacity:0.85'>Examples: <em>front-left headlight</em>, <em>rear-right ABS sensor</em>, <em>turbo intercooler hose under the engine bay</em>. If you have a link or OEM number — paste it here. You can also add <strong>photos of the part</strong> at the end.</small>",
     hint: "e.g. front-left headlight / OEM 1K6941005C / link",
     multiline: true,
@@ -52,7 +84,8 @@ const STEPS: Step[] = [
     ],
   },
   {
-    key: "phone", apiStep: "phone",
+    key: "phone",
+    apiStep: "phone",
     ask: "Got it! Your <strong>phone number</strong>?<br><small style='opacity:0.85'>So we can reach you if we need to confirm details.</small>",
     hint: "e.g. +354 787 8617",
     why: {
@@ -61,30 +94,54 @@ const STEPS: Step[] = [
       is: "Aðeins notað ef við þurfum að staðfesta atriði. Enginn spam, engin markaðssetning.",
     },
   },
-  { key: "email", apiStep: "email", ask: "And your <strong>email</strong>?", hint: "e.g. you@workshop.is" },
-  { key: "company", apiStep: "company", ask: "Your <strong>name or company</strong>?", hint: "e.g. Workshop ehf.", maxLen: 120 },
   {
-    key: "address", apiStep: "address",
+    key: "email",
+    apiStep: "email",
+    ask: "And your <strong>email</strong>?",
+    hint: "e.g. you@workshop.is",
+  },
+  {
+    key: "company",
+    apiStep: "company",
+    ask: "Your <strong>name or company</strong>?",
+    hint: "e.g. Workshop ehf.",
+    maxLen: 120,
+  },
+  {
+    key: "address",
+    apiStep: "address",
     ask: "<strong>Delivery address</strong> in Iceland?",
     hint: "e.g. Hafnarbraut 5, Reykjanesbær",
     optional: true,
     maxLen: 200,
-    chips: [{ label: "📦 I'll pick up myself", submit: "Personal pickup", normalize: "Personal pickup" }],
+    chips: [
+      { label: "📦 I'll pick up myself", submit: "Personal pickup", normalize: "Personal pickup" },
+    ],
   },
   {
-    key: "delivery_preference", apiStep: "delivery_preference",
+    key: "delivery_preference",
+    apiStep: "delivery_preference",
     ask: "How would you like it shipped?<br><small style='opacity:0.85'>Pick what suits you — we'll quote both if you're not sure.</small>",
     hint: "Tap a button or type your own preference",
     optional: true,
     maxLen: 200,
     chips: [
-      { label: "🚚 Standard — cheaper", submit: "Standard (cheaper)", normalize: "Standard (cheaper)" },
-      { label: "✈️ Express — fastest", submit: "Express (fastest)", normalize: "Express (fastest)" },
+      {
+        label: "🚚 Standard — cheaper",
+        submit: "Standard (cheaper)",
+        normalize: "Standard (cheaper)",
+      },
+      {
+        label: "✈️ Express — fastest",
+        submit: "Express (fastest)",
+        normalize: "Express (fastest)",
+      },
       { label: "🤔 Quote me both", submit: "Quote both options", normalize: "Quote both options" },
     ],
   },
   {
-    key: "photos", apiStep: "photos",
+    key: "photos",
+    apiStep: "photos",
     ask: "Last step! 📸 Add <strong>photos of the part</strong> (and the car if useful) — close-ups of labels, codes or the mounting point speed up sourcing a lot.<br><small style='opacity:0.85'>Up to 5 photos, max 10 MB each. Optional but very welcome.</small>",
     hint: "",
     optional: true,
@@ -92,7 +149,13 @@ const STEPS: Step[] = [
   },
 ];
 
-type Bubble = { who: "bot" | "user" | "typing" | "error"; html?: string; text?: string; faded?: boolean; retry?: () => void };
+type Bubble = {
+  who: "bot" | "user" | "typing" | "error";
+  html?: string;
+  text?: string;
+  faded?: boolean;
+  retry?: () => void;
+};
 
 const MAX_PHOTOS = 5;
 const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
@@ -101,12 +164,23 @@ const MIN_HUMAN_MS = 2500; // anti-bot: form too fast = likely a bot
 
 // ---- Validation helpers ----
 const EMAIL_TYPOS: Record<string, string> = {
-  "gmial.com": "gmail.com", "gmai.com": "gmail.com", "gnail.com": "gmail.com", "gmil.com": "gmail.com",
-  "gmaill.com": "gmail.com", "gmal.com": "gmail.com", "gmail.co": "gmail.com",
-  "yaho.com": "yahoo.com", "yahooo.com": "yahoo.com", "yahoo.co": "yahoo.com",
-  "hotnail.com": "hotmail.com", "hotmial.com": "hotmail.com", "hotmai.com": "hotmail.com",
-  "outlok.com": "outlook.com", "outloook.com": "outlook.com",
-  "iclud.com": "icloud.com", "icoud.com": "icloud.com",
+  "gmial.com": "gmail.com",
+  "gmai.com": "gmail.com",
+  "gnail.com": "gmail.com",
+  "gmil.com": "gmail.com",
+  "gmaill.com": "gmail.com",
+  "gmal.com": "gmail.com",
+  "gmail.co": "gmail.com",
+  "yaho.com": "yahoo.com",
+  "yahooo.com": "yahoo.com",
+  "yahoo.co": "yahoo.com",
+  "hotnail.com": "hotmail.com",
+  "hotmial.com": "hotmail.com",
+  "hotmai.com": "hotmail.com",
+  "outlok.com": "outlook.com",
+  "outloook.com": "outlook.com",
+  "iclud.com": "icloud.com",
+  "icoud.com": "icloud.com",
 };
 function suggestEmailFix(email: string): string | null {
   const m = email.toLowerCase().match(/^[^@]+@(.+)$/);
@@ -146,7 +220,9 @@ export function ConversationalForm() {
   const [data, setData] = useState<Record<string, string>>({});
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+  const [partHistory, setPartHistory] = useState<{ role: "user" | "assistant"; content: string }[]>(
+    [],
+  );
   const [partItems, setPartItems] = useState<string[]>([]);
   const [partShopQueries, setPartShopQueries] = useState<string[]>([]);
   const [awaitingMoreParts, setAwaitingMoreParts] = useState(false);
@@ -162,7 +238,9 @@ export function ConversationalForm() {
   const [path, setPath] = useState<Path | null>(null);
   const [calcSnapshot, setCalcSnapshot] = useState<CalcSnapshot | null>(null);
   const editingReturnRef = useRef(false);
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -173,48 +251,98 @@ export function ConversationalForm() {
 
   // Localized small strings
   const L = {
-    resumeQ: lang === "pl" ? "Witaj z powrotem 👋 Mamy zapisany Twój postęp. Kontynuować?"
-      : lang === "is" ? "Velkomin/n aftur 👋 Við vistuðum framganginn þinn. Halda áfram?"
-      : "Welcome back 👋 We saved your progress. Continue?",
-    resumeYes: lang === "pl" ? "Tak, kontynuuj" : lang === "is" ? "Já, halda áfram" : "Yes, continue",
-    resumeNo: lang === "pl" ? "Zacznij od nowa" : lang === "is" ? "Byrja upp á nýtt" : "Start fresh",
+    resumeQ:
+      lang === "pl"
+        ? "Witaj z powrotem 👋 Mamy zapisany Twój postęp. Kontynuować?"
+        : lang === "is"
+          ? "Velkomin/n aftur 👋 Við vistuðum framganginn þinn. Halda áfram?"
+          : "Welcome back 👋 We saved your progress. Continue?",
+    resumeYes:
+      lang === "pl" ? "Tak, kontynuuj" : lang === "is" ? "Já, halda áfram" : "Yes, continue",
+    resumeNo:
+      lang === "pl" ? "Zacznij od nowa" : lang === "is" ? "Byrja upp á nýtt" : "Start fresh",
     reset: lang === "pl" ? "Zacznij od nowa" : lang === "is" ? "Byrja upp á nýtt" : "Start over",
-    resetConfirm: lang === "pl" ? "Skasować wszystkie odpowiedzi i zacząć od nowa?"
-      : lang === "is" ? "Eyða öllum svörum og byrja upp á nýtt?"
-      : "Clear all answers and start fresh?",
-    netError: lang === "pl" ? "⚠️ Problem z połączeniem. Spróbuj jeszcze raz."
-      : lang === "is" ? "⚠️ Tengingarvilla. Vinsamlegast reyndu aftur."
-      : "⚠️ Connection problem. Please try again.",
+    resetConfirm:
+      lang === "pl"
+        ? "Skasować wszystkie odpowiedzi i zacząć od nowa?"
+        : lang === "is"
+          ? "Eyða öllum svörum og byrja upp á nýtt?"
+          : "Clear all answers and start fresh?",
+    netError:
+      lang === "pl"
+        ? "⚠️ Problem z połączeniem. Spróbuj jeszcze raz."
+        : lang === "is"
+          ? "⚠️ Tengingarvilla. Vinsamlegast reyndu aftur."
+          : "⚠️ Connection problem. Please try again.",
     retry: lang === "pl" ? "🔄 Spróbuj ponownie" : lang === "is" ? "🔄 Reyna aftur" : "🔄 Retry",
-    typoSuggest: lang === "pl" ? "Czy chodziło Ci o" : lang === "is" ? "Áttirðu við" : "Did you mean",
-    badPhone: lang === "pl" ? "Hmm, ten numer wygląda na za krótki. Podaj 8+ cyfr (z kierunkowym, np. +354)."
-      : lang === "is" ? "Þetta númer virðist of stutt. Sláðu inn 8+ tölustafi (með landsnúmeri, t.d. +354)."
-      : "Hmm, that number looks too short. Please use 8+ digits (with country code, e.g. +354).",
-    badEmail: lang === "pl" ? "Ten e-mail wygląda nieprawidłowo. Sprawdź pisownię."
-      : lang === "is" ? "Þetta netfang lítur ekki rétt út. Athugaðu stafsetninguna."
-      : "That email doesn't look right. Please check the spelling.",
-    tooFast: lang === "pl" ? "Zbyt szybko 🤖 — odczekaj chwilę i spróbuj ponownie."
-      : lang === "is" ? "Of hratt 🤖 — bíddu augnablik og reyndu aftur."
-      : "Too fast 🤖 — please slow down a moment and try again.",
-    why: lang === "pl" ? "Dlaczego pytamy?" : lang === "is" ? "Af hverju spyrjum við?" : "Why we ask?",
-    socialProof: lang === "pl" ? "✓ 247 zapytań w tym miesiącu · ⏱ ~2 min na wypełnienie"
-      : lang === "is" ? "✓ 247 fyrirspurnir í þessum mánuði · ⏱ ~2 mín að fylla út"
-      : "✓ 247 requests this month · ⏱ ~2 min to fill in",
-    missingWarn: lang === "pl" ? "⚠️ Bez tego nie damy rady się z Tobą skontaktować."
-      : lang === "is" ? "⚠️ Án þessa getum við ekki haft samband við þig."
-      : "⚠️ Without this we can't reach you back.",
-    copyQuote: lang === "pl" ? "📋 Skopiuj kopię" : lang === "is" ? "📋 Afrita afrit" : "📋 Copy a copy",
+    typoSuggest:
+      lang === "pl" ? "Czy chodziło Ci o" : lang === "is" ? "Áttirðu við" : "Did you mean",
+    badPhone:
+      lang === "pl"
+        ? "Hmm, ten numer wygląda na za krótki. Podaj 8+ cyfr (z kierunkowym, np. +354)."
+        : lang === "is"
+          ? "Þetta númer virðist of stutt. Sláðu inn 8+ tölustafi (með landsnúmeri, t.d. +354)."
+          : "Hmm, that number looks too short. Please use 8+ digits (with country code, e.g. +354).",
+    badEmail:
+      lang === "pl"
+        ? "Ten e-mail wygląda nieprawidłowo. Sprawdź pisownię."
+        : lang === "is"
+          ? "Þetta netfang lítur ekki rétt út. Athugaðu stafsetninguna."
+          : "That email doesn't look right. Please check the spelling.",
+    tooFast:
+      lang === "pl"
+        ? "Zbyt szybko 🤖 — odczekaj chwilę i spróbuj ponownie."
+        : lang === "is"
+          ? "Of hratt 🤖 — bíddu augnablik og reyndu aftur."
+          : "Too fast 🤖 — please slow down a moment and try again.",
+    why:
+      lang === "pl" ? "Dlaczego pytamy?" : lang === "is" ? "Af hverju spyrjum við?" : "Why we ask?",
+    socialProof:
+      lang === "pl"
+        ? "✓ 247 zapytań w tym miesiącu · ⏱ ~2 min na wypełnienie"
+        : lang === "is"
+          ? "✓ 247 fyrirspurnir í þessum mánuði · ⏱ ~2 mín að fylla út"
+          : "✓ 247 requests this month · ⏱ ~2 min to fill in",
+    missingWarn:
+      lang === "pl"
+        ? "⚠️ Bez tego nie damy rady się z Tobą skontaktować."
+        : lang === "is"
+          ? "⚠️ Án þessa getum við ekki haft samband við þig."
+          : "⚠️ Without this we can't reach you back.",
+    copyQuote:
+      lang === "pl" ? "📋 Skopiuj kopię" : lang === "is" ? "📋 Afrita afrit" : "📋 Copy a copy",
     copied: lang === "pl" ? "Skopiowane!" : lang === "is" ? "Afritað!" : "Copied!",
   };
 
   const thinkingMessages = [
-    lang === "pl" ? "Sprawdzam u dostawcy…" : lang === "is" ? "Skoða hjá birgi…" : "Checking with supplier…",
-    lang === "pl" ? "Weryfikuję pasujące modele…" : lang === "is" ? "Sannreyni gerðir sem passa…" : "Verifying matching models…",
-    lang === "pl" ? "Porównuję OEM vs. zamiennik…" : lang === "is" ? "Ber saman OEM vs. aukaframleiðslu…" : "Comparing OEM vs. aftermarket…",
+    lang === "pl"
+      ? "Sprawdzam u dostawcy…"
+      : lang === "is"
+        ? "Skoða hjá birgi…"
+        : "Checking with supplier…",
+    lang === "pl"
+      ? "Weryfikuję pasujące modele…"
+      : lang === "is"
+        ? "Sannreyni gerðir sem passa…"
+        : "Verifying matching models…",
+    lang === "pl"
+      ? "Porównuję OEM vs. zamiennik…"
+      : lang === "is"
+        ? "Ber saman OEM vs. aukaframleiðslu…"
+        : "Comparing OEM vs. aftermarket…",
   ];
 
   // ---- Persistence ----
-  const persist = (next?: Partial<{ step: number; data: Record<string, string>; partItems: string[]; partShopQueries: string[]; partHistory: typeof partHistory; photoUrls: string[] }>) => {
+  const persist = (
+    next?: Partial<{
+      step: number;
+      data: Record<string, string>;
+      partItems: string[];
+      partShopQueries: string[];
+      partHistory: typeof partHistory;
+      photoUrls: string[];
+    }>,
+  ) => {
     try {
       const payload = {
         step: next?.step ?? step,
@@ -226,10 +354,16 @@ export function ConversationalForm() {
         savedAt: Date.now(),
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    } catch { /* ignore quota */ }
+    } catch {
+      /* ignore quota */
+    }
   };
   const clearPersisted = () => {
-    try { localStorage.removeItem(STORAGE_KEY); } catch { /* noop */ }
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* noop */
+    }
   };
 
   useEffect(() => {
@@ -241,14 +375,13 @@ export function ConversationalForm() {
         const parsed = JSON.parse(raw);
         // Only restore if <7 days old & has meaningful content
         const fresh = Date.now() - (parsed.savedAt ?? 0) < 7 * 86400 * 1000;
-        const hasContent = (parsed.partItems?.length ?? 0) > 0 || Object.keys(parsed.data ?? {}).length > 0;
+        const hasContent =
+          (parsed.partItems?.length ?? 0) > 0 || Object.keys(parsed.data ?? {}).length > 0;
         if (fresh && hasContent) {
           restored = true;
           setResumePromptShown(true);
           setTimeout(() => {
-            setBubbles([
-              { who: "bot", html: L.resumeQ },
-            ]);
+            setBubbles([{ who: "bot", html: L.resumeQ }]);
             setDynamicChips([
               { label: L.resumeYes, submit: "__resume__", normalize: "__resume__" },
               { label: L.resumeNo, submit: "__fresh__", normalize: "__fresh__" },
@@ -257,7 +390,9 @@ export function ConversationalForm() {
           }, 300);
         }
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     if (!restored) {
       // Show path selector first instead of jumping to step 0.
       // Bubbles + chat input remain hidden until user picks a path.
@@ -265,7 +400,9 @@ export function ConversationalForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => { chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" }); }, [bubbles]);
+  useEffect(() => {
+    chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
+  }, [bubbles]);
 
   // Cycle "thinking" messages while busy
   useEffect(() => {
@@ -280,7 +417,9 @@ export function ConversationalForm() {
       if (thinkingTimerRef.current) clearInterval(thinkingTimerRef.current);
       setThinkingLabel("Thinking…");
     }
-    return () => { if (thinkingTimerRef.current) clearInterval(thinkingTimerRef.current); };
+    return () => {
+      if (thinkingTimerRef.current) clearInterval(thinkingTimerRef.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [busy, lang]);
 
@@ -313,13 +452,27 @@ export function ConversationalForm() {
       setPath((p.path as Path) ?? "link");
       setDynamicChips(null);
       setBubbles([
-        { who: "bot", html: lang === "pl" ? "Świetnie, kontynuujemy! 🚀" : lang === "is" ? "Frábært, höldum áfram! 🚀" : "Great, picking up where you left off! 🚀" },
+        {
+          who: "bot",
+          html:
+            lang === "pl"
+              ? "Świetnie, kontynuujemy! 🚀"
+              : lang === "is"
+                ? "Frábært, höldum áfram! 🚀"
+                : "Great, picking up where you left off! 🚀",
+        },
         { who: "bot", html: STEPS[restoredStep].ask },
       ]);
-      setHintMsg(STEPS[restoredStep].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+      setHintMsg(
+        STEPS[restoredStep].multiline
+          ? "Enter to send · Shift+Enter for new line"
+          : "Press Enter to continue",
+      );
       setResumePromptShown(false);
       setTimeout(() => inputRef.current?.focus(), 100);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   };
 
   const startFresh = () => {
@@ -354,61 +507,92 @@ export function ConversationalForm() {
       parsed.path = p;
       parsed.savedAt = Date.now();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   };
 
   const SHOP_LINKS_HTML = [
-    ['Allegro', 'https://allegro.pl/'],
-    ['Autofixer', 'https://pl.autofixer.com/'],
-    ['Autodoc', 'https://www.autodoc.pl/'],
-    ['iParts', 'https://iparts.pl/'],
-    ['Europarts', 'https://europarts.pl/'],
-    ['Signeda', 'https://signeda.pl/'],
-  ].map(([n, u]) => `<a href="${u}" target="_blank" rel="noopener noreferrer" class="underline font-semibold text-mas-orange hover:opacity-80">${n}</a>`).join(', ');
+    ["Allegro", "https://allegro.pl/"],
+    ["Autofixer", "https://pl.autofixer.com/"],
+    ["Autodoc", "https://www.autodoc.pl/"],
+    ["iParts", "https://iparts.pl/"],
+    ["Europarts", "https://europarts.pl/"],
+    ["Signeda", "https://signeda.pl/"],
+  ]
+    .map(
+      ([n, u]) =>
+        `<a href="${u}" target="_blank" rel="noopener noreferrer" class="underline font-semibold text-mas-orange hover:opacity-80">${n}</a>`,
+    )
+    .join(", ");
 
   const choosePath = (p: Path) => {
     setPath(p);
     persistPath(p);
     startTimeRef.current = Date.now();
     if (p === "calculator") {
-      setBubbles([{ who: "bot", html: lang === "pl"
-        ? `Świetnie! Wpisz cenę w PL (PLN) i wagę (kg) części, a od razu policzymy całkowity koszt z dostawą do Islandii.<br><br>🛒 <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Ważne:</strong> jeśli podajesz własny link, kupujemy <strong>dokładnie to, co wskazałeś</strong> — nie weryfikujemy dopasowania do Twojego auta. Zakup jest <strong>bez możliwości zwrotu</strong>.`
-        : lang === "is"
-          ? `Frábært! Sláðu inn verð (PLN) og þyngd (kg) — við reiknum strax út heildarkostnað til Íslands.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Mikilvægt:</strong> ef þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort það passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>.`
-          : `Great! Enter the part's PL price (PLN) and weight (kg) — we'll instantly calculate the total cost delivered to Iceland.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Important:</strong> if you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify it fits your car. The purchase is <strong>non-returnable</strong>.` }]);
+      setBubbles([
+        {
+          who: "bot",
+          html:
+            lang === "pl"
+              ? `Świetnie! Wpisz cenę w PL (PLN) i wagę (kg) części, a od razu policzymy całkowity koszt z dostawą do Islandii.<br><br>🛒 <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Ważne:</strong> jeśli podajesz własny link, kupujemy <strong>dokładnie to, co wskazałeś</strong> — nie weryfikujemy dopasowania do Twojego auta. Zakup jest <strong>bez możliwości zwrotu</strong>.`
+              : lang === "is"
+                ? `Frábært! Sláðu inn verð (PLN) og þyngd (kg) — við reiknum strax út heildarkostnað til Íslands.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Mikilvægt:</strong> ef þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort það passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>.`
+                : `Great! Enter the part's PL price (PLN) and weight (kg) — we'll instantly calculate the total cost delivered to Iceland.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> ${SHOP_LINKS_HTML}.<br><br>⚠️ <strong>Important:</strong> if you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify it fits your car. The purchase is <strong>non-returnable</strong>.`,
+        },
+      ]);
       setHintMsg("");
       return;
     }
-    const intro = p === "link"
-      ? (lang === "pl"
-        ? `Świetnie! Jeśli masz <strong>link albo numer OEM</strong>, dodasz go za chwilę po potwierdzeniu auta.<br><br>🛒 <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> ${SHOP_LINKS_HTML}. Skróty do nich pojawią się przy polu opisu części.<br><br>⚠️ <strong>Ważne:</strong> gdy podajesz własny link, kupujemy <strong>dokładnie to, co wskazałeś</strong> — nie sprawdzamy, czy część pasuje do Twojego auta. Zakup jest <strong>bez możliwości zwrotu</strong>. Jeśli chcesz, abyśmy zweryfikowali dopasowanie, wybierz opcję „Znajdźcie część za mnie”.`
-        : lang === "is"
-          ? `Frábært! Ef þú ert með <strong>hlekk eða OEM númer</strong> geturðu bætt því við rétt á eftir þegar bíllinn hefur verið staðfestur.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> ${SHOP_LINKS_HTML}. Flýtileiðir birtast við lýsingarreitinn.<br><br>⚠️ <strong>Mikilvægt:</strong> þegar þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort hluturinn passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>. Ef þú vilt að við staðfestum að hluturinn passi, veldu „Finnið hlutinn fyrir mig“.`
-          : `Great! If you have a <strong>link or OEM number</strong>, you'll add it right after we confirm the car.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> ${SHOP_LINKS_HTML}. Shortcuts appear next to the part description field.<br><br>⚠️ <strong>Important:</strong> when you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify the part fits your car. The purchase is <strong>non-returnable</strong>. If you'd like us to verify the fit, choose „Find the part for me” instead.`)
-      : (lang === "pl"
-        ? "Jasne 🔍 — opisz, czego potrzebujesz (część, OEM, model auta). Na podstawie Twojego opisu pokażemy Ci sklepy, w których możesz <strong>poszukać sam za darmo</strong>. Jeśli wolisz, abyśmy zrobili to za Ciebie — pojawi się taka opcja przy sklepach."
-        : lang === "is"
-          ? "Skil 🔍 — lýstu því sem þú þarft (varahlutur, OEM, bíltegund). Út frá lýsingunni sýnum við þér verslanir þar sem þú getur <strong>leitað sjálf/ur ókeypis</strong>. Ef þú vilt frekar að við gerum það fyrir þig — sá möguleiki birtist við verslanirnar."
-          : "Sure 🔍 — describe what you need (part, OEM, car model). Based on your description we'll show you shops where you can <strong>search yourself for free</strong>. If you'd rather have us do it — that option appears next to the shops.");
-    setBubbles([{ who: "bot", html: intro }, { who: "bot", html: STEPS[0].ask }]);
+    const intro =
+      p === "link"
+        ? lang === "pl"
+          ? `Świetnie! Jeśli masz <strong>link albo numer OEM</strong>, dodasz go za chwilę po potwierdzeniu auta.<br><br>🛒 <strong>Akceptujemy linki tylko z naszych zaufanych sklepów:</strong> ${SHOP_LINKS_HTML}. Skróty do nich pojawią się przy polu opisu części.<br><br>⚠️ <strong>Ważne:</strong> gdy podajesz własny link, kupujemy <strong>dokładnie to, co wskazałeś</strong> — nie sprawdzamy, czy część pasuje do Twojego auta. Zakup jest <strong>bez możliwości zwrotu</strong>. Jeśli chcesz, abyśmy zweryfikowali dopasowanie, wybierz opcję „Znajdźcie część za mnie”.`
+          : lang === "is"
+            ? `Frábært! Ef þú ert með <strong>hlekk eða OEM númer</strong> geturðu bætt því við rétt á eftir þegar bíllinn hefur verið staðfestur.<br><br>🛒 <strong>Við tökum aðeins við hlekkjum frá okkar traustu verslunum:</strong> ${SHOP_LINKS_HTML}. Flýtileiðir birtast við lýsingarreitinn.<br><br>⚠️ <strong>Mikilvægt:</strong> þegar þú sendir þinn eigin hlekk kaupum við <strong>nákvæmlega það sem þú vísaðir á</strong> — við athugum ekki hvort hluturinn passi við bílinn þinn. Kaupin eru <strong>óafturkræf</strong>. Ef þú vilt að við staðfestum að hluturinn passi, veldu „Finnið hlutinn fyrir mig“.`
+            : `Great! If you have a <strong>link or OEM number</strong>, you'll add it right after we confirm the car.<br><br>🛒 <strong>We only accept links from our trusted retailers:</strong> ${SHOP_LINKS_HTML}. Shortcuts appear next to the part description field.<br><br>⚠️ <strong>Important:</strong> when you provide your own link, we buy <strong>exactly what you pointed to</strong> — we don't verify the part fits your car. The purchase is <strong>non-returnable</strong>. If you'd like us to verify the fit, choose „Find the part for me” instead.`
+        : lang === "pl"
+          ? "Jasne 🔍 — opisz, czego potrzebujesz (część, OEM, model auta). Na podstawie Twojego opisu pokażemy Ci sklepy, w których możesz <strong>poszukać sam za darmo</strong>. Jeśli wolisz, abyśmy zrobili to za Ciebie — pojawi się taka opcja przy sklepach."
+          : lang === "is"
+            ? "Skil 🔍 — lýstu því sem þú þarft (varahlutur, OEM, bíltegund). Út frá lýsingunni sýnum við þér verslanir þar sem þú getur <strong>leitað sjálf/ur ókeypis</strong>. Ef þú vilt frekar að við gerum það fyrir þig — sá möguleiki birtist við verslanirnar."
+            : "Sure 🔍 — describe what you need (part, OEM, car model). Based on your description we'll show you shops where you can <strong>search yourself for free</strong>. If you'd rather have us do it — that option appears next to the shops.";
+    setBubbles([
+      { who: "bot", html: intro },
+      { who: "bot", html: STEPS[0].ask },
+    ]);
     setStep(0);
-    setHintMsg(STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setHintMsg(
+      STEPS[0].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue",
+    );
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
   const onCalcOrder = (snap: CalcSnapshot) => {
     setCalcSnapshot(snap);
-    const lines = snap.items.map((it, i) =>
-      `${i + 1}. ${it.name}${it.link ? ` — ${it.link}` : ""} — ${it.pricePLN.toFixed(2)} PLN · ${it.weightKg.toFixed(1)} kg`
-    ).join("\n");
+    const lines = snap.items
+      .map(
+        (it, i) =>
+          `${i + 1}. ${it.name}${it.link ? ` — ${it.link}` : ""} — ${it.pricePLN.toFixed(2)} PLN · ${it.weightKg.toFixed(1)} kg`,
+      )
+      .join("\n");
     const fmt = (v: number) => Math.round(v).toLocaleString("pl-PL");
     const summary = `[Kalkulator] ${snap.ship === "pp" ? "Poczta" : "Kurier Express"}\n${lines}\n— Razem (z VAT): ${fmt(snap.grandISK)} ISK · ${snap.grandPLN.toFixed(2)} PLN`;
     const newData = { ...data, part_links: summary };
     setData(newData);
     setPartItems([summary]);
     setPartShopQueries([summary]);
-    setBubbles((b) => [...b,
-      { who: "user", text: lang === "pl" ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK` : lang === "is" ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK` : `✅ Accept quote ~${fmt(snap.grandISK)} ISK` },
+    setBubbles((b) => [
+      ...b,
+      {
+        who: "user",
+        text:
+          lang === "pl"
+            ? `✅ Akceptuję wycenę ~${fmt(snap.grandISK)} ISK`
+            : lang === "is"
+              ? `✅ Samþykki tilboð ~${fmt(snap.grandISK)} ISK`
+              : `✅ Accept quote ~${fmt(snap.grandISK)} ISK`,
+      },
       { who: "bot", html: STEPS[2].ask },
     ]);
     setStep(2);
@@ -428,7 +612,15 @@ export function ConversationalForm() {
     setBubbles((b) => [...b, { who: "bot", html: t("form.allDone") }]);
     try {
       const payload: Record<string, unknown> = {};
-      for (const k of ["part_links", "phone", "email", "company", "license_plate", "address", "delivery_preference"] as const) {
+      for (const k of [
+        "part_links",
+        "phone",
+        "email",
+        "company",
+        "license_plate",
+        "address",
+        "delivery_preference",
+      ] as const) {
         if (data[k]) payload[k] = data[k];
       }
       if (photoUrls.length) payload.photo_urls = photoUrls;
@@ -440,11 +632,16 @@ export function ConversationalForm() {
       setTimeout(() => navigate({ to: "/thank-you" }), 800);
     } catch {
       setDone(false);
-      setBubbles((b) => [...b, {
-        who: "error",
-        html: t("form.failed"),
-        retry: () => { void submit(); },
-      }]);
+      setBubbles((b) => [
+        ...b,
+        {
+          who: "error",
+          html: t("form.failed"),
+          retry: () => {
+            void submit();
+          },
+        },
+      ]);
     }
   };
 
@@ -472,7 +669,9 @@ export function ConversationalForm() {
     setStep(idx);
     setBubbles((b) => [...b, { who: "bot", html: STEPS[idx].ask }]);
     setHintErr(false);
-    setHintMsg(STEPS[idx].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setHintMsg(
+      STEPS[idx].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue",
+    );
     persist({ step: idx, data: newData });
     setTimeout(() => inputRef.current?.focus(), 50);
   };
@@ -492,7 +691,11 @@ export function ConversationalForm() {
     setBubbles((b) => {
       const arr = [...b].filter((x) => x.who !== "typing");
       let lastUser = -1;
-      for (let i = arr.length - 1; i >= 0; i--) if (arr[i].who === "user") { lastUser = i; break; }
+      for (let i = arr.length - 1; i >= 0; i--)
+        if (arr[i].who === "user") {
+          lastUser = i;
+          break;
+        }
       const trimmed = lastUser === -1 ? arr : arr.slice(0, lastUser);
       return [...trimmed, { who: "bot", html: STEPS[prev].ask }];
     });
@@ -501,14 +704,19 @@ export function ConversationalForm() {
     setDynamicChips(null);
     setAwaitingMoreParts(false);
     setHintErr(false);
-    setHintMsg(STEPS[prev].multiline ? "Enter to send · Shift+Enter for new line" : "Press Enter to continue");
+    setHintMsg(
+      STEPS[prev].multiline
+        ? "Enter to send · Shift+Enter for new line"
+        : "Press Enter to continue",
+    );
     persist({ step: prev, data: newData });
     setTimeout(() => inputRef.current?.focus(), 50);
   };
 
   const PLATE_RE = /\b[A-Z]{2,3}[\s-]?\d{2,3}\b/;
   const YEAR_RE = /\b(19|20)\d{2}\b/;
-  const MAKE_RE = /\b(toyota|kia|hyundai|vw|volkswagen|skoda|seat|audi|bmw|mercedes|benz|ford|opel|renault|peugeot|citroen|fiat|nissan|mazda|honda|suzuki|subaru|mitsubishi|volvo|saab|jeep|chrysler|dodge|tesla|porsche|land\s?rover|range\s?rover|jaguar|mini|dacia|lexus|infiniti|scania|man|daf|iveco|ursus|massey|john\s?deere|new\s?holland|kubota|jcb|caterpillar|komatsu)\b/i;
+  const MAKE_RE =
+    /\b(toyota|kia|hyundai|vw|volkswagen|skoda|seat|audi|bmw|mercedes|benz|ford|opel|renault|peugeot|citroen|fiat|nissan|mazda|honda|suzuki|subaru|mitsubishi|volvo|saab|jeep|chrysler|dodge|tesla|porsche|land\s?rover|range\s?rover|jaguar|mini|dacia|lexus|infiniti|scania|man|daf|iveco|ursus|massey|john\s?deere|new\s?holland|kubota|jcb|caterpillar|komatsu)\b/i;
 
   const inferVehicleFromParts = (): string | null => {
     const blob = [...partHistory.map((m) => m.content), ...partItems].join(" \n ");
@@ -533,7 +741,7 @@ export function ConversationalForm() {
       openReview();
       return;
     }
-    let next = step + 1;
+    const next = step + 1;
     const workingData = { ...baseData };
     setData(workingData);
     if (next < STEPS.length) {
@@ -546,12 +754,16 @@ export function ConversationalForm() {
             ? "Tap to add photos or skip"
             : nextStep.multiline
               ? "Enter to send · Shift+Enter for new line"
-              : "Press Enter to continue"
+              : "Press Enter to continue",
         );
         setBusy(false);
         persist({ step: next, data: workingData });
         // Only auto-focus on desktop — on mobile this opens the keyboard unexpectedly and shifts layout
-        if (!nextStep.upload && typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches) {
+        if (
+          !nextStep.upload &&
+          typeof window !== "undefined" &&
+          window.matchMedia("(pointer: fine)").matches
+        ) {
           inputRef.current?.focus();
         }
       }, 350);
@@ -574,7 +786,11 @@ export function ConversationalForm() {
 
     // Resume / fresh chips selection special case
     if (resumePromptShown && (v === "__resume__" || v === "__fresh__")) {
-      v === "__resume__" ? resumeStored() : startFresh();
+      if (v === "__resume__") {
+        resumeStored();
+      } else {
+        startFresh();
+      }
       setVal("");
       return;
     }
@@ -588,7 +804,9 @@ export function ConversationalForm() {
       return;
     }
     if (!v) {
-      setHintErr(true); setHintMsg("Please enter a value"); return;
+      setHintErr(true);
+      setHintMsg("Please enter a value");
+      return;
     }
 
     // Client-side validation BEFORE wasting an AI call
@@ -630,8 +848,6 @@ export function ConversationalForm() {
     setBusy(true);
     setHintErr(false);
 
-
-
     // License-plate lookup: query autoparts.is registry directly from the browser.
     if (cur.key === "license_plate") {
       const plateNorm = v.toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -642,20 +858,31 @@ export function ConversationalForm() {
           const summary = vehicleSummary(car);
           const stored = `${car.plate} — ${summary}${car.vin ? ` · VIN ${car.vin}` : ""}`;
           setBubbles((b) => b.filter((x) => x.who !== "typing"));
-          const confirmAsk = lang === "pl"
-            ? `Znalazłem pojazd: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Czy to jest Twój samochód?`
-            : lang === "is"
-              ? `Fann ökutæki: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Er þetta bíllinn þinn?`
-              : `Found vehicle: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Is this your car?`;
+          const confirmAsk =
+            lang === "pl"
+              ? `Znalazłem pojazd: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Czy to jest Twój samochód?`
+              : lang === "is"
+                ? `Fann ökutæki: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Er þetta bíllinn þinn?`
+                : `Found vehicle: <strong>${summary}</strong>. <small>(${car.plate}${car.vin ? ` · VIN ${car.vin}` : ""})</small><br>Is this your car?`;
           setBubbles((b) => [...b, { who: "bot", html: confirmAsk }]);
           setDynamicChips([
             {
-              label: lang === "pl" ? "✅ Tak, to ten" : lang === "is" ? "✅ Já, þetta er hann" : "✅ Yes, that's it",
+              label:
+                lang === "pl"
+                  ? "✅ Tak, to ten"
+                  : lang === "is"
+                    ? "✅ Já, þetta er hann"
+                    : "✅ Yes, that's it",
               submit: stored,
               normalize: stored,
             },
             {
-              label: lang === "pl" ? "✏️ Zła tablica" : lang === "is" ? "✏️ Rangt númer" : "✏️ Wrong plate",
+              label:
+                lang === "pl"
+                  ? "✏️ Zła tablica"
+                  : lang === "is"
+                    ? "✏️ Rangt númer"
+                    : "✏️ Wrong plate",
               fill: "",
             },
           ]);
@@ -664,19 +891,30 @@ export function ConversationalForm() {
         }
         // Plate format looked valid but registry returned nothing → STOP, don't advance.
         setBubbles((b) => b.filter((x) => x.who !== "typing"));
-        const notFound = lang === "pl"
-          ? `Nie znalazłem auta o tablicy <strong>${plateNorm}</strong> w islandzkim rejestrze. Sprawdź pisownię i spróbuj ponownie, albo kontynuuj bez tablicy — wtedy zapytam o markę i model.`
-          : lang === "is"
-            ? `Fann ekki bíl með númerinu <strong>${plateNorm}</strong> í íslenskri ökutækjaskrá. Athugaðu stafsetningu og reyndu aftur, eða haltu áfram án númers — þá spyr ég um tegund og árgerð.`
-            : `Couldn't find a car with plate <strong>${plateNorm}</strong> in the Icelandic registry. Double-check the spelling and try again, or continue without a plate — I'll ask for the make and model instead.`;
+        const notFound =
+          lang === "pl"
+            ? `Nie znalazłem auta o tablicy <strong>${plateNorm}</strong> w islandzkim rejestrze. Sprawdź pisownię i spróbuj ponownie, albo kontynuuj bez tablicy — wtedy zapytam o markę i model.`
+            : lang === "is"
+              ? `Fann ekki bíl með númerinu <strong>${plateNorm}</strong> í íslenskri ökutækjaskrá. Athugaðu stafsetningu og reyndu aftur, eða haltu áfram án númers — þá spyr ég um tegund og árgerð.`
+              : `Couldn't find a car with plate <strong>${plateNorm}</strong> in the Icelandic registry. Double-check the spelling and try again, or continue without a plate — I'll ask for the make and model instead.`;
         setBubbles((b) => [...b, { who: "bot", html: notFound }]);
         setDynamicChips([
           {
-            label: lang === "pl" ? "✏️ Wpisz ponownie" : lang === "is" ? "✏️ Slá inn aftur" : "✏️ Try again",
+            label:
+              lang === "pl"
+                ? "✏️ Wpisz ponownie"
+                : lang === "is"
+                  ? "✏️ Slá inn aftur"
+                  : "✏️ Try again",
             fill: "",
           },
           {
-            label: lang === "pl" ? "❌ Nie mam tablicy" : lang === "is" ? "❌ Ekkert númer" : "❌ No license plate",
+            label:
+              lang === "pl"
+                ? "❌ Nie mam tablicy"
+                : lang === "is"
+                  ? "❌ Ekkert númer"
+                  : "❌ No license plate",
             submit: "—",
             normalize: "—",
           },
@@ -687,17 +925,18 @@ export function ConversationalForm() {
       }
     }
 
-
     try {
-       const isPart = cur.apiStep === "part";
-      const newHistory = isPart ? [...partHistory, { role: "user" as const, content: v }] : partHistory;
+      const isPart = cur.apiStep === "part";
+      const newHistory = isPart
+        ? [...partHistory, { role: "user" as const, content: v }]
+        : partHistory;
       const { data: res, error } = await supabase.functions.invoke("form-assist", {
         body: {
           step: cur.apiStep,
           value: v,
           lang,
           history: isPart ? newHistory.slice(-8) : undefined,
-          vehicle: isPart ? (data.license_plate || undefined) : undefined,
+          vehicle: isPart ? data.license_plate || undefined : undefined,
         },
       });
       setBubbles((b) => b.filter((x) => x.who !== "typing"));
@@ -711,7 +950,10 @@ export function ConversationalForm() {
       setBubbles((b) => [...b, { who: "bot", html: reply }]);
 
       if (isPart) {
-        const cappedHistory = [...newHistory, { role: "assistant" as const, content: reply.replace(/<[^>]+>/g, "") }].slice(-12);
+        const cappedHistory = [
+          ...newHistory,
+          { role: "assistant" as const, content: reply.replace(/<[^>]+>/g, "") },
+        ].slice(-12);
         setPartHistory(cappedHistory);
       }
 
@@ -720,7 +962,10 @@ export function ConversationalForm() {
           ? res.chips
               .filter((c: { label?: string; fill?: string }) => c && typeof c.label === "string")
               .slice(0, 4)
-              .map((c: { label: string; fill?: string }) => ({ label: c.label, fill: c.fill ?? "" }))
+              .map((c: { label: string; fill?: string }) => ({
+                label: c.label,
+                fill: c.fill ?? "",
+              }))
           : [];
         setDynamicChips(aiChips.length ? aiChips : null);
         setBusy(false);
@@ -747,7 +992,14 @@ export function ConversationalForm() {
     } catch {
       setBubbles((b) => [
         ...b.filter((x) => x.who !== "typing"),
-        { who: "error", html: L.netError, retry: () => { setVal(v); setTimeout(() => onNext(), 50); } },
+        {
+          who: "error",
+          html: L.netError,
+          retry: () => {
+            setVal(v);
+            setTimeout(() => onNext(), 50);
+          },
+        },
       ]);
       setBusy(false);
     }
@@ -763,8 +1015,14 @@ export function ConversationalForm() {
     const cur = STEPS[step];
     const submitVal = chip.submit ?? "";
     // Resume/fresh special path
-    if (submitVal === "__resume__") { resumeStored(); return; }
-    if (submitVal === "__fresh__") { startFresh(); return; }
+    if (submitVal === "__resume__") {
+      resumeStored();
+      return;
+    }
+    if (submitVal === "__fresh__") {
+      startFresh();
+      return;
+    }
     if (chip.normalize !== undefined) {
       const newData = { ...data, [cur.key]: chip.normalize };
       setData(newData);
@@ -785,7 +1043,10 @@ export function ConversationalForm() {
     const newUrls: string[] = [];
     for (const file of list) {
       if (file.size > MAX_PHOTO_BYTES) {
-        setBubbles((b) => [...b, { who: "bot", html: `<small>⚠️ ${file.name} is over 10 MB and was skipped.</small>` }]);
+        setBubbles((b) => [
+          ...b,
+          { who: "bot", html: `<small>⚠️ ${file.name} is over 10 MB and was skipped.</small>` },
+        ]);
         continue;
       }
       const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
@@ -796,7 +1057,10 @@ export function ConversationalForm() {
         contentType: file.type || undefined,
       });
       if (error) {
-        setBubbles((b) => [...b, { who: "bot", html: `<small>⚠️ Could not upload ${file.name}.</small>` }]);
+        setBubbles((b) => [
+          ...b,
+          { who: "bot", html: `<small>⚠️ Could not upload ${file.name}.</small>` },
+        ]);
         continue;
       }
       const { data: pub } = supabase.storage.from("quote-photos").getPublicUrl(path);
@@ -819,7 +1083,10 @@ export function ConversationalForm() {
     setBubbles((b) => [
       ...b,
       photoUrls.length
-        ? { who: "user", text: `${photoUrls.length} photo${photoUrls.length > 1 ? "s" : ""} attached` }
+        ? {
+            who: "user",
+            text: `${photoUrls.length} photo${photoUrls.length > 1 ? "s" : ""} attached`,
+          }
         : { who: "user", text: "No photos", faded: true },
     ]);
     advanceStep();
@@ -827,14 +1094,23 @@ export function ConversationalForm() {
 
   const copySummary = async () => {
     const lines = STEPS.map((s) => {
-      const v = s.key === "photos" ? (photoUrls.length ? `${photoUrls.length} photo(s): ${photoUrls.join(", ")}` : "") : (data[s.key] ?? "");
+      const v =
+        s.key === "photos"
+          ? photoUrls.length
+            ? `${photoUrls.length} photo(s): ${photoUrls.join(", ")}`
+            : ""
+          : (data[s.key] ?? "");
       return v ? `${s.key}: ${v}` : null;
-    }).filter(Boolean).join("\n");
+    })
+      .filter(Boolean)
+      .join("\n");
     try {
       await navigator.clipboard.writeText(lines);
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
-    } catch { /* noop */ }
+    } catch {
+      /* noop */
+    }
   };
 
   const cur = STEPS[step] ?? STEPS[STEPS.length - 1];
@@ -844,7 +1120,10 @@ export function ConversationalForm() {
   const overLimit = maxLen ? charCount > maxLen : false;
 
   return (
-    <div className="bg-white rounded-2xl border border-border overflow-hidden" style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.1)" }}>
+    <div
+      className="bg-white rounded-2xl border border-border overflow-hidden"
+      style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.1)" }}
+    >
       <div className="px-5 py-3.5 border-b border-border flex items-center justify-between bg-muted/30 flex-wrap gap-2">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-mas-orange rounded-lg flex items-center justify-center">
@@ -885,23 +1164,42 @@ export function ConversationalForm() {
         </div>
       </div>
       <div className="h-1 bg-muted">
-        <div className="h-1 bg-mas-orange transition-all" style={{ width: `${done ? 100 : progress}%` }} />
+        <div
+          className="h-1 bg-mas-orange transition-all"
+          style={{ width: `${done ? 100 : progress}%` }}
+        />
       </div>
       <div
         ref={chatRef}
         className="px-4 pt-4 pb-2 flex flex-col gap-2.5"
-        style={{ minHeight: 160, maxHeight: "min(340px,40svh)", overflowY: "auto", overscrollBehavior: "contain" }}
+        style={{
+          minHeight: 160,
+          maxHeight: "min(340px,40svh)",
+          overflowY: "auto",
+          overscrollBehavior: "contain",
+        }}
         aria-live="polite"
         aria-atomic="false"
         role="log"
       >
         {bubbles.map((b, i) =>
           b.who === "bot" ? (
-            <div key={i} className="c-bubble-bot" dangerouslySetInnerHTML={{ __html: b.html ?? "" }} />
+            <div
+              key={i}
+              className="c-bubble-bot"
+              dangerouslySetInnerHTML={{ __html: b.html ?? "" }}
+            />
           ) : b.who === "error" ? (
-            <div key={i} className="c-bubble-bot" style={{ borderLeft: "3px solid #ef4444", background: "#fef2f2" }}>
+            <div
+              key={i}
+              className="c-bubble-bot"
+              style={{ borderLeft: "3px solid #ef4444", background: "#fef2f2" }}
+            >
               <div className="flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 mt-0.5 text-red-600 shrink-0" aria-hidden="true" />
+                <AlertTriangle
+                  className="w-4 h-4 mt-0.5 text-red-600 shrink-0"
+                  aria-hidden="true"
+                />
                 <div className="flex-1">
                   <div dangerouslySetInnerHTML={{ __html: b.html ?? "" }} />
                   {b.retry && (
@@ -916,13 +1214,22 @@ export function ConversationalForm() {
               </div>
             </div>
           ) : b.who === "typing" ? (
-            <div key={i} className="c-bubble-bot" style={{ display: "inline-flex", gap: 8, width: "fit-content", alignItems: "center" }} aria-label={thinkingLabel}>
-              <span className="typing-dot" /><span className="typing-dot" /><span className="typing-dot" />
+            <div
+              key={i}
+              className="c-bubble-bot"
+              style={{ display: "inline-flex", gap: 8, width: "fit-content", alignItems: "center" }}
+              aria-label={thinkingLabel}
+            >
+              <span className="typing-dot" />
+              <span className="typing-dot" />
+              <span className="typing-dot" />
               <span className="text-xs text-slate-500 ml-1">{thinkingLabel}</span>
             </div>
           ) : (
-            <div key={i} className="c-bubble-user" style={{ opacity: b.faded ? 0.45 : 1 }}>{b.text}</div>
-          )
+            <div key={i} className="c-bubble-user" style={{ opacity: b.faded ? 0.45 : 1 }}>
+              {b.text}
+            </div>
+          ),
         )}
       </div>
 
@@ -930,7 +1237,11 @@ export function ConversationalForm() {
       {mounted && !done && !reviewing && !path && !resumePromptShown && (
         <div className="px-4 pb-4 pt-2 flex flex-col gap-2">
           <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-1">
-            {lang === "pl" ? "Jak chcesz zacząć?" : lang === "is" ? "Hvernig viltu byrja?" : "How would you like to start?"}
+            {lang === "pl"
+              ? "Jak chcesz zacząć?"
+              : lang === "is"
+                ? "Hvernig viltu byrja?"
+                : "How would you like to start?"}
           </div>
           <button
             onClick={() => choosePath("calculator")}
@@ -938,8 +1249,20 @@ export function ConversationalForm() {
           >
             <Calculator className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
             <div>
-              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Mam link / OEM — policz mi cenę" : lang === "is" ? "Ég er með hlekk / OEM — reiknið verðið" : "I have a link / OEM — calculate the price"}</div>
-              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Wklej cenę PL (PLN) i wagę z linku — kalkulator pokaże cenę końcową z dostawą do Islandii. Możesz dodać kilka produktów do jednego zamówienia. Akceptujemy linki z: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Uwaga: kupujemy dokładnie wskazaną część — bez weryfikacji dopasowania i bez zwrotów." : lang === "is" ? "Settu inn PL verð (PLN) og þyngd af hlekknum — reiknirinn sýnir lokaverð með sendingu til Íslands. Þú getur bætt við mörgum vörum í eina pöntun. Við tökum við hlekkjum frá: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Athugið: við kaupum nákvæmlega þann hlut sem þú vísar á — án staðfestingar á að hann passi og án skilaréttar." : "Paste the PL price (PLN) and weight from your link — the calculator shows the final price delivered to Iceland. Add multiple products to one order. We accept links from: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Note: we buy exactly the part you point to — no fit verification, no returns."}</div>
+              <div className="font-bold text-sm text-navy">
+                {lang === "pl"
+                  ? "Mam link / OEM — policz mi cenę"
+                  : lang === "is"
+                    ? "Ég er með hlekk / OEM — reiknið verðið"
+                    : "I have a link / OEM — calculate the price"}
+              </div>
+              <div className="text-xs text-slate-600 mt-0.5">
+                {lang === "pl"
+                  ? "Wklej cenę PL (PLN) i wagę z linku — kalkulator pokaże cenę końcową z dostawą do Islandii. Możesz dodać kilka produktów do jednego zamówienia. Akceptujemy linki z: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Uwaga: kupujemy dokładnie wskazaną część — bez weryfikacji dopasowania i bez zwrotów."
+                  : lang === "is"
+                    ? "Settu inn PL verð (PLN) og þyngd af hlekknum — reiknirinn sýnir lokaverð með sendingu til Íslands. Þú getur bætt við mörgum vörum í eina pöntun. Við tökum við hlekkjum frá: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Athugið: við kaupum nákvæmlega þann hlut sem þú vísar á — án staðfestingar á að hann passi og án skilaréttar."
+                    : "Paste the PL price (PLN) and weight from your link — the calculator shows the final price delivered to Iceland. Add multiple products to one order. We accept links from: Allegro, Autofixer, Autodoc, iParts, Europarts, Signeda. Note: we buy exactly the part you point to — no fit verification, no returns."}
+              </div>
             </div>
           </button>
           <button
@@ -948,8 +1271,20 @@ export function ConversationalForm() {
           >
             <Search className="w-5 h-5 text-mas-orange shrink-0 mt-0.5" />
             <div>
-              <div className="font-bold text-sm text-navy">{lang === "pl" ? "Znajdźcie część za mnie" : lang === "is" ? "Finnið hlutinn fyrir mig" : "Find the part for me"}</div>
-              <div className="text-xs text-slate-600 mt-0.5">{lang === "pl" ? "Opisz, czego potrzebujesz — sprawdzimy dopasowanie do auta i znajdziemy najlepszą opcję." : lang === "is" ? "Lýstu því sem þú þarft — við staðfestum að passi við bílinn og finnum bestu leiðina." : "Describe what you need — we'll verify fit for your car and find the best option."}</div>
+              <div className="font-bold text-sm text-navy">
+                {lang === "pl"
+                  ? "Znajdźcie część za mnie"
+                  : lang === "is"
+                    ? "Finnið hlutinn fyrir mig"
+                    : "Find the part for me"}
+              </div>
+              <div className="text-xs text-slate-600 mt-0.5">
+                {lang === "pl"
+                  ? "Opisz, czego potrzebujesz — sprawdzimy dopasowanie do auta i znajdziemy najlepszą opcję."
+                  : lang === "is"
+                    ? "Lýstu því sem þú þarft — við staðfestum að passi við bílinn og finnum bestu leiðina."
+                    : "Describe what you need — we'll verify fit for your car and find the best option."}
+              </div>
             </div>
           </button>
         </div>
@@ -963,10 +1298,19 @@ export function ConversationalForm() {
               {lang === "pl" ? "Kalkulator" : lang === "is" ? "Reiknir" : "Calculator"}
             </span>
             <button
-              onClick={() => { setPath(null); setBubbles([]); setHintMsg(""); persistPath(null); }}
+              onClick={() => {
+                setPath(null);
+                setBubbles([]);
+                setHintMsg("");
+                persistPath(null);
+              }}
               className="text-[11px] text-slate-500 hover:text-navy underline"
             >
-              {lang === "pl" ? "← Zmień ścieżkę" : lang === "is" ? "← Skipta um leið" : "← Change path"}
+              {lang === "pl"
+                ? "← Zmień ścieżkę"
+                : lang === "is"
+                  ? "← Skipta um leið"
+                  : "← Change path"}
             </button>
           </div>
           <PriceCalculator onOrder={onCalcOrder} />
@@ -985,215 +1329,363 @@ export function ConversationalForm() {
       />
 
       {/* Review & Confirm */}
-      {!done && reviewing && (() => {
-        const reviewItems = STEPS.map((s, idx) => {
-          let value = "";
-          if (s.key === "photos") {
-            value = photoUrls.length ? `${photoUrls.length} photo${photoUrls.length > 1 ? "s" : ""}` : "";
-          } else {
-            value = data[s.key] ?? "";
-          }
-          const labelMap: Record<string, string> = {
-            need_overview: lang === "pl" ? "Potrzeba" : lang === "is" ? "Þörf" : "Need",
-            part_links: lang === "pl" ? "Część / link" : lang === "is" ? "Hlutur / hlekkur" : "Part / link",
-            phone: lang === "pl" ? "Telefon" : lang === "is" ? "Sími" : "Phone",
-            email: lang === "pl" ? "E-mail" : "Email",
-            company: lang === "pl" ? "Imię / firma" : lang === "is" ? "Nafn / fyrirtæki" : "Name / company",
-            license_plate: lang === "pl" ? "Tablica / pojazd" : lang === "is" ? "Skráningarn. / ökutæki" : "Plate / vehicle",
-            address: lang === "pl" ? "Adres dostawy" : lang === "is" ? "Heimilisfang" : "Delivery address",
-            delivery_preference: lang === "pl" ? "Dostawa" : lang === "is" ? "Sending" : "Shipping",
-            photos: lang === "pl" ? "Zdjęcia" : lang === "is" ? "Myndir" : "Photos",
-          };
-          const required = s.key === "phone" || s.key === "email" || s.key === "part_links" || s.key === "company";
-          const missing = required && !value;
-          return { idx, key: s.key, label: labelMap[s.key], value, missing };
-        });
-        const heading = lang === "pl"
-          ? "Sprawdź swoje odpowiedzi 👇"
-          : lang === "is"
-            ? "Yfirfarðu svörin þín 👇"
-            : "Review your answers 👇";
-        const sub = lang === "pl"
-          ? "Wszystko się zgadza? Możesz edytować dowolny krok."
-          : lang === "is"
-            ? "Er allt rétt? Þú getur breytt hverju skrefi."
-            : "All correct? You can edit any step.";
-        const editLbl = lang === "pl" ? "Edytuj" : lang === "is" ? "Breyta" : "Edit";
-        const sendLbl = lang === "pl" ? "✅ Wyślij zapytanie" : lang === "is" ? "✅ Senda beiðni" : "✅ Send request";
-        const emptyLbl = lang === "pl" ? "(pominięte)" : lang === "is" ? "(sleppt)" : "(skipped)";
-        const hasMissing = reviewItems.some((x) => x.missing);
-        return (
-          <div className="px-4 pb-3">
-            <div className="rounded-xl border-2 border-mas-orange/30 bg-orange-50/50 p-3 mb-3">
-              <div className="font-extrabold text-navy text-sm mb-0.5" style={{ fontFamily: "Exo 2" }}>{heading}</div>
-              <div className="text-xs text-slate-700">{sub}</div>
-            </div>
-            <ul className="flex flex-col gap-2">
-              {reviewItems.map((it) => (
-                <li
-                  key={it.key}
-                  className={`flex items-start justify-between gap-3 rounded-lg border p-3 ${it.missing ? "border-red-300 bg-red-50/50" : "border-slate-200 bg-white"}`}
+      {!done &&
+        reviewing &&
+        (() => {
+          const reviewItems = STEPS.map((s, idx) => {
+            let value = "";
+            if (s.key === "photos") {
+              value = photoUrls.length
+                ? `${photoUrls.length} photo${photoUrls.length > 1 ? "s" : ""}`
+                : "";
+            } else {
+              value = data[s.key] ?? "";
+            }
+            const labelMap: Record<string, string> = {
+              need_overview: lang === "pl" ? "Potrzeba" : lang === "is" ? "Þörf" : "Need",
+              part_links:
+                lang === "pl" ? "Część / link" : lang === "is" ? "Hlutur / hlekkur" : "Part / link",
+              phone: lang === "pl" ? "Telefon" : lang === "is" ? "Sími" : "Phone",
+              email: lang === "pl" ? "E-mail" : "Email",
+              company:
+                lang === "pl"
+                  ? "Imię / firma"
+                  : lang === "is"
+                    ? "Nafn / fyrirtæki"
+                    : "Name / company",
+              license_plate:
+                lang === "pl"
+                  ? "Tablica / pojazd"
+                  : lang === "is"
+                    ? "Skráningarn. / ökutæki"
+                    : "Plate / vehicle",
+              address:
+                lang === "pl"
+                  ? "Adres dostawy"
+                  : lang === "is"
+                    ? "Heimilisfang"
+                    : "Delivery address",
+              delivery_preference:
+                lang === "pl" ? "Dostawa" : lang === "is" ? "Sending" : "Shipping",
+              photos: lang === "pl" ? "Zdjęcia" : lang === "is" ? "Myndir" : "Photos",
+            };
+            const required =
+              s.key === "phone" ||
+              s.key === "email" ||
+              s.key === "part_links" ||
+              s.key === "company";
+            const missing = required && !value;
+            return { idx, key: s.key, label: labelMap[s.key], value, missing };
+          });
+          const heading =
+            lang === "pl"
+              ? "Sprawdź swoje odpowiedzi 👇"
+              : lang === "is"
+                ? "Yfirfarðu svörin þín 👇"
+                : "Review your answers 👇";
+          const sub =
+            lang === "pl"
+              ? "Wszystko się zgadza? Możesz edytować dowolny krok."
+              : lang === "is"
+                ? "Er allt rétt? Þú getur breytt hverju skrefi."
+                : "All correct? You can edit any step.";
+          const editLbl = lang === "pl" ? "Edytuj" : lang === "is" ? "Breyta" : "Edit";
+          const sendLbl =
+            lang === "pl"
+              ? "✅ Wyślij zapytanie"
+              : lang === "is"
+                ? "✅ Senda beiðni"
+                : "✅ Send request";
+          const emptyLbl = lang === "pl" ? "(pominięte)" : lang === "is" ? "(sleppt)" : "(skipped)";
+          const hasMissing = reviewItems.some((x) => x.missing);
+          return (
+            <div className="px-4 pb-3">
+              <div className="rounded-xl border-2 border-mas-orange/30 bg-orange-50/50 p-3 mb-3">
+                <div
+                  className="font-extrabold text-navy text-sm mb-0.5"
+                  style={{ fontFamily: "Exo 2" }}
                 >
-                  <div className="min-w-0 flex-1">
-                    <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">{it.label}</div>
-                    <div className={`text-sm mt-0.5 break-words whitespace-pre-wrap ${it.value ? "text-navy" : "text-slate-500 italic"}`}>
-                      {it.value || emptyLbl}
-                    </div>
-                    {it.missing && (
-                      <div className="text-[11px] text-red-700 font-semibold mt-1">{L.missingWarn}</div>
-                    )}
-                    {it.key === "photos" && photoUrls.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mt-2">
-                        {photoUrls.map((url) => (
-                          <img key={url} src={url} alt="Uploaded part" className="w-10 h-10 rounded object-cover border border-border" />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => editStep(it.idx)}
-                    className="shrink-0 text-xs font-semibold text-mas-orange hover:underline px-2 py-1"
-                    aria-label={`${editLbl} ${it.label}`}
+                  {heading}
+                </div>
+                <div className="text-xs text-slate-700">{sub}</div>
+              </div>
+              <ul className="flex flex-col gap-2">
+                {reviewItems.map((it) => (
+                  <li
+                    key={it.key}
+                    className={`flex items-start justify-between gap-3 rounded-lg border p-3 ${it.missing ? "border-red-300 bg-red-50/50" : "border-slate-200 bg-white"}`}
                   >
-                    {editLbl}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-col sm:flex-row gap-2 mt-4">
-              <button
-                onClick={copySummary}
-                className="flex items-center justify-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy font-semibold text-sm py-3 px-4"
-                aria-label={L.copyQuote}
-              >
-                {copied ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
-                {copied ? L.copied : L.copyQuote}
-              </button>
-              <button
-                onClick={submit}
-                disabled={hasMissing}
-                className="flex-1 rounded-xl bg-mas-orange text-white font-bold text-base py-3.5 hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {sendLbl}
-              </button>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                        {it.label}
+                      </div>
+                      <div
+                        className={`text-sm mt-0.5 break-words whitespace-pre-wrap ${it.value ? "text-navy" : "text-slate-500 italic"}`}
+                      >
+                        {it.value || emptyLbl}
+                      </div>
+                      {it.missing && (
+                        <div className="text-[11px] text-red-700 font-semibold mt-1">
+                          {L.missingWarn}
+                        </div>
+                      )}
+                      {it.key === "photos" && photoUrls.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {photoUrls.map((url) => (
+                            <img
+                              key={url}
+                              src={url}
+                              alt="Uploaded part"
+                              className="w-10 h-10 rounded object-cover border border-border"
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => editStep(it.idx)}
+                      className="shrink-0 text-xs font-semibold text-mas-orange hover:underline px-2 py-1"
+                      aria-label={`${editLbl} ${it.label}`}
+                    >
+                      {editLbl}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                <button
+                  onClick={copySummary}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy font-semibold text-sm py-3 px-4"
+                  aria-label={L.copyQuote}
+                >
+                  {copied ? (
+                    <Check className="w-4 h-4" aria-hidden="true" />
+                  ) : (
+                    <Copy className="w-4 h-4" aria-hidden="true" />
+                  )}
+                  {copied ? L.copied : L.copyQuote}
+                </button>
+                <button
+                  onClick={submit}
+                  disabled={hasMissing}
+                  className="flex-1 rounded-xl bg-mas-orange text-white font-bold text-base py-3.5 hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {sendLbl}
+                </button>
+              </div>
             </div>
-          </div>
-        );
-      })()}
+          );
+        })()}
 
       {/* Multi-part loop */}
       {mounted && !done && !reviewing && !busy && awaitingMoreParts && path && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
           <button
-            onClick={() => { setAwaitingMoreParts(false); setVal(""); inputRef.current?.focus(); }}
+            onClick={() => {
+              setAwaitingMoreParts(false);
+              setVal("");
+              inputRef.current?.focus();
+            }}
             className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
             aria-label={lang === "pl" ? "Dodaj kolejną część" : "Add another part"}
-          >➕ Add another part</button>
+          >
+            ➕ Add another part
+          </button>
           <button
             onClick={() => {
               setAwaitingMoreParts(false);
               setVal("");
-              setBubbles((b) => [...b, { who: "user", text: "🔗 I'll paste a link instead" }, {
-                who: "bot",
-                html: lang === "pl"
-                  ? `Świetnie! Wklej link do części (lub kilka linków, jeden na linijkę) — opłata wyszukiwania <strong>znika</strong>, płacisz tylko części + wysyłkę.<br><br>🛒 Akceptujemy linki tylko z: ${SHOP_LINKS_HTML}.<br>⚠️ Kupujemy <strong>dokładnie to, co wskazałeś</strong> — bez weryfikacji dopasowania do auta, <strong>bez zwrotów</strong>.`
-                  : lang === "is"
-                    ? `Frábært! Sendu hlekk á hlutinn (eða nokkra, einn á línu) — leitargjaldið <strong>fellur niður</strong>, þú borgar aðeins varahluti + sendingu.<br><br>🛒 Við tökum aðeins við hlekkjum frá: ${SHOP_LINKS_HTML}.<br>⚠️ Við kaupum <strong>nákvæmlega það sem þú vísar á</strong> — án staðfestingar á að það passi við bílinn, <strong>án skilaréttar</strong>.`
-                    : `Great! Paste the link(s) to the part — one per line. The search fee <strong>disappears</strong>, you only pay parts + shipping.<br><br>🛒 We only accept links from: ${SHOP_LINKS_HTML}.<br>⚠️ We buy <strong>exactly what you pointed to</strong> — no fit verification, <strong>no returns</strong>.`,
-              }]);
+              setBubbles((b) => [
+                ...b,
+                { who: "user", text: "🔗 I'll paste a link instead" },
+                {
+                  who: "bot",
+                  html:
+                    lang === "pl"
+                      ? `Świetnie! Wklej link do części (lub kilka linków, jeden na linijkę) — opłata wyszukiwania <strong>znika</strong>, płacisz tylko części + wysyłkę.<br><br>🛒 Akceptujemy linki tylko z: ${SHOP_LINKS_HTML}.<br>⚠️ Kupujemy <strong>dokładnie to, co wskazałeś</strong> — bez weryfikacji dopasowania do auta, <strong>bez zwrotów</strong>.`
+                      : lang === "is"
+                        ? `Frábært! Sendu hlekk á hlutinn (eða nokkra, einn á línu) — leitargjaldið <strong>fellur niður</strong>, þú borgar aðeins varahluti + sendingu.<br><br>🛒 Við tökum aðeins við hlekkjum frá: ${SHOP_LINKS_HTML}.<br>⚠️ Við kaupum <strong>nákvæmlega það sem þú vísar á</strong> — án staðfestingar á að það passi við bílinn, <strong>án skilaréttar</strong>.`
+                        : `Great! Paste the link(s) to the part — one per line. The search fee <strong>disappears</strong>, you only pay parts + shipping.<br><br>🛒 We only accept links from: ${SHOP_LINKS_HTML}.<br>⚠️ We buy <strong>exactly what you pointed to</strong> — no fit verification, <strong>no returns</strong>.`,
+                },
+              ]);
               inputRef.current?.focus();
             }}
             className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
-          >🔗 Paste link instead</button>
+          >
+            🔗 Paste link instead
+          </button>
           <button
             onClick={() => {
-              const info = lang === "pl"
-                ? "Wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Za <strong>4 960 ISK (z VAT)</strong>: kontaktujemy się z naszymi zaufanymi dostawcami (Niemcy, Polska, kraje bałtyckie), <strong>negocjujemy najlepszą cenę w Twoim imieniu</strong>, sprawdzamy dopasowanie do Twojego pojazdu (VIN/OEM), porównujemy OEM vs. dobry zamiennik i przygotowujemy pełną wycenę z transportem i cłem. Płatne z góry — <strong>kwota wlicza się w cenę zamówienia, gdy kupisz</strong>. Wklej link — opłata znika."
-                : lang === "is"
-                  ? "Þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Fyrir <strong>4 960 ISK (m. VSK)</strong>: höfum samband við trausta birgja okkar (Þýskaland, Pólland, Eystrasaltsríkin), <strong>semjum besta verðið fyrir þína hönd</strong>, staðfestum að hluturinn passi (VIN/OEM), berum saman OEM vs. góða aukaframleiðslu og útbúum heildartilboð með flutningi og tolli. Greitt fyrirfram — <strong>dregst frá pöntuninni þegar þú kaupir</strong>. Sendu hlekk — gjaldið fellur niður."
-                  : "You're hiring us as <strong>your buyer in Europe</strong>. For <strong>4 960 ISK (incl. VAT)</strong>: we contact our trusted EU suppliers (Germany, Poland, Baltics), <strong>negotiate the best price on your behalf</strong>, verify the part fits your vehicle (VIN/OEM), compare OEM vs. quality aftermarket options and prepare a full quote with shipping + customs included. Paid upfront — <strong>credited toward your order when you buy</strong>. Paste a link and the fee disappears.";
-              setBubbles((b) => [...b, { who: "user", text: "ℹ️ Tell me more about the fee" }, { who: "bot", html: info }]);
+              const info =
+                lang === "pl"
+                  ? "Wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Za <strong>4 960 ISK (z VAT)</strong>: kontaktujemy się z naszymi zaufanymi dostawcami (Niemcy, Polska, kraje bałtyckie), <strong>negocjujemy najlepszą cenę w Twoim imieniu</strong>, sprawdzamy dopasowanie do Twojego pojazdu (VIN/OEM), porównujemy OEM vs. dobry zamiennik i przygotowujemy pełną wycenę z transportem i cłem. Płatne z góry — <strong>kwota wlicza się w cenę zamówienia, gdy kupisz</strong>. Wklej link — opłata znika."
+                  : lang === "is"
+                    ? "Þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Fyrir <strong>4 960 ISK (m. VSK)</strong>: höfum samband við trausta birgja okkar (Þýskaland, Pólland, Eystrasaltsríkin), <strong>semjum besta verðið fyrir þína hönd</strong>, staðfestum að hluturinn passi (VIN/OEM), berum saman OEM vs. góða aukaframleiðslu og útbúum heildartilboð með flutningi og tolli. Greitt fyrirfram — <strong>dregst frá pöntuninni þegar þú kaupir</strong>. Sendu hlekk — gjaldið fellur niður."
+                    : "You're hiring us as <strong>your buyer in Europe</strong>. For <strong>4 960 ISK (incl. VAT)</strong>: we contact our trusted EU suppliers (Germany, Poland, Baltics), <strong>negotiate the best price on your behalf</strong>, verify the part fits your vehicle (VIN/OEM), compare OEM vs. quality aftermarket options and prepare a full quote with shipping + customs included. Paid upfront — <strong>credited toward your order when you buy</strong>. Paste a link and the fee disappears.";
+              setBubbles((b) => [
+                ...b,
+                { who: "user", text: "ℹ️ Tell me more about the fee" },
+                { who: "bot", html: info },
+              ]);
             }}
             className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
-          >ℹ️ More about fee</button>
+          >
+            ℹ️ More about fee
+          </button>
           <button
-            onClick={() => { setAwaitingMoreParts(false); advanceStep(); }}
+            onClick={() => {
+              setAwaitingMoreParts(false);
+              advanceStep();
+            }}
             className="text-[12px] font-bold text-white bg-mas-orange hover:opacity-90 transition rounded-full px-3 py-1.5 border-0"
-          >✅ That's all — continue</button>
+          >
+            ✅ That's all — continue
+          </button>
         </div>
       )}
 
       {/* Quick search retailers — only on part step.
           - link path: always visible, framed as "we accept links only from these stores".
           - search_paid path: only after the client has described the part, framed as a free DIY alternative. */}
-      {mounted && !done && !reviewing && !busy && path && cur.key === "part_links" && (path === "link" || (path === "search_paid" && (val.trim().length >= 3 || partItems.length > 0))) && (() => {
-        const RETAILERS = [
-          { name: "Allegro", url: (q: string) => `https://allegro.pl/listing?string=${encodeURIComponent(q)}` },
-          { name: "Autofixer", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:pl.autofixer.com ${q}`)}` },
-          { name: "Autodoc", url: (q: string) => `https://www.autodoc.pl/search?keyword=${encodeURIComponent(q)}` },
-          { name: "iParts", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:iparts.pl ${q}`)}` },
-          { name: "Europarts", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:europarts.pl ${q}`)}` },
-          { name: "Signeda", url: (q: string) => `https://duckduckgo.com/?q=${encodeURIComponent(`site:signeda.pl ${q}`)}` },
-        ];
-        const raw = data.license_plate || "";
-        const afterDash = raw.split(" — ")[1] || raw;
-        const vehicleBase = (afterDash.split(" · ")[0] || "").trim();
-        const partText = (partShopQueries[partShopQueries.length - 1] || val.trim() || partItems[partItems.length - 1] || "").trim();
-        const queryParts = [partText, vehicleBase].filter(Boolean);
-        const hasQuery = queryParts.length > 0;
-        const query = queryParts.join(" ");
-        const isLink = path === "link";
-        const label = isLink
-          ? (lang === "pl" ? "🛒 Akceptujemy linki tylko z tych sklepów:" : lang === "is" ? "🛒 Við tökum aðeins við hlekkjum frá þessum verslunum:" : "🛒 We accept links only from these retailers:")
-          : (lang === "pl" ? "💡 Możesz poszukać sam w tych sklepach — to nic nie kosztuje:" : lang === "is" ? "💡 Þú getur leitað sjálf/ur í þessum verslunum — það er ókeypis:" : "💡 You can search yourself in these shops — it's free:");
-        const hint = !hasQuery
-          ? (lang === "pl" ? "Wpisz nazwę części powyżej, a klik wyszuka ją w wybranym sklepie." : lang === "is" ? "Skrifaðu hluta hér að ofan til að leita í verslun." : "Type the part name above, then click a shop to search.")
-          : (lang === "pl" ? `Szukasz: "${query}"` : lang === "is" ? `Leitarstrengur: "${query}"` : `Search query: "${query}"`);
-        const footer = isLink
-          ? (lang === "pl" ? "Po znalezieniu wklej link tutaj 👇" : lang === "is" ? "Þegar þú finnur, líma hlekkinn hér 👇" : "When you find it, paste the link below 👇")
-          : (lang === "pl" ? "Nie chcesz szukać sam? Zlecisz nam wyszukiwanie za <strong>4 960 ISK (z VAT)</strong> — opisz część poniżej i wyślij formularz. Kwota <strong>wraca jako rabat</strong>, gdy kupisz znalezioną przez nas część." : lang === "is" ? "Viltu ekki leita sjálf/ur? Þú getur falið okkur leitina fyrir <strong>4 960 ISK (m. VSK)</strong> — lýstu hlutnum hér að neðan og sendu formið. Gjaldið <strong>dregst frá</strong> ef þú kaupir hlutinn sem við finnum." : "Don't want to search yourself? Hire us to do it for <strong>4,960 ISK (incl. VAT)</strong> — describe the part below and submit the form. The fee is <strong>credited</strong> toward your order if you buy the part we find.");
-        return (
-          <div className="px-4 pb-2 pt-1">
-            <div className={`rounded-xl border px-3 py-2.5 ${isLink ? "border-mas-orange/40 bg-orange-50" : "border-slate-200 bg-slate-50"}`}>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">{label}</div>
-              <div className="flex flex-wrap gap-1.5">
-                {RETAILERS.map((r) => {
-                  const url = hasQuery ? r.url(query) : "#";
-                  return (
-                    <a
-                      key={r.name}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`text-xs font-semibold rounded-full px-3 py-1.5 border transition-colors ${hasQuery ? "bg-white text-navy border-slate-300 hover:border-mas-orange hover:bg-orange-50" : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed pointer-events-none"}`}
-                    >
-                      {r.name}
-                    </a>
-                  );
-                })}
+      {mounted &&
+        !done &&
+        !reviewing &&
+        !busy &&
+        path &&
+        cur.key === "part_links" &&
+        (path === "link" ||
+          (path === "search_paid" && (val.trim().length >= 3 || partItems.length > 0))) &&
+        (() => {
+          const RETAILERS = [
+            {
+              name: "Allegro",
+              url: (q: string) => `https://allegro.pl/listing?string=${encodeURIComponent(q)}`,
+            },
+            {
+              name: "Autofixer",
+              url: (q: string) =>
+                `https://duckduckgo.com/?q=${encodeURIComponent(`site:pl.autofixer.com ${q}`)}`,
+            },
+            {
+              name: "Autodoc",
+              url: (q: string) => `https://www.autodoc.pl/search?keyword=${encodeURIComponent(q)}`,
+            },
+            {
+              name: "iParts",
+              url: (q: string) =>
+                `https://duckduckgo.com/?q=${encodeURIComponent(`site:iparts.pl ${q}`)}`,
+            },
+            {
+              name: "Europarts",
+              url: (q: string) =>
+                `https://duckduckgo.com/?q=${encodeURIComponent(`site:europarts.pl ${q}`)}`,
+            },
+            {
+              name: "Signeda",
+              url: (q: string) =>
+                `https://duckduckgo.com/?q=${encodeURIComponent(`site:signeda.pl ${q}`)}`,
+            },
+          ];
+          const raw = data.license_plate || "";
+          const afterDash = raw.split(" — ")[1] || raw;
+          const vehicleBase = (afterDash.split(" · ")[0] || "").trim();
+          const partText = (
+            partShopQueries[partShopQueries.length - 1] ||
+            val.trim() ||
+            partItems[partItems.length - 1] ||
+            ""
+          ).trim();
+          const queryParts = [partText, vehicleBase].filter(Boolean);
+          const hasQuery = queryParts.length > 0;
+          const query = queryParts.join(" ");
+          const isLink = path === "link";
+          const label = isLink
+            ? lang === "pl"
+              ? "🛒 Akceptujemy linki tylko z tych sklepów:"
+              : lang === "is"
+                ? "🛒 Við tökum aðeins við hlekkjum frá þessum verslunum:"
+                : "🛒 We accept links only from these retailers:"
+            : lang === "pl"
+              ? "💡 Możesz poszukać sam w tych sklepach — to nic nie kosztuje:"
+              : lang === "is"
+                ? "💡 Þú getur leitað sjálf/ur í þessum verslunum — það er ókeypis:"
+                : "💡 You can search yourself in these shops — it's free:";
+          const hint = !hasQuery
+            ? lang === "pl"
+              ? "Wpisz nazwę części powyżej, a klik wyszuka ją w wybranym sklepie."
+              : lang === "is"
+                ? "Skrifaðu hluta hér að ofan til að leita í verslun."
+                : "Type the part name above, then click a shop to search."
+            : lang === "pl"
+              ? `Szukasz: "${query}"`
+              : lang === "is"
+                ? `Leitarstrengur: "${query}"`
+                : `Search query: "${query}"`;
+          const footer = isLink
+            ? lang === "pl"
+              ? "Po znalezieniu wklej link tutaj 👇"
+              : lang === "is"
+                ? "Þegar þú finnur, líma hlekkinn hér 👇"
+                : "When you find it, paste the link below 👇"
+            : lang === "pl"
+              ? "Nie chcesz szukać sam? Zlecisz nam wyszukiwanie za <strong>4 960 ISK (z VAT)</strong> — opisz część poniżej i wyślij formularz. Kwota <strong>wraca jako rabat</strong>, gdy kupisz znalezioną przez nas część."
+              : lang === "is"
+                ? "Viltu ekki leita sjálf/ur? Þú getur falið okkur leitina fyrir <strong>4 960 ISK (m. VSK)</strong> — lýstu hlutnum hér að neðan og sendu formið. Gjaldið <strong>dregst frá</strong> ef þú kaupir hlutinn sem við finnum."
+                : "Don't want to search yourself? Hire us to do it for <strong>4,960 ISK (incl. VAT)</strong> — describe the part below and submit the form. The fee is <strong>credited</strong> toward your order if you buy the part we find.";
+          return (
+            <div className="px-4 pb-2 pt-1">
+              <div
+                className={`rounded-xl border px-3 py-2.5 ${isLink ? "border-mas-orange/40 bg-orange-50" : "border-slate-200 bg-slate-50"}`}
+              >
+                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  {label}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {RETAILERS.map((r) => {
+                    const url = hasQuery ? r.url(query) : "#";
+                    return (
+                      <a
+                        key={r.name}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`text-xs font-semibold rounded-full px-3 py-1.5 border transition-colors ${hasQuery ? "bg-white text-navy border-slate-300 hover:border-mas-orange hover:bg-orange-50" : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed pointer-events-none"}`}
+                      >
+                        {r.name}
+                      </a>
+                    );
+                  })}
+                </div>
+                <div
+                  className="text-[11px] text-slate-500 mt-1.5"
+                  dangerouslySetInnerHTML={{ __html: `${hint} · ${footer}` }}
+                />
               </div>
-              <div className="text-[11px] text-slate-500 mt-1.5" dangerouslySetInnerHTML={{ __html: `${hint} · ${footer}` }} />
-
             </div>
-          </div>
-        );
-      })()}
+          );
+        })()}
 
       {/* Quick-reply chips */}
-      {mounted && !done && !reviewing && !busy && !awaitingMoreParts && path && !!(dynamicChips?.length || cur.chips?.length) && (
-        <div className="px-4 pb-2 flex flex-wrap gap-1.5">
-          {(dynamicChips?.length ? dynamicChips : cur.chips ?? []).map((chip) => (
-            <button
-              key={chip.label}
-              onClick={() => onChip(chip)}
-              className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
-              aria-label={chip.label.replace(/^[^\w]+/, "").trim() || chip.label}
-            >
-              {chip.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {mounted &&
+        !done &&
+        !reviewing &&
+        !busy &&
+        !awaitingMoreParts &&
+        path &&
+        !!(dynamicChips?.length || cur.chips?.length) && (
+          <div className="px-4 pb-2 flex flex-wrap gap-1.5">
+            {(dynamicChips?.length ? dynamicChips : (cur.chips ?? [])).map((chip) => (
+              <button
+                key={chip.label}
+                onClick={() => onChip(chip)}
+                className="text-sm font-medium text-navy bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors rounded-full px-4 py-2 border border-slate-200"
+                aria-label={chip.label.replace(/^[^\w]+/, "").trim() || chip.label}
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
+        )}
 
       {/* Email typo banner */}
       {!done && !reviewing && cur.key === "email" && emailSuggestion && (
@@ -1202,7 +1694,10 @@ export function ConversationalForm() {
             {L.typoSuggest} <strong>{emailSuggestion}</strong>?
           </span>
           <button
-            onClick={() => { setVal(emailSuggestion); setEmailSuggestion(null); }}
+            onClick={() => {
+              setVal(emailSuggestion);
+              setEmailSuggestion(null);
+            }}
             className="text-amber-900 font-bold underline hover:no-underline"
           >
             {lang === "pl" ? "Zastosuj" : lang === "is" ? "Beita" : "Apply"}
@@ -1219,12 +1714,18 @@ export function ConversationalForm() {
             accept="image/*"
             multiple
             className="hidden"
-            onChange={(e) => { onFiles(e.target.files); e.target.value = ""; }}
+            onChange={(e) => {
+              onFiles(e.target.files);
+              e.target.value = "";
+            }}
           />
           {photoUrls.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
               {photoUrls.map((url) => (
-                <div key={url} className="relative w-16 h-16 rounded-lg overflow-hidden border border-border">
+                <div
+                  key={url}
+                  className="relative w-16 h-16 rounded-lg overflow-hidden border border-border"
+                >
                   <img src={url} alt="Upload preview" className="w-full h-full object-cover" />
                   <button
                     onClick={() => removePhoto(url)}
@@ -1246,9 +1747,14 @@ export function ConversationalForm() {
               {uploading ? (
                 <>Uploading…</>
               ) : photoUrls.length >= MAX_PHOTOS ? (
-                <><ImageIcon className="w-4 h-4" aria-hidden="true" /> Max {MAX_PHOTOS} reached</>
+                <>
+                  <ImageIcon className="w-4 h-4" aria-hidden="true" /> Max {MAX_PHOTOS} reached
+                </>
               ) : (
-                <><Upload className="w-4 h-4" aria-hidden="true" /> {photoUrls.length === 0 ? "Add photos" : "Add more"}</>
+                <>
+                  <Upload className="w-4 h-4" aria-hidden="true" />{" "}
+                  {photoUrls.length === 0 ? "Add photos" : "Add more"}
+                </>
               )}
             </button>
             <button
@@ -1281,7 +1787,10 @@ export function ConversationalForm() {
                 }, 250);
               }}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && (!cur.multiline || !e.shiftKey)) { e.preventDefault(); onNext(); }
+                if (e.key === "Enter" && (!cur.multiline || !e.shiftKey)) {
+                  e.preventDefault();
+                  onNext();
+                }
               }}
               placeholder={cur.hint}
               rows={cur.multiline ? 3 : 1}
@@ -1289,7 +1798,17 @@ export function ConversationalForm() {
               aria-label={cur.hint || cur.key}
               enterKeyHint={cur.multiline ? "enter" : "send"}
               inputMode={cur.key === "phone" ? "tel" : cur.key === "email" ? "email" : "text"}
-              autoComplete={cur.key === "phone" ? "tel" : cur.key === "email" ? "email" : cur.key === "company" ? "organization" : cur.key === "address" ? "street-address" : "off"}
+              autoComplete={
+                cur.key === "phone"
+                  ? "tel"
+                  : cur.key === "email"
+                    ? "email"
+                    : cur.key === "company"
+                      ? "organization"
+                      : cur.key === "address"
+                        ? "street-address"
+                        : "off"
+              }
               className="w-full rounded-xl py-3.5 pl-4 pr-14 outline-none resize-none border-2 transition-colors box-border disabled:opacity-60"
               style={{ borderColor: hintErr || overLimit ? "#ef4444" : "", fontSize: "16px" }}
             />
@@ -1298,7 +1817,9 @@ export function ConversationalForm() {
               disabled={busy || overLimit}
               aria-label="Continue"
               className="absolute right-2.5 bottom-2.5 w-11 h-11 rounded-full bg-mas-orange border-0 cursor-pointer flex items-center justify-center disabled:opacity-60"
-              style={{ boxShadow: "0 2px 8px color-mix(in oklab, var(--mas-orange) 40%, transparent)" }}
+              style={{
+                boxShadow: "0 2px 8px color-mix(in oklab, var(--mas-orange) 40%, transparent)",
+              }}
             >
               <ArrowRight className="w-5 h-5 text-white" aria-hidden="true" />
             </button>
@@ -1319,12 +1840,20 @@ export function ConversationalForm() {
                 </button>
               )}
               {maxLen && charCount > maxLen * 0.7 && (
-                <span className={`text-xs ${overLimit ? "text-red-600 font-bold" : "text-slate-500"}`}>
+                <span
+                  className={`text-xs ${overLimit ? "text-red-600 font-bold" : "text-slate-500"}`}
+                >
                   {charCount}/{maxLen}
                 </span>
               )}
               {cur.optional && !busy && (
-                <button onClick={() => { setVal(""); onNext(); }} className="text-xs text-slate-600 bg-transparent border-0 cursor-pointer underline px-2 py-1">
+                <button
+                  onClick={() => {
+                    setVal("");
+                    onNext();
+                  }}
+                  className="text-xs text-slate-600 bg-transparent border-0 cursor-pointer underline px-2 py-1"
+                >
                   Skip this step
                 </button>
               )}

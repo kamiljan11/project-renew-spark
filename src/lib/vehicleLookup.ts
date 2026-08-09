@@ -44,10 +44,9 @@ export async function lookupVehicle(plate: string): Promise<VehicleLookupResult>
   if (!cleanPlate) return { success: false, error: "No plate provided" };
 
   try {
-    const response = await fetch(
-      `https://www.autoparts.is/api/car-data/${cleanPlate}`,
-      { headers: { Accept: "application/json" } }
-    );
+    const response = await fetch(`https://www.autoparts.is/api/car-data/${cleanPlate}`, {
+      headers: { Accept: "application/json" },
+    });
 
     if (!response.ok) return { success: false, error: "Vehicle not found" };
 
@@ -60,9 +59,14 @@ export async function lookupVehicle(plate: string): Promise<VehicleLookupResult>
     let powerHp = 0;
 
     if (d.cars) {
-      const prime = Object.values(d.cars as Record<string, unknown>)
-        .find((c) => (c as { prime?: boolean })?.prime === true) as
-        | { record?: { vehicleDetails?: { carId?: number; impulsionType?: string; powerHpFrom?: number } } }
+      const prime = Object.values(d.cars as Record<string, unknown>).find(
+        (c) => (c as { prime?: boolean })?.prime === true,
+      ) as
+        | {
+            record?: {
+              vehicleDetails?: { carId?: number; impulsionType?: string; powerHpFrom?: number };
+            };
+          }
         | undefined;
       const vd = prime?.record?.vehicleDetails;
       if (vd) {

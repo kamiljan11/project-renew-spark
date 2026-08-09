@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useLang } from "@/i18n/LanguageContext";
 import { LANGS } from "@/i18n/translations";
 
-const LOGO = "https://d1yei2z3i6k35z.cloudfront.net/15618994/694407658cab3_694317fd7b14d_Untitleddesign.jpg";
+const LOGO =
+  "https://d1yei2z3i6k35z.cloudfront.net/15618994/694407658cab3_694317fd7b14d_Untitleddesign.jpg";
 
 export function Header({ onContact }: { onContact?: () => void }) {
   const { lang, setLang, t } = useLang();
@@ -31,9 +32,14 @@ export function Header({ onContact }: { onContact?: () => void }) {
           {/* Center nav */}
           <nav className="hidden xl:flex items-center gap-7 mx-auto text-[13px] font-bold uppercase tracking-wider text-navy">
             {navLinks.map((n) => (
-              <a key={n.href} href={n.href} className="hover:text-mas-orange transition-colors">{n.label}</a>
+              <a key={n.href} href={n.href} className="hover:text-mas-orange transition-colors">
+                {n.label}
+              </a>
             ))}
-            <button onClick={onContact} className="hover:text-mas-orange transition-colors bg-transparent border-0 cursor-pointer font-bold uppercase tracking-wider text-[13px] text-navy">
+            <button
+              onClick={onContact}
+              className="hover:text-mas-orange transition-colors bg-transparent border-0 cursor-pointer font-bold uppercase tracking-wider text-[13px] text-navy"
+            >
               {t("nav.contact")}
             </button>
           </nav>
@@ -55,14 +61,26 @@ export function Header({ onContact }: { onContact?: () => void }) {
                     transform: lang === l.code ? "scale(1.05)" : "none",
                   }}
                 >
-                  <img src={l.flag} width={20} alt={l.code.toUpperCase()} className="rounded-sm block" />
+                  <img
+                    src={l.flag}
+                    width={20}
+                    alt={l.code.toUpperCase()}
+                    className="rounded-sm block"
+                  />
                 </button>
               ))}
             </div>
-            <a href="/#order" className="btn-glow px-3.5 py-2 md:px-5 md:py-2.5 rounded-lg font-bold text-[11px] md:text-xs uppercase tracking-wide whitespace-nowrap">
+            <a
+              href="/#order"
+              className="btn-glow px-3.5 py-2 md:px-5 md:py-2.5 rounded-lg font-bold text-[11px] md:text-xs uppercase tracking-wide whitespace-nowrap"
+            >
               {t("cta.quote")}
             </a>
-            <button onClick={() => setOpen(!open)} className="xl:hidden p-1.5 text-navy bg-transparent border-0 cursor-pointer" aria-label="Menu">
+            <button
+              onClick={() => setOpen(!open)}
+              className="xl:hidden p-1.5 text-navy bg-transparent border-0 cursor-pointer"
+              aria-label="Menu"
+            >
               {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -72,11 +90,22 @@ export function Header({ onContact }: { onContact?: () => void }) {
           <div className="absolute top-16 md:top-20 left-0 w-full bg-white border-b border-border shadow-xl xl:hidden">
             <div className="flex flex-col p-5 gap-1 max-w-7xl mx-auto">
               {navLinks.map((n) => (
-                <a key={n.href} href={n.href} onClick={() => setOpen(false)} className="font-bold uppercase tracking-wider py-3 px-2 text-sm hover:text-mas-orange hover:bg-muted/50 rounded-md text-navy">
+                <a
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  className="font-bold uppercase tracking-wider py-3 px-2 text-sm hover:text-mas-orange hover:bg-muted/50 rounded-md text-navy"
+                >
                   {n.label}
                 </a>
               ))}
-              <button onClick={() => { setOpen(false); onContact?.(); }} className="text-left font-bold uppercase tracking-wider py-3 px-2 text-sm text-navy bg-transparent border-0 cursor-pointer hover:bg-muted/50 rounded-md">
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  onContact?.();
+                }}
+                className="text-left font-bold uppercase tracking-wider py-3 px-2 text-sm text-navy bg-transparent border-0 cursor-pointer hover:bg-muted/50 rounded-md"
+              >
                 {t("nav.contact")}
               </button>
             </div>
@@ -87,4 +116,3 @@ export function Header({ onContact }: { onContact?: () => void }) {
     </>
   );
 }
-

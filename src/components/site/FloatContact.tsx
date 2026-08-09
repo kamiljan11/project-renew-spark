@@ -48,12 +48,19 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
       });
       setBubbles((b) => b.filter((x) => x.who !== "typing"));
       if (error) {
-        const status = (error as any)?.context?.status;
-        const msg = status === 429
-          ? (lang === "pl" ? "Za dużo wiadomości na raz — spróbuj za chwilę." : "Too many messages — try again in a moment.")
-          : status === 402
-          ? (lang === "pl" ? "Asystent AI chwilowo niedostępny. Napisz: parts@masgroup.is" : "AI assistant temporarily unavailable. Email: parts@masgroup.is")
-          : (lang === "pl" ? "Problem z połączeniem — napisz na parts@masgroup.is" : "Connection issue — email parts@masgroup.is");
+        const status = (error as { context?: { status?: number } } | null)?.context?.status;
+        const msg =
+          status === 429
+            ? lang === "pl"
+              ? "Za dużo wiadomości na raz — spróbuj za chwilę."
+              : "Too many messages — try again in a moment."
+            : status === 402
+              ? lang === "pl"
+                ? "Asystent AI chwilowo niedostępny. Napisz: parts@masgroup.is"
+                : "AI assistant temporarily unavailable. Email: parts@masgroup.is"
+              : lang === "pl"
+                ? "Problem z połączeniem — napisz na parts@masgroup.is"
+                : "Connection issue — email parts@masgroup.is";
         setBubbles((b) => [...b, { who: "bot", html: msg }]);
         return;
       }
@@ -63,20 +70,30 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
       if (data?.submit) {
         setPendingMsg(data.normalized || v);
         setTimeout(() => {
-          setBubbles((b) => [...b, {
-            who: "bot",
-            html: lang === "pl"
-              ? "Świetnie! Zostaw <strong>telefon i email</strong>, a odezwiemy się z wyceną. ⬇️"
-              : lang === "is"
-              ? "Frábært! Skildu eftir <strong>síma og netfang</strong> og við sendum tilboð. ⬇️"
-              : "Great! Leave your <strong>phone and email</strong> and we'll get back with a quote. ⬇️",
-          }]);
+          setBubbles((b) => [
+            ...b,
+            {
+              who: "bot",
+              html:
+                lang === "pl"
+                  ? "Świetnie! Zostaw <strong>telefon i email</strong>, a odezwiemy się z wyceną. ⬇️"
+                  : lang === "is"
+                    ? "Frábært! Skildu eftir <strong>síma og netfang</strong> og við sendum tilboð. ⬇️"
+                    : "Great! Leave your <strong>phone and email</strong> and we'll get back with a quote. ⬇️",
+            },
+          ]);
           setStage("details");
         }, 400);
       }
     } catch {
       setBubbles((b) => b.filter((x) => x.who !== "typing"));
-      setBubbles((b) => [...b, { who: "bot", html: "Connection issue — try again, or email <strong>parts@masgroup.is</strong>." }]);
+      setBubbles((b) => [
+        ...b,
+        {
+          who: "bot",
+          html: "Connection issue — try again, or email <strong>parts@masgroup.is</strong>.",
+        },
+      ]);
     } finally {
       setBusy(false);
     }
@@ -100,7 +117,10 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
       } as never);
       setStage("done");
     } catch {
-      setBubbles((b) => [...b, { who: "bot", html: "Couldn't save — please email parts@masgroup.is" }]);
+      setBubbles((b) => [
+        ...b,
+        { who: "bot", html: "Couldn't save — please email parts@masgroup.is" },
+      ]);
     } finally {
       setBusy(false);
     }
@@ -108,8 +128,12 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
 
   const reset = () => {
     setBubbles([{ who: "bot", html: GREETINGS[lang] ?? GREETINGS.en }]);
-    setVal(""); setPendingMsg(""); setContact({ name: "", phone: "", email: "", license_plate: "" });
-    setErrors({}); setStage("chat"); setHistory([]);
+    setVal("");
+    setPendingMsg("");
+    setContact({ name: "", phone: "", email: "", license_plate: "" });
+    setErrors({});
+    setStage("chat");
+    setHistory([]);
   };
 
   return (
@@ -138,7 +162,10 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
               <MessageCircle className="w-4 h-4 text-white" />
             </div>
             <div>
-              <p className="text-white font-bold text-sm m-0 flex items-center gap-1.5" style={{ fontFamily: "Exo 2" }}>
+              <p
+                className="text-white font-bold text-sm m-0 flex items-center gap-1.5"
+                style={{ fontFamily: "Exo 2" }}
+              >
                 {t("float.title")}
                 <span className="inline-flex items-center gap-0.5 text-[10px] text-mas-orange font-bold uppercase tracking-wider">
                   <Sparkles className="w-3 h-3" /> AI
@@ -147,20 +174,41 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
               <p className="text-white/60 text-xs m-0">{t("float.sub")}</p>
             </div>
           </div>
-          <button onClick={() => setOpen(false)} className="bg-transparent border-0 text-white/60 cursor-pointer text-2xl leading-none p-0">×</button>
+          <button
+            onClick={() => setOpen(false)}
+            className="bg-transparent border-0 text-white/60 cursor-pointer text-2xl leading-none p-0"
+          >
+            ×
+          </button>
         </div>
 
-        <div ref={chatRef} className="flex flex-col gap-2.5 px-4 pt-4 pb-2" style={{ minHeight: 200, maxHeight: "min(360px, 50vh)", overflowY: "auto" }}>
+        <div
+          ref={chatRef}
+          className="flex flex-col gap-2.5 px-4 pt-4 pb-2"
+          style={{ minHeight: 200, maxHeight: "min(360px, 50vh)", overflowY: "auto" }}
+        >
           {bubbles.map((b, i) =>
             b.who === "bot" ? (
-              <div key={i} className="c-bubble-bot" dangerouslySetInnerHTML={{ __html: b.html ?? "" }} />
+              <div
+                key={i}
+                className="c-bubble-bot"
+                dangerouslySetInnerHTML={{ __html: b.html ?? "" }}
+              />
             ) : b.who === "typing" ? (
-              <div key={i} className="c-bubble-bot" style={{ display: "inline-flex", gap: 4, width: "fit-content" }}>
-                <span className="typing-dot" /><span className="typing-dot" /><span className="typing-dot" />
+              <div
+                key={i}
+                className="c-bubble-bot"
+                style={{ display: "inline-flex", gap: 4, width: "fit-content" }}
+              >
+                <span className="typing-dot" />
+                <span className="typing-dot" />
+                <span className="typing-dot" />
               </div>
             ) : (
-              <div key={i} className="c-bubble-user">{b.text}</div>
-            )
+              <div key={i} className="c-bubble-user">
+                {b.text}
+              </div>
+            ),
           )}
         </div>
 
@@ -171,12 +219,27 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
                 value={val}
                 onChange={(e) => setVal(e.target.value)}
                 disabled={busy}
-                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-                placeholder={lang === "pl" ? "Napisz wiadomość…" : lang === "is" ? "Skrifaðu skilaboð…" : "Type a message…"}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    send();
+                  }
+                }}
+                placeholder={
+                  lang === "pl"
+                    ? "Napisz wiadomość…"
+                    : lang === "is"
+                      ? "Skrifaðu skilaboð…"
+                      : "Type a message…"
+                }
                 rows={2}
                 className="w-full rounded-xl py-2.5 pl-3 pr-11 text-sm outline-none resize-none border-2 border-border focus:border-mas-orange transition-colors box-border disabled:opacity-60"
               />
-              <button onClick={send} disabled={busy} className="absolute right-2 bottom-2 w-8 h-8 rounded-full bg-mas-orange border-0 cursor-pointer flex items-center justify-center disabled:opacity-60">
+              <button
+                onClick={send}
+                disabled={busy}
+                className="absolute right-2 bottom-2 w-8 h-8 rounded-full bg-mas-orange border-0 cursor-pointer flex items-center justify-center disabled:opacity-60"
+              >
                 <Send className="w-3.5 h-3.5 text-white" />
               </button>
             </div>
@@ -186,11 +249,45 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
 
         {stage === "details" && (
           <div className="px-4 pb-4 space-y-2">
-            <input value={contact.name} onChange={(e) => setContact({ ...contact, name: e.target.value })} placeholder={t("float.name")} className="w-full border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange" />
-            <input value={contact.phone} onChange={(e) => setContact({ ...contact, phone: e.target.value })} placeholder={t("float.phone")} className="w-full rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange border" style={{ borderColor: errors.phone ? "#ef4444" : "" }} />
-            <input value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} placeholder={t("float.email")} className="w-full rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange border" style={{ borderColor: errors.email ? "#ef4444" : "" }} />
-            <input value={contact.license_plate} onChange={(e) => setContact({ ...contact, license_plate: e.target.value.toUpperCase() })} placeholder={lang === "pl" ? "Nr rejestracyjny (opcjonalnie)" : lang === "is" ? "Bílnúmer (valfrjálst)" : "License plate (optional)"} className="w-full border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange" />
-            <button onClick={submit} disabled={busy} className="btn-glow w-full rounded-lg py-2.5 font-bold text-xs uppercase tracking-wide cursor-pointer border-0">
+            <input
+              value={contact.name}
+              onChange={(e) => setContact({ ...contact, name: e.target.value })}
+              placeholder={t("float.name")}
+              className="w-full border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange"
+            />
+            <input
+              value={contact.phone}
+              onChange={(e) => setContact({ ...contact, phone: e.target.value })}
+              placeholder={t("float.phone")}
+              className="w-full rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange border"
+              style={{ borderColor: errors.phone ? "#ef4444" : "" }}
+            />
+            <input
+              value={contact.email}
+              onChange={(e) => setContact({ ...contact, email: e.target.value })}
+              placeholder={t("float.email")}
+              className="w-full rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange border"
+              style={{ borderColor: errors.email ? "#ef4444" : "" }}
+            />
+            <input
+              value={contact.license_plate}
+              onChange={(e) =>
+                setContact({ ...contact, license_plate: e.target.value.toUpperCase() })
+              }
+              placeholder={
+                lang === "pl"
+                  ? "Nr rejestracyjny (opcjonalnie)"
+                  : lang === "is"
+                    ? "Bílnúmer (valfrjálst)"
+                    : "License plate (optional)"
+              }
+              className="w-full border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-mas-orange"
+            />
+            <button
+              onClick={submit}
+              disabled={busy}
+              className="btn-glow w-full rounded-lg py-2.5 font-bold text-xs uppercase tracking-wide cursor-pointer border-0"
+            >
               {busy ? "…" : t("float.send")}
             </button>
           </div>
@@ -201,9 +298,13 @@ export function FloatContact({ open, setOpen }: { open: boolean; setOpen: (b: bo
             <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-mas-orange flex items-center justify-center">
               <Check className="w-6 h-6 text-white" strokeWidth={3} />
             </div>
-            <p className="font-bold text-navy text-base mb-1" style={{ fontFamily: "Exo 2" }}>{t("float.sent")}</p>
+            <p className="font-bold text-navy text-base mb-1" style={{ fontFamily: "Exo 2" }}>
+              {t("float.sent")}
+            </p>
             <p className="text-muted-foreground text-sm mb-4">{t("float.sentSub")}</p>
-            <button onClick={reset} className="text-xs text-mas-orange underline">New message</button>
+            <button onClick={reset} className="text-xs text-mas-orange underline">
+              New message
+            </button>
           </div>
         )}
       </div>

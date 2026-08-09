@@ -34,23 +34,28 @@ const en: Dict = {
   "form.of": "of",
   "form.privacy": "Your data is used only to process your request.",
   "form.sending": "Sending...",
-  "form.allDone": "✅ Got it — sending your request now. We usually reply within a few business hours.",
-  "form.failed":
-    "Something went wrong. Please try again or email us at parts@masgroup.is",
+  "form.allDone":
+    "✅ Got it — sending your request now. We usually reply within a few business hours.",
+  "form.failed": "Something went wrong. Please try again or email us at parts@masgroup.is",
 
   "benefits.kicker": "How it works",
   "benefits.titleA": "WHAT YOU",
   "benefits.titleB": "ACTUALLY GET",
   "benefits.b1.t": "Fast delivery",
-  "benefits.b1.d": "We find the fastest shipping route for your order. You always know when it arrives before you pay.",
+  "benefits.b1.d":
+    "We find the fastest shipping route for your order. You always know when it arrives before you pay.",
   "benefits.b2.t": "We find any part",
-  "benefits.b2.d": "No link? Just describe the part. We search European suppliers and send you the price. Search fee: 4,960 ISK (VAT included).",
+  "benefits.b2.d":
+    "No link? Just describe the part. We search European suppliers and send you the price. Search fee: 4,960 ISK (VAT included).",
   "benefits.b3.t": "Icelandic invoice",
-  "benefits.b3.d": "Every order comes with a proper Icelandic VAT invoice. You can deduct it as a business expense. We handle customs — you don't touch it.",
+  "benefits.b3.d":
+    "Every order comes with a proper Icelandic VAT invoice. You can deduct it as a business expense. We handle customs — you don't touch it.",
   "benefits.b4.t": "No middleman stress",
-  "benefits.b4.d": "You send a request. We handle everything between the European supplier and your door. You just wait for the package.",
+  "benefits.b4.d":
+    "You send a request. We handle everything between the European supplier and your door. You just wait for the package.",
   "benefits.b5.t": "Fair price",
-  "benefits.b5.d": "We show you the full price before you commit — part cost, shipping, and our fee. No surprises at the end.",
+  "benefits.b5.d":
+    "We show you the full price before you commit — part cost, shipping, and our fee. No surprises at the end.",
   "benefits.cta.t": "Have questions?",
   "benefits.cta.d": "Write to us and we'll get back to you within a few hours.",
   "benefits.cta.btn": "Contact us",
@@ -60,30 +65,39 @@ const en: Dict = {
   "process.titleB": "WORKS",
   "process.lead": "6 steps from your message to the part at your door.",
   "process.s1.t": "Send what you need",
-  "process.s1.d": "Fill out the form: paste a link to the part you found online, or describe what you need. No link? <strong>We become your buyer in Europe</strong> — we hunt down the part across trusted EU suppliers, negotiate the best price on your behalf, verify it fits your vehicle (VIN/OEM) and handle the paperwork. A one-off <strong>4 960 ISK (incl. VAT) sourcing fee</strong> covers our work and is paid upfront. If you order, it's credited toward your total — so you only pay it once.",
+  "process.s1.d":
+    "Fill out the form: paste a link to the part you found online, or describe what you need. No link? <strong>We become your buyer in Europe</strong> — we hunt down the part across trusted EU suppliers, negotiate the best price on your behalf, verify it fits your vehicle (VIN/OEM) and handle the paperwork. A one-off <strong>4 960 ISK (incl. VAT) sourcing fee</strong> covers our work and is paid upfront. If you order, it's credited toward your total — so you only pay it once.",
   "process.s2.t": "We check the part",
-  "process.s2.d": "We verify availability, check the price, and calculate the full cost including shipping to Iceland.",
+  "process.s2.d":
+    "We verify availability, check the price, and calculate the full cost including shipping to Iceland.",
   "process.s3.t": "You get the total",
-  "process.s3.d": "We send you one number: part + shipping + customs clearance + our service commission for handling everything. No hidden costs.",
+  "process.s3.d":
+    "We send you one number: part + shipping + customs clearance + our service commission for handling everything. No hidden costs.",
   "process.s4.t": "You confirm",
   "process.s4.d": "You say yes, you pay. We immediately place the order with the supplier.",
   "process.s5.t": "We ship it",
-  "process.s5.d": "We handle the purchase, international shipping, and all customs paperwork to Iceland. You get tracking info.",
+  "process.s5.d":
+    "We handle the purchase, international shipping, and all customs paperwork to Iceland. You get tracking info.",
   "process.s6.t": "Pickup",
   "process.s6.d": "When the package arrives, you can pick it up locally or we deliver it to you.",
 
   "reviews.kicker": "Trusted by",
   "reviews.title": "WHAT CLIENTS SAY ABOUT US",
-  "reviews.r1": "Time matters to us. I ordered engine parts, and they were here faster than I expected. Solid work, no unnecessary talk or paperwork.",
-  "reviews.r2": "I run a rental agency, cars need to drive, not sit idle. MAS Parts takes the hassle of finding parts off my shoulders. Icelandic invoice included, everything works.",
-  "reviews.r3": "I was looking for a part that no one had in stock. Found it here immediately and at a good price. Quickly sorted.",
+  "reviews.r1":
+    "Time matters to us. I ordered engine parts, and they were here faster than I expected. Solid work, no unnecessary talk or paperwork.",
+  "reviews.r2":
+    "I run a rental agency, cars need to drive, not sit idle. MAS Parts takes the hassle of finding parts off my shoulders. Icelandic invoice included, everything works.",
+  "reviews.r3":
+    "I was looking for a part that no one had in stock. Found it here immediately and at a good price. Quickly sorted.",
 
   "about.kicker": "Built on experience",
   "about.titleA": "FROM WORKSHOP OWNERS,",
   "about.titleB": "FOR WORKSHOP OWNERS",
   "about.p1": "We didn't just open a trading company; we created a solution to our own problems.",
-  "about.p2": "Our experience is based on running a total of 4 of our own workshops, so we perfectly understand the challenges you face every day. We know the stress of a car blocking a lift because of a missing bolt.",
-  "about.p3": "MAS Parts was created to effectively solve one of the key problems in the industry: Logistics. We take the problems on ourselves so you can focus on the work.",
+  "about.p2":
+    "Our experience is based on running a total of 4 of our own workshops, so we perfectly understand the challenges you face every day. We know the stress of a car blocking a lift because of a missing bolt.",
+  "about.p3":
+    "MAS Parts was created to effectively solve one of the key problems in the industry: Logistics. We take the problems on ourselves so you can focus on the work.",
   "about.stat1": "Own workshops",
   "about.stat2": "Available parts",
   "about.stat3": "B2B Partners",
@@ -95,39 +109,53 @@ const en: Dict = {
   "faq.titleB": "QUESTIONS",
   "faq.lead": "Everything you need to know about working with MAS Parts in one place.",
   "faq.q1": "How exactly does this work?",
-  "faq.a1": "Simple. Find a part on any website (Autodoc, eBay, a Polish shop, anywhere in Europe) and copy the link. Fill in our form, paste the link, and submit. We check the part, add up shipping to Iceland, and send you the total. If you agree, you pay and we handle everything else: buying, shipping, customs, and delivery to your door.",
+  "faq.a1":
+    "Simple. Find a part on any website (Autodoc, eBay, a Polish shop, anywhere in Europe) and copy the link. Fill in our form, paste the link, and submit. We check the part, add up shipping to Iceland, and send you the total. If you agree, you pay and we handle everything else: buying, shipping, customs, and delivery to your door.",
   "faq.q2": "Do you issue an Icelandic VAT invoice?",
-  "faq.a2": "Yes. We are a registered company in Iceland (ehf.) and every order comes with a full Icelandic VAT invoice. If you run a workshop or company, you can deduct it as a business expense.",
+  "faq.a2":
+    "Yes. We are a registered company in Iceland (ehf.) and every order comes with a full Icelandic VAT invoice. If you run a workshop or company, you can deduct it as a business expense.",
   "faq.q3": "How long does part delivery take?",
-  "faq.a3": "It depends on where the part ships from, but we always tell you the estimated delivery time before you pay. Most European orders arrive within 5-10 business days. Express options are available.",
+  "faq.a3":
+    "It depends on where the part ships from, but we always tell you the estimated delivery time before you pay. Most European orders arrive within 5-10 business days. Express options are available.",
   "faq.q4": "What if the ordered part doesn't fit?",
-  "faq.a4": "If we ordered the wrong part on our end, we replace it or refund you, no questions asked. If you sent us an incorrect link or wrong vehicle details, we'll do our best to help but the responsibility lies on your side. Always double-check the link before sending.",
+  "faq.a4":
+    "If we ordered the wrong part on our end, we replace it or refund you, no questions asked. If you sent us an incorrect link or wrong vehicle details, we'll do our best to help but the responsibility lies on your side. Always double-check the link before sending.",
   "faq.q5": "Do you deliver parts outside the capital area?",
-  "faq.a5": "Yes, everywhere in Iceland. Reykjavik, Akureyri, Egilsstaðir, Westfjords — we ship to your address. Just write your delivery address in the form.",
+  "faq.a5":
+    "Yes, everywhere in Iceland. Reykjavik, Akureyri, Egilsstaðir, Westfjords — we ship to your address. Just write your delivery address in the form.",
   "faq.q6": "What car brands do you support?",
-  "faq.a6": "All of them. VW, Audi, BMW, Toyota, Kia, Ford, Volvo — if it drives, we can get the part. Both original OEM parts and quality aftermarket alternatives.",
+  "faq.a6":
+    "All of them. VW, Audi, BMW, Toyota, Kia, Ford, Volvo — if it drives, we can get the part. Both original OEM parts and quality aftermarket alternatives.",
   "faq.q7": "Do you supply used parts?",
-  "faq.a7": "Yes, on request. Engines, gearboxes, body parts — just ask. Keep in mind: used parts cannot be returned once delivered, so make sure you know what you're ordering.",
+  "faq.a7":
+    "Yes, on request. Engines, gearboxes, body parts — just ask. Keep in mind: used parts cannot be returned once delivered, so make sure you know what you're ordering.",
   "faq.q8": "What does the 4 960 ISK fee actually pay for?",
-  "faq.a8": "It's not just \"a search fee\" — you're hiring us as <strong>your buyer in Europe</strong>. For 4 960 ISK (incl. VAT) we: contact our trusted EU suppliers (Germany, Poland, Baltics), <strong>negotiate the best price on your behalf</strong>, verify the part fits your exact vehicle (VIN/OEM check), compare OEM vs. quality aftermarket options and prepare a full quote with shipping + customs included. Paid upfront because real research takes real time. <strong>If you order, it's credited toward your total.</strong> Send a link instead and there's no fee — you've already done the sourcing work yourself.",
+  "faq.a8":
+    "It's not just \"a search fee\" — you're hiring us as <strong>your buyer in Europe</strong>. For 4 960 ISK (incl. VAT) we: contact our trusted EU suppliers (Germany, Poland, Baltics), <strong>negotiate the best price on your behalf</strong>, verify the part fits your exact vehicle (VIN/OEM check), compare OEM vs. quality aftermarket options and prepare a full quote with shipping + customs included. Paid upfront because real research takes real time. <strong>If you order, it's credited toward your total.</strong> Send a link instead and there's no fee — you've already done the sourcing work yourself.",
   "faq.q9": "How do I pay?",
-  "faq.a9": "Bank transfer (millifærsla) or card via an invoice link. Business invoices with kt./VAT number on request. After you submit the form, our team emails you the quote and payment instructions — usually within 24h on business days.",
+  "faq.a9":
+    "Bank transfer (millifærsla) or card via an invoice link. Business invoices with kt./VAT number on request. After you submit the form, our team emails you the quote and payment instructions — usually within 24h on business days.",
   "faq.q10": "Is customs clearance included in the price?",
-  "faq.a10": "Yes. Our shipping price always includes Icelandic customs clearance and import VAT handling. No surprise bills at the door.",
+  "faq.a10":
+    "Yes. Our shipping price always includes Icelandic customs clearance and import VAT handling. No surprise bills at the door.",
   "faq.q11": "Can you ship heavy or oversized parts (engines, axles, bodywork)?",
-  "faq.a11": "Yes. We handle pallets and crates regularly — engines, gearboxes, bumpers, full body panels. Just describe what you need and we'll quote the right shipping option.",
+  "faq.a11":
+    "Yes. We handle pallets and crates regularly — engines, gearboxes, bumpers, full body panels. Just describe what you need and we'll quote the right shipping option.",
   "faq.q12": "Can I order multiple parts in one request?",
-  "faq.a12": "Absolutely. In the chat form just tap \"➕ Add another part\" after each one. We'll quote them together and you save on combined shipping.",
+  "faq.a12":
+    'Absolutely. In the chat form just tap "➕ Add another part" after each one. We\'ll quote them together and you save on combined shipping.',
 
   "cta.titleA": "GOT A LINK?",
   "cta.titleB": "SEND IT TO US.",
-  "cta.lead": "Paste the link, fill in your details, click send. We reply with the full price. You decide. That's the whole process.",
+  "cta.lead":
+    "Paste the link, fill in your details, click send. We reply with the full price. You decide. That's the whole process.",
   "cta.btn1": "Get a Quote",
   "cta.btn2": "Have a Question",
   "cta.bullet1": "Secure VIN selection",
   "cta.bullet2": "Fast shipping",
 
-  "footer.tagline": "Your professional partner in supplying spare parts across Iceland. We focus on speed and hassle-free logistics for your business.",
+  "footer.tagline":
+    "Your professional partner in supplying spare parts across Iceland. We focus on speed and hassle-free logistics for your business.",
   "footer.nav": "Navigation",
   "footer.info": "Information",
   "footer.contact": "Contact",
@@ -181,22 +209,28 @@ const pl: Dict = {
   "form.of": "z",
   "form.privacy": "Twoje dane służą wyłącznie do realizacji zapytania.",
   "form.sending": "Wysyłanie...",
-  "form.allDone": "✅ Mamy to — wysyłamy zapytanie. Zwykle odpowiadamy w ciągu kilku godzin roboczych.",
+  "form.allDone":
+    "✅ Mamy to — wysyłamy zapytanie. Zwykle odpowiadamy w ciągu kilku godzin roboczych.",
   "form.failed": "Coś poszło nie tak. Spróbuj ponownie lub napisz na parts@masgroup.is",
 
   "benefits.kicker": "Jak to działa",
   "benefits.titleA": "CO DOKŁADNIE",
   "benefits.titleB": "DOSTAJESZ",
   "benefits.b1.t": "Szybka dostawa",
-  "benefits.b1.d": "Znajdujemy najszybszą trasę dla Twojego zamówienia. Termin dostawy znasz przed zapłatą.",
+  "benefits.b1.d":
+    "Znajdujemy najszybszą trasę dla Twojego zamówienia. Termin dostawy znasz przed zapłatą.",
   "benefits.b2.t": "Znajdziemy każdą część",
-  "benefits.b2.d": "Brak linku? Opisz część — <strong>działamy jako Twój kupiec w Europie</strong>: szukamy u sprawdzonych dostawców, negocjujemy najlepszą cenę w Twoim imieniu i sprawdzamy dopasowanie do Twojego auta. Opłata za naszą pracę: 4 960 ISK (z VAT) — wliczana w cenę zamówienia.",
+  "benefits.b2.d":
+    "Brak linku? Opisz część — <strong>działamy jako Twój kupiec w Europie</strong>: szukamy u sprawdzonych dostawców, negocjujemy najlepszą cenę w Twoim imieniu i sprawdzamy dopasowanie do Twojego auta. Opłata za naszą pracę: 4 960 ISK (z VAT) — wliczana w cenę zamówienia.",
   "benefits.b3.t": "Islandzka faktura",
-  "benefits.b3.d": "Każde zamówienie z fakturą VAT z Islandii. Wrzucasz w koszty firmy. Cło bierzemy na siebie.",
+  "benefits.b3.d":
+    "Każde zamówienie z fakturą VAT z Islandii. Wrzucasz w koszty firmy. Cło bierzemy na siebie.",
   "benefits.b4.t": "Bez stresu z pośrednikami",
-  "benefits.b4.d": "Wysyłasz zapytanie. Resztę między dostawcą a Twoimi drzwiami robimy my. Ty czekasz na paczkę.",
+  "benefits.b4.d":
+    "Wysyłasz zapytanie. Resztę między dostawcą a Twoimi drzwiami robimy my. Ty czekasz na paczkę.",
   "benefits.b5.t": "Uczciwa cena",
-  "benefits.b5.d": "Pokazujemy pełną cenę przed potwierdzeniem — część, transport, nasza prowizja. Bez niespodzianek.",
+  "benefits.b5.d":
+    "Pokazujemy pełną cenę przed potwierdzeniem — część, transport, nasza prowizja. Bez niespodzianek.",
   "benefits.cta.t": "Masz pytania?",
   "benefits.cta.d": "Napisz do nas, odpowiemy w ciągu kilku godzin.",
   "benefits.cta.btn": "Skontaktuj się",
@@ -206,30 +240,38 @@ const pl: Dict = {
   "process.titleB": "DZIAŁA",
   "process.lead": "6 kroków od wiadomości do części pod drzwiami.",
   "process.s1.t": "Wyślij czego potrzebujesz",
-  "process.s1.d": "Wypełnij formularz: wklej link do części lub opisz, czego potrzebujesz. Bez linku? <strong>Stajemy się Twoim kupcem w Europie</strong> — szukamy części u zaufanych dostawców w UE, <strong>negocjujemy najlepszą cenę w Twoim imieniu</strong>, weryfikujemy dopasowanie do Twojego pojazdu (VIN/OEM) i ogarniamy formalności. Jednorazowa <strong>opłata 4 960 ISK (z VAT)</strong> za naszą pracę, płatna z góry. Jeśli zamówisz — kwota wlicza się w cenę zamówienia, więc płacisz ją tylko raz.",
+  "process.s1.d":
+    "Wypełnij formularz: wklej link do części lub opisz, czego potrzebujesz. Bez linku? <strong>Stajemy się Twoim kupcem w Europie</strong> — szukamy części u zaufanych dostawców w UE, <strong>negocjujemy najlepszą cenę w Twoim imieniu</strong>, weryfikujemy dopasowanie do Twojego pojazdu (VIN/OEM) i ogarniamy formalności. Jednorazowa <strong>opłata 4 960 ISK (z VAT)</strong> za naszą pracę, płatna z góry. Jeśli zamówisz — kwota wlicza się w cenę zamówienia, więc płacisz ją tylko raz.",
   "process.s2.t": "Sprawdzamy część",
   "process.s2.d": "Weryfikujemy dostępność, cenę i pełny koszt z dostawą na Islandię.",
   "process.s3.t": "Dostajesz wycenę",
-  "process.s3.d": "Wysyłamy jedną kwotę: część + transport + odprawa celna + nasza prowizja za obsługę całości. Bez ukrytych kosztów.",
+  "process.s3.d":
+    "Wysyłamy jedną kwotę: część + transport + odprawa celna + nasza prowizja za obsługę całości. Bez ukrytych kosztów.",
   "process.s4.t": "Akceptujesz",
   "process.s4.d": "Mówisz tak, płacisz. Od razu zamawiamy u dostawcy.",
   "process.s5.t": "Wysyłamy",
-  "process.s5.d": "Bierzemy na siebie zakup, transport międzynarodowy i odprawę celną. Otrzymujesz numer śledzenia.",
+  "process.s5.d":
+    "Bierzemy na siebie zakup, transport międzynarodowy i odprawę celną. Otrzymujesz numer śledzenia.",
   "process.s6.t": "Odbiór",
   "process.s6.d": "Gdy paczka dotrze, odbierasz lokalnie albo dowozimy.",
 
   "reviews.kicker": "Zaufali nam",
   "reviews.title": "CO MÓWIĄ KLIENCI",
-  "reviews.r1": "Czas to dla nas pieniądz. Zamówiłem części silnika, były szybciej niż się spodziewałem. Konkretnie, bez zbędnego gadania.",
-  "reviews.r2": "Prowadzę wypożyczalnię, auta muszą jeździć. MAS Parts zdejmuje ze mnie szukanie części. Faktura islandzka, wszystko gra.",
-  "reviews.r3": "Szukałem części, której nikt nie miał na stanie. Tu znalazłem od ręki i w dobrej cenie.",
+  "reviews.r1":
+    "Czas to dla nas pieniądz. Zamówiłem części silnika, były szybciej niż się spodziewałem. Konkretnie, bez zbędnego gadania.",
+  "reviews.r2":
+    "Prowadzę wypożyczalnię, auta muszą jeździć. MAS Parts zdejmuje ze mnie szukanie części. Faktura islandzka, wszystko gra.",
+  "reviews.r3":
+    "Szukałem części, której nikt nie miał na stanie. Tu znalazłem od ręki i w dobrej cenie.",
 
   "about.kicker": "Z doświadczenia warsztatu",
   "about.titleA": "OD WARSZTATÓW,",
   "about.titleB": "DLA WARSZTATÓW",
   "about.p1": "Nie otworzyliśmy zwykłej hurtowni; stworzyliśmy rozwiązanie własnych problemów.",
-  "about.p2": "Mamy za sobą prowadzenie 4 własnych warsztatów, więc rozumiemy Twoje codzienne wyzwania. Znamy stres, gdy auto stoi na podnośniku przez brakującą śrubę.",
-  "about.p3": "MAS Parts powstał, żeby skutecznie rozwiązać kluczowy problem branży: Logistykę. Bierzemy ją na siebie, byś mógł skupić się na pracy.",
+  "about.p2":
+    "Mamy za sobą prowadzenie 4 własnych warsztatów, więc rozumiemy Twoje codzienne wyzwania. Znamy stres, gdy auto stoi na podnośniku przez brakującą śrubę.",
+  "about.p3":
+    "MAS Parts powstał, żeby skutecznie rozwiązać kluczowy problem branży: Logistykę. Bierzemy ją na siebie, byś mógł skupić się na pracy.",
   "about.stat1": "Własne warsztaty",
   "about.stat2": "Dostępnych części",
   "about.stat3": "Partnerów B2B",
@@ -241,39 +283,53 @@ const pl: Dict = {
   "faq.titleB": "PYTANIA",
   "faq.lead": "Wszystko, co musisz wiedzieć o współpracy z MAS Parts.",
   "faq.q1": "Jak to dokładnie działa?",
-  "faq.a1": "Prosto. Znajdujesz część na dowolnej stronie (Autodoc, eBay, polski sklep — gdziekolwiek w Europie) i kopiujesz link. Wypełniasz formularz, wklejasz link, wysyłasz. Sprawdzamy część, doliczamy transport na Islandię i wysyłamy całkowitą cenę. Akceptujesz, płacisz, a my robimy resztę: zakup, wysyłka, cło, dostawa.",
+  "faq.a1":
+    "Prosto. Znajdujesz część na dowolnej stronie (Autodoc, eBay, polski sklep — gdziekolwiek w Europie) i kopiujesz link. Wypełniasz formularz, wklejasz link, wysyłasz. Sprawdzamy część, doliczamy transport na Islandię i wysyłamy całkowitą cenę. Akceptujesz, płacisz, a my robimy resztę: zakup, wysyłka, cło, dostawa.",
   "faq.q2": "Wystawiacie islandzką fakturę VAT?",
-  "faq.a2": "Tak. Jesteśmy zarejestrowaną firmą na Islandii (ehf.) i każde zamówienie ma pełną fakturę VAT. Jeśli prowadzisz warsztat lub firmę, wrzucasz w koszty.",
+  "faq.a2":
+    "Tak. Jesteśmy zarejestrowaną firmą na Islandii (ehf.) i każde zamówienie ma pełną fakturę VAT. Jeśli prowadzisz warsztat lub firmę, wrzucasz w koszty.",
   "faq.q3": "Ile trwa dostawa?",
-  "faq.a3": "Zależy skąd jedzie część, ale termin dostawy znasz przed płatnością. Większość zamówień z Europy w 5–10 dni roboczych. Dostępny ekspres.",
+  "faq.a3":
+    "Zależy skąd jedzie część, ale termin dostawy znasz przed płatnością. Większość zamówień z Europy w 5–10 dni roboczych. Dostępny ekspres.",
   "faq.q4": "Co jeśli część nie pasuje?",
-  "faq.a4": "Jeśli to my zamówiliśmy złą część, wymieniamy lub zwracamy bez pytań. Jeśli wysłałeś zły link lub złe dane auta, pomożemy, ale odpowiedzialność jest po Twojej stronie. Sprawdzaj link dwa razy.",
+  "faq.a4":
+    "Jeśli to my zamówiliśmy złą część, wymieniamy lub zwracamy bez pytań. Jeśli wysłałeś zły link lub złe dane auta, pomożemy, ale odpowiedzialność jest po Twojej stronie. Sprawdzaj link dwa razy.",
   "faq.q5": "Dostarczacie poza stolicę?",
-  "faq.a5": "Tak, w całej Islandii. Reykjavík, Akureyri, Egilsstaðir, Fiordy Zachodnie — dowozimy pod adres.",
+  "faq.a5":
+    "Tak, w całej Islandii. Reykjavík, Akureyri, Egilsstaðir, Fiordy Zachodnie — dowozimy pod adres.",
   "faq.q6": "Jakie marki obsługujecie?",
-  "faq.a6": "Wszystkie. VW, Audi, BMW, Toyota, Kia, Ford, Volvo — jeśli jeździ, znajdziemy część. OEM i dobre zamienniki.",
+  "faq.a6":
+    "Wszystkie. VW, Audi, BMW, Toyota, Kia, Ford, Volvo — jeśli jeździ, znajdziemy część. OEM i dobre zamienniki.",
   "faq.q7": "Macie używki?",
-  "faq.a7": "Tak, na zamówienie. Silniki, skrzynie, blacharka — pytaj. Pamiętaj: używanych nie zwracamy.",
+  "faq.a7":
+    "Tak, na zamówienie. Silniki, skrzynie, blacharka — pytaj. Pamiętaj: używanych nie zwracamy.",
   "faq.q8": "Za co tak naprawdę płacę te 4 960 ISK?",
-  "faq.a8": "To nie jest tylko \"opłata za szukanie\" — wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Za 4 960 ISK (z VAT): kontaktujemy się z naszymi zaufanymi dostawcami w UE (Niemcy, Polska, kraje bałtyckie), <strong>negocjujemy najlepszą cenę w Twoim imieniu</strong>, weryfikujemy dopasowanie części do Twojego konkretnego pojazdu (VIN/OEM), porównujemy opcje OEM vs. dobry zamiennik i przygotowujemy pełną wycenę z transportem i cłem. Płatne z góry, bo prawdziwy research zajmuje czas. <strong>Jeśli zamówisz — kwota wlicza się w cenę.</strong> Wyślij link i opłata znika — wtedy research zrobiłeś już sam.",
+  "faq.a8":
+    'To nie jest tylko "opłata za szukanie" — wynajmujesz nas jako <strong>swojego kupca w Europie</strong>. Za 4 960 ISK (z VAT): kontaktujemy się z naszymi zaufanymi dostawcami w UE (Niemcy, Polska, kraje bałtyckie), <strong>negocjujemy najlepszą cenę w Twoim imieniu</strong>, weryfikujemy dopasowanie części do Twojego konkretnego pojazdu (VIN/OEM), porównujemy opcje OEM vs. dobry zamiennik i przygotowujemy pełną wycenę z transportem i cłem. Płatne z góry, bo prawdziwy research zajmuje czas. <strong>Jeśli zamówisz — kwota wlicza się w cenę.</strong> Wyślij link i opłata znika — wtedy research zrobiłeś już sam.',
   "faq.q9": "Jak płacę?",
-  "faq.a9": "Przelew bankowy (millifærsla) lub karta przez link do faktury. Faktura na firmę z kt./VAT na życzenie. Po wysłaniu formularza zespół wyśle Ci wycenę i dane do płatności — zwykle w 24h w dni robocze.",
+  "faq.a9":
+    "Przelew bankowy (millifærsla) lub karta przez link do faktury. Faktura na firmę z kt./VAT na życzenie. Po wysłaniu formularza zespół wyśle Ci wycenę i dane do płatności — zwykle w 24h w dni robocze.",
   "faq.q10": "Czy cło jest wliczone w cenę?",
-  "faq.a10": "Tak. Cena wysyłki zawsze obejmuje odprawę celną i obsługę VAT importowego. Brak niespodzianek przy odbiorze.",
+  "faq.a10":
+    "Tak. Cena wysyłki zawsze obejmuje odprawę celną i obsługę VAT importowego. Brak niespodzianek przy odbiorze.",
   "faq.q11": "Wysyłacie ciężkie/wielkogabarytowe (silniki, osie, blacharka)?",
-  "faq.a11": "Tak. Regularnie obsługujemy palety i skrzynie — silniki, skrzynie biegów, zderzaki, całe blachy. Opisz co potrzebujesz, dobierzemy odpowiedni transport.",
+  "faq.a11":
+    "Tak. Regularnie obsługujemy palety i skrzynie — silniki, skrzynie biegów, zderzaki, całe blachy. Opisz co potrzebujesz, dobierzemy odpowiedni transport.",
   "faq.q12": "Mogę zamówić kilka części w jednym zapytaniu?",
-  "faq.a12": "Oczywiście. W formularzu czatu po każdej części klikaj \"➕ Add another part\". Wycenimy je razem i zaoszczędzisz na łączonej wysyłce.",
+  "faq.a12":
+    'Oczywiście. W formularzu czatu po każdej części klikaj "➕ Add another part". Wycenimy je razem i zaoszczędzisz na łączonej wysyłce.',
 
   "cta.titleA": "MASZ LINK?",
   "cta.titleB": "WYŚLIJ GO DO NAS.",
-  "cta.lead": "Wklej link, podaj dane, kliknij wyślij. Odpowiadamy z pełną ceną. Decydujesz Ty. To cały proces.",
+  "cta.lead":
+    "Wklej link, podaj dane, kliknij wyślij. Odpowiadamy z pełną ceną. Decydujesz Ty. To cały proces.",
   "cta.btn1": "Wyceń część",
   "cta.btn2": "Mam pytanie",
   "cta.bullet1": "Bezpieczny dobór po VIN",
   "cta.bullet2": "Szybki transport",
 
-  "footer.tagline": "Twój partner w dostawach części zamiennych na Islandii. Stawiamy na szybkość i bezproblemową logistykę.",
+  "footer.tagline":
+    "Twój partner w dostawach części zamiennych na Islandii. Stawiamy na szybkość i bezproblemową logistykę.",
   "footer.nav": "Nawigacja",
   "footer.info": "Informacje",
   "footer.contact": "Kontakt",
@@ -327,23 +383,27 @@ const is: Dict = {
   "form.of": "af",
   "form.privacy": "Gögnin þín eru aðeins notuð fyrir þessa beiðni.",
   "form.sending": "Sendi...",
-  "form.allDone": "✅ Móttekið — sendi beiðnina. Við svörum yfirleitt innan nokkurra klukkustunda á virkum dögum.",
-  "form.failed":
-    "Eitthvað fór úrskeiðis. Reyndu aftur eða sendu póst á parts@masgroup.is",
+  "form.allDone":
+    "✅ Móttekið — sendi beiðnina. Við svörum yfirleitt innan nokkurra klukkustunda á virkum dögum.",
+  "form.failed": "Eitthvað fór úrskeiðis. Reyndu aftur eða sendu póst á parts@masgroup.is",
 
   "benefits.kicker": "Hvernig það virkar",
   "benefits.titleA": "HVAÐ ÞÚ",
   "benefits.titleB": "FÆRÐ Í RAUN",
   "benefits.b1.t": "Hröð afhending",
-  "benefits.b1.d": "Við finnum hraðustu leiðina. Þú veist alltaf afhendingartíma áður en þú borgar.",
+  "benefits.b1.d":
+    "Við finnum hraðustu leiðina. Þú veist alltaf afhendingartíma áður en þú borgar.",
   "benefits.b2.t": "Við finnum hvaða hlut sem er",
-  "benefits.b2.d": "Engan hlekk? Lýstu hlutnum — <strong>við verðum kaupandi þinn í Evrópu</strong>: leitum hjá traustum birgjum, semjum besta verðið fyrir þig og staðfestum að hluturinn passi við bílinn þinn. Þóknun fyrir vinnuna: 4.960 kr. (m. VSK) — dregst frá pöntuninni þegar þú kaupir.",
+  "benefits.b2.d":
+    "Engan hlekk? Lýstu hlutnum — <strong>við verðum kaupandi þinn í Evrópu</strong>: leitum hjá traustum birgjum, semjum besta verðið fyrir þig og staðfestum að hluturinn passi við bílinn þinn. Þóknun fyrir vinnuna: 4.960 kr. (m. VSK) — dregst frá pöntuninni þegar þú kaupir.",
   "benefits.b3.t": "Íslenskur reikningur",
-  "benefits.b3.d": "Hver pöntun fylgir íslenskum VSK-reikningi. Þú getur dregið hann frá. Við sjáum um tollinn.",
+  "benefits.b3.d":
+    "Hver pöntun fylgir íslenskum VSK-reikningi. Þú getur dregið hann frá. Við sjáum um tollinn.",
   "benefits.b4.t": "Engin milliliðavandræði",
   "benefits.b4.d": "Þú sendir beiðni. Við sjáum um allt á milli birgis og dyranna þinna.",
   "benefits.b5.t": "Sanngjarnt verð",
-  "benefits.b5.d": "Við sýnum heildarverð áður en þú samþykkir — hlutur, flutningur og þóknun. Engar óvæntar uppákomur.",
+  "benefits.b5.d":
+    "Við sýnum heildarverð áður en þú samþykkir — hlutur, flutningur og þóknun. Engar óvæntar uppákomur.",
   "benefits.cta.t": "Spurningar?",
   "benefits.cta.d": "Sendu okkur og við svörum innan fárra klukkustunda.",
   "benefits.cta.btn": "Hafðu samband",
@@ -353,30 +413,37 @@ const is: Dict = {
   "process.titleB": "VIRKAR",
   "process.lead": "6 skref frá skilaboðum að hlutnum við dyrnar þínar.",
   "process.s1.t": "Sendu það sem þú þarft",
-  "process.s1.d": "Fylltu út formið: límdu hlekk eða lýstu hvað þú þarft. Enginn hlekkur? <strong>Við verðum kaupandi þinn í Evrópu</strong> — leitum að hlutnum hjá traustum birgjum í ESB, <strong>semjum besta verðið fyrir þína hönd</strong>, staðfestum að hluturinn passi við ökutækið þitt (VIN/OEM) og sjáum um pappírsvinnuna. Einskiptis <strong>þóknun 4 960 ISK (m. VSK)</strong> fyrir vinnuna, greidd fyrirfram. Ef þú pantar — dregst hún frá heildarverðinu, svo þú borgar hana aðeins einu sinni.",
+  "process.s1.d":
+    "Fylltu út formið: límdu hlekk eða lýstu hvað þú þarft. Enginn hlekkur? <strong>Við verðum kaupandi þinn í Evrópu</strong> — leitum að hlutnum hjá traustum birgjum í ESB, <strong>semjum besta verðið fyrir þína hönd</strong>, staðfestum að hluturinn passi við ökutækið þitt (VIN/OEM) og sjáum um pappírsvinnuna. Einskiptis <strong>þóknun 4 960 ISK (m. VSK)</strong> fyrir vinnuna, greidd fyrirfram. Ef þú pantar — dregst hún frá heildarverðinu, svo þú borgar hana aðeins einu sinni.",
   "process.s2.t": "Við athugum hlutinn",
   "process.s2.d": "Við staðfestum framboð, verð og heildarkostnað með flutningi til Íslands.",
   "process.s3.t": "Þú færð heildarverðið",
-  "process.s3.d": "Ein tala: hlutur + flutningur + tollafgreiðsla + okkar þjónustuþóknun fyrir að sjá um allt. Enginn falinn kostnaður.",
+  "process.s3.d":
+    "Ein tala: hlutur + flutningur + tollafgreiðsla + okkar þjónustuþóknun fyrir að sjá um allt. Enginn falinn kostnaður.",
   "process.s4.t": "Þú samþykkir",
   "process.s4.d": "Þú segir já og borgar. Við pöntum strax hjá birgi.",
   "process.s5.t": "Við sendum",
-  "process.s5.d": "Við sjáum um kaup, alþjóðlegan flutning og tollskýrslur. Þú færð rakningarnúmer.",
+  "process.s5.d":
+    "Við sjáum um kaup, alþjóðlegan flutning og tollskýrslur. Þú færð rakningarnúmer.",
   "process.s6.t": "Sækja",
   "process.s6.d": "Þegar pakkinn berst, sækir þú eða við sendum.",
 
   "reviews.kicker": "Treyst af",
   "reviews.title": "HVAÐ VIÐSKIPTAVINIR SEGJA",
-  "reviews.r1": "Tími skiptir máli. Ég pantaði vélahluta og þeir komu fyrr en ég bjóst við. Traust vinna, ekkert óþarfa kjaftæði.",
-  "reviews.r2": "Ég rek bílaleigu, bílar þurfa að keyra. MAS Parts tekur leitina af mér. Íslenskur reikningur, allt virkar.",
+  "reviews.r1":
+    "Tími skiptir máli. Ég pantaði vélahluta og þeir komu fyrr en ég bjóst við. Traust vinna, ekkert óþarfa kjaftæði.",
+  "reviews.r2":
+    "Ég rek bílaleigu, bílar þurfa að keyra. MAS Parts tekur leitina af mér. Íslenskur reikningur, allt virkar.",
   "reviews.r3": "Ég leitaði að hlut sem enginn átti til. Fann strax hér á góðu verði.",
 
   "about.kicker": "Byggt á reynslu",
   "about.titleA": "FRÁ VERKSTÆÐISEIGENDUM,",
   "about.titleB": "FYRIR VERKSTÆÐISEIGENDUR",
   "about.p1": "Við opnuðum ekki bara verslun; við bjuggum til lausn á eigin vandamálum.",
-  "about.p2": "Reynsla okkar byggir á því að reka 4 eigin verkstæði, svo við skiljum áskoranirnar sem þú stendur frammi fyrir á hverjum degi.",
-  "about.p3": "MAS Parts var stofnað til að leysa eitt af stærstu vandamálum í greininni: Flutninga. Við tökum þau á okkur svo þú getir einbeitt þér að vinnunni.",
+  "about.p2":
+    "Reynsla okkar byggir á því að reka 4 eigin verkstæði, svo við skiljum áskoranirnar sem þú stendur frammi fyrir á hverjum degi.",
+  "about.p3":
+    "MAS Parts var stofnað til að leysa eitt af stærstu vandamálum í greininni: Flutninga. Við tökum þau á okkur svo þú getir einbeitt þér að vinnunni.",
   "about.stat1": "Eigin verkstæði",
   "about.stat2": "Hlutir í boði",
   "about.stat3": "B2B samstarfsaðilar",
@@ -388,39 +455,53 @@ const is: Dict = {
   "faq.titleB": "SPURNINGAR",
   "faq.lead": "Allt sem þú þarft að vita um samstarf við MAS Parts.",
   "faq.q1": "Hvernig virkar þetta nákvæmlega?",
-  "faq.a1": "Einfalt. Finndu hlutinn á hvaða vefsíðu sem er (Autodoc, eBay, hvar sem er í Evrópu) og afritaðu hlekkinn. Fylltu út formið, límdu hlekkinn og sendu. Við athugum hlutinn, bætum við flutningi til Íslands og sendum heildarverðið. Ef þú samþykkir, borgar þú og við sjáum um afganginn.",
+  "faq.a1":
+    "Einfalt. Finndu hlutinn á hvaða vefsíðu sem er (Autodoc, eBay, hvar sem er í Evrópu) og afritaðu hlekkinn. Fylltu út formið, límdu hlekkinn og sendu. Við athugum hlutinn, bætum við flutningi til Íslands og sendum heildarverðið. Ef þú samþykkir, borgar þú og við sjáum um afganginn.",
   "faq.q2": "Gefið þið út íslenskan VSK-reikning?",
-  "faq.a2": "Já. Við erum skráð fyrirtæki á Íslandi (ehf.) og hver pöntun fær fullan íslenskan VSK-reikning.",
+  "faq.a2":
+    "Já. Við erum skráð fyrirtæki á Íslandi (ehf.) og hver pöntun fær fullan íslenskan VSK-reikning.",
   "faq.q3": "Hve langan tíma tekur afhending?",
-  "faq.a3": "Það fer eftir uppruna, en við segjum þér áætlaðan tíma fyrir greiðslu. Flestar pantanir frá Evrópu berast á 5–10 virkum dögum.",
+  "faq.a3":
+    "Það fer eftir uppruna, en við segjum þér áætlaðan tíma fyrir greiðslu. Flestar pantanir frá Evrópu berast á 5–10 virkum dögum.",
   "faq.q4": "Hvað ef hluturinn passar ekki?",
-  "faq.a4": "Ef við pöntuðum rangt skiptum við eða endurgreiðum. Ef þú sendir rangan hlekk eða röng bílupplýsingar reynum við að hjálpa, en ábyrgðin er þín. Tvíathugaðu hlekkinn.",
+  "faq.a4":
+    "Ef við pöntuðum rangt skiptum við eða endurgreiðum. Ef þú sendir rangan hlekk eða röng bílupplýsingar reynum við að hjálpa, en ábyrgðin er þín. Tvíathugaðu hlekkinn.",
   "faq.q5": "Sendið þið út fyrir höfuðborgarsvæðið?",
-  "faq.a5": "Já, hvert sem er á Íslandi. Reykjavík, Akureyri, Egilsstaðir, Vestfirðir — við sendum á heimilið þitt.",
+  "faq.a5":
+    "Já, hvert sem er á Íslandi. Reykjavík, Akureyri, Egilsstaðir, Vestfirðir — við sendum á heimilið þitt.",
   "faq.q6": "Hvaða bílategundir styðjið þið?",
-  "faq.a6": "Allar. VW, Audi, BMW, Toyota, Kia, Ford, Volvo — ef hann keyrir getum við útvegað hlutinn.",
+  "faq.a6":
+    "Allar. VW, Audi, BMW, Toyota, Kia, Ford, Volvo — ef hann keyrir getum við útvegað hlutinn.",
   "faq.q7": "Útvegið þið notaða hluti?",
-  "faq.a7": "Já, eftir beiðni. Vélar, gírkassar, yfirbygging — bara spurðu. Athugaðu: ekki hægt að skila notuðum hlutum.",
+  "faq.a7":
+    "Já, eftir beiðni. Vélar, gírkassar, yfirbygging — bara spurðu. Athugaðu: ekki hægt að skila notuðum hlutum.",
   "faq.q8": "Fyrir hvað ertu í raun að borga 4 960 ISK?",
-  "faq.a8": "Þetta er ekki bara \"leitargjald\" — þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Fyrir 4 960 ISK (m. VSK): höfum við samband við trausta birgja okkar í ESB (Þýskaland, Pólland, Eystrasaltsríkin), <strong>semjum besta verðið fyrir þína hönd</strong>, staðfestum að hluturinn passi við þitt nákvæma ökutæki (VIN/OEM), berum saman OEM vs. góða aukaframleiðslu og útbúum heildartilboð með flutningi og tolli. Greitt fyrirfram því raunveruleg leit tekur tíma. <strong>Ef þú pantar — dregst það frá heildarverðinu.</strong> Sendu hlekk og engin þóknun — þá hefur þú þegar gert leitarvinnuna sjálf/ur.",
+  "faq.a8":
+    'Þetta er ekki bara "leitargjald" — þú ert að ráða okkur sem <strong>kaupanda þinn í Evrópu</strong>. Fyrir 4 960 ISK (m. VSK): höfum við samband við trausta birgja okkar í ESB (Þýskaland, Pólland, Eystrasaltsríkin), <strong>semjum besta verðið fyrir þína hönd</strong>, staðfestum að hluturinn passi við þitt nákvæma ökutæki (VIN/OEM), berum saman OEM vs. góða aukaframleiðslu og útbúum heildartilboð með flutningi og tolli. Greitt fyrirfram því raunveruleg leit tekur tíma. <strong>Ef þú pantar — dregst það frá heildarverðinu.</strong> Sendu hlekk og engin þóknun — þá hefur þú þegar gert leitarvinnuna sjálf/ur.',
   "faq.q9": "Hvernig borga ég?",
-  "faq.a9": "Millifærsla eða kort í gegnum reikningshlekk. Reikningar fyrir fyrirtæki með kt./VSK eftir beiðni. Eftir að þú sendir formið sendir teymið okkar tilboðið og greiðsluleiðbeiningar í tölvupósti — venjulega innan 24 klst. á virkum dögum.",
+  "faq.a9":
+    "Millifærsla eða kort í gegnum reikningshlekk. Reikningar fyrir fyrirtæki með kt./VSK eftir beiðni. Eftir að þú sendir formið sendir teymið okkar tilboðið og greiðsluleiðbeiningar í tölvupósti — venjulega innan 24 klst. á virkum dögum.",
   "faq.q10": "Er tollafgreiðsla innifalin í verðinu?",
-  "faq.a10": "Já. Sendingarverðið inniheldur alltaf íslenska tollafgreiðslu og umsýslu á innflutnings-VSK. Engar óvæntar reikningar við móttöku.",
+  "faq.a10":
+    "Já. Sendingarverðið inniheldur alltaf íslenska tollafgreiðslu og umsýslu á innflutnings-VSK. Engar óvæntar reikningar við móttöku.",
   "faq.q11": "Sendið þið þunga eða stóra hluti (vélar, öxla, yfirbyggingu)?",
-  "faq.a11": "Já. Við tökum reglulega við brettum og kössum — vélar, gírkassar, stuðarar, heilar yfirbyggingar. Lýstu hvað þú þarft og við gerum tilboð í réttan flutning.",
+  "faq.a11":
+    "Já. Við tökum reglulega við brettum og kössum — vélar, gírkassar, stuðarar, heilar yfirbyggingar. Lýstu hvað þú þarft og við gerum tilboð í réttan flutning.",
   "faq.q12": "Get ég pantað marga hluti í einni beiðni?",
-  "faq.a12": "Auðvitað. Í spjallforminu smellir þú bara á \"➕ Add another part\" eftir hvern hlut. Við gefum tilboð saman og þú sparar á sameinaðri sendingu.",
+  "faq.a12":
+    'Auðvitað. Í spjallforminu smellir þú bara á "➕ Add another part" eftir hvern hlut. Við gefum tilboð saman og þú sparar á sameinaðri sendingu.',
 
   "cta.titleA": "ERTU MEÐ HLEKK?",
   "cta.titleB": "SENDU OKKUR HANN.",
-  "cta.lead": "Límdu hlekkinn, fylltu út upplýsingar, ýttu á senda. Við svörum með heildarverði. Þú ákveður.",
+  "cta.lead":
+    "Límdu hlekkinn, fylltu út upplýsingar, ýttu á senda. Við svörum með heildarverði. Þú ákveður.",
   "cta.btn1": "Fá tilboð",
   "cta.btn2": "Hef spurningu",
   "cta.bullet1": "Öruggt val eftir VIN",
   "cta.bullet2": "Hraður flutningur",
 
-  "footer.tagline": "Faglegur samstarfsaðili í varahlutum á Íslandi. Við einbeitum okkur að hraða og þægilegri flutningi.",
+  "footer.tagline":
+    "Faglegur samstarfsaðili í varahlutum á Íslandi. Við einbeitum okkur að hraða og þægilegri flutningi.",
   "footer.nav": "Leiðsögn",
   "footer.info": "Upplýsingar",
   "footer.contact": "Hafa samband",

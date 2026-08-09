@@ -5,11 +5,20 @@ import { Footer } from "@/components/site/Footer";
 import { ConversationalForm } from "@/components/site/ConversationalForm";
 import { FloatContact } from "@/components/site/FloatContact";
 import {
-  MessageSquarePlus, SearchCode, FileText, CreditCard, Truck, PackageCheck,
-  Quote, Award,
+  MessageSquarePlus,
+  SearchCode,
+  FileText,
+  CreditCard,
+  Truck,
+  PackageCheck,
+  Quote,
+  Award,
 } from "lucide-react";
 import {
-  Accordion, AccordionContent, AccordionItem, AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useLang } from "@/i18n/LanguageContext";
 
@@ -17,20 +26,64 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-
 const PROCESS = [
-  { n: "01", icon: MessageSquarePlus, t: "Send what you need", d: "Fill out the form: paste a link to the part you found online, or describe what you need. No link? We'll search for you — a one-off search fee of 4 960 ISK (incl. VAT) applies, paid upfront before we start looking. Payment details are sent after you submit the form." },
-  { n: "02", icon: SearchCode, t: "We check the part", d: "We verify availability, check the price, and calculate the full cost including shipping to Iceland." },
-  { n: "03", icon: FileText, t: "You get the total", d: "We send you one number: part + shipping + customs clearance + our service commission for handling everything. No hidden costs." },
-  { n: "04", icon: CreditCard, t: "You confirm", d: "You say yes, you pay. We immediately place the order with the supplier." },
-  { n: "05", icon: Truck, t: "We ship it", d: "We handle the purchase, international shipping, and all customs paperwork to Iceland. You get tracking info." },
-  { n: "06", icon: PackageCheck, t: "Pickup", d: "When the package arrives, you can pick it up locally or we deliver it to you." },
+  {
+    n: "01",
+    icon: MessageSquarePlus,
+    t: "Send what you need",
+    d: "Fill out the form: paste a link to the part you found online, or describe what you need. No link? We'll search for you — a one-off search fee of 4 960 ISK (incl. VAT) applies, paid upfront before we start looking. Payment details are sent after you submit the form.",
+  },
+  {
+    n: "02",
+    icon: SearchCode,
+    t: "We check the part",
+    d: "We verify availability, check the price, and calculate the full cost including shipping to Iceland.",
+  },
+  {
+    n: "03",
+    icon: FileText,
+    t: "You get the total",
+    d: "We send you one number: part + shipping + customs clearance + our service commission for handling everything. No hidden costs.",
+  },
+  {
+    n: "04",
+    icon: CreditCard,
+    t: "You confirm",
+    d: "You say yes, you pay. We immediately place the order with the supplier.",
+  },
+  {
+    n: "05",
+    icon: Truck,
+    t: "We ship it",
+    d: "We handle the purchase, international shipping, and all customs paperwork to Iceland. You get tracking info.",
+  },
+  {
+    n: "06",
+    icon: PackageCheck,
+    t: "Pickup",
+    d: "When the package arrives, you can pick it up locally or we deliver it to you.",
+  },
 ];
 
 const REVIEWS = [
-  { q: "Time matters to us. I ordered engine parts, and they were here faster than I expected. Solid work, no unnecessary talk or paperwork.", n: "Mariusz", c: "Flottur Bill ehf.", color: "var(--mas-orange)" },
-  { q: "I run a rental agency, cars need to drive, not sit idle. MAS Parts takes the hassle of finding parts off my shoulders. Icelandic invoice included, everything works.", n: "Łukasz", c: "Rabel Travel ehf.", color: "var(--navy)" },
-  { q: "I was looking for a part that no one had in stock. Found it here immediately and at a good price. Quickly sorted.", n: "Gudjon", c: "Private Garage", color: "#e2e8f0" },
+  {
+    q: "Time matters to us. I ordered engine parts, and they were here faster than I expected. Solid work, no unnecessary talk or paperwork.",
+    n: "Mariusz",
+    c: "Flottur Bill ehf.",
+    color: "var(--mas-orange)",
+  },
+  {
+    q: "I run a rental agency, cars need to drive, not sit idle. MAS Parts takes the hassle of finding parts off my shoulders. Icelandic invoice included, everything works.",
+    n: "Łukasz",
+    c: "Rabel Travel ehf.",
+    color: "var(--navy)",
+  },
+  {
+    q: "I was looking for a part that no one had in stock. Found it here immediately and at a good price. Quickly sorted.",
+    n: "Gudjon",
+    c: "Private Garage",
+    color: "#e2e8f0",
+  },
 ];
 
 const FAQ_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"] as const;
@@ -49,20 +102,39 @@ function Index() {
         className="relative overflow-hidden"
         style={{ background: "linear-gradient(135deg, var(--navy) 0%, oklch(0.22 0.05 265) 100%)" }}
       >
-        <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-          style={{ backgroundImage: "radial-gradient(circle at 20% 20%, var(--mas-orange) 0, transparent 50%), radial-gradient(circle at 80% 80%, var(--mas-orange) 0, transparent 40%)" }}
+        <div
+          className="absolute inset-0 opacity-[0.07] pointer-events-none"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 20%, var(--mas-orange) 0, transparent 50%), radial-gradient(circle at 80% 80%, var(--mas-orange) 0, transparent 40%)",
+          }}
         />
         <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20 grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-white">
-            <h1 className="text-4xl md:text-6xl font-black leading-[1.05] tracking-tight uppercase italic" style={{ fontFamily: "Exo 2", letterSpacing: "-0.02em" }}>
-              CAR PARTS<br/>
+            <h1
+              className="text-4xl md:text-6xl font-black leading-[1.05] tracking-tight uppercase italic"
+              style={{ fontFamily: "Exo 2", letterSpacing: "-0.02em" }}
+            >
+              CAR PARTS
+              <br />
               SHIPPED TO <span className="text-mas-orange">ICELAND.</span>
             </h1>
             <p className="mt-6 text-lg text-white/85 max-w-xl leading-relaxed">
-              We don't just ship parts to Iceland — <span className="text-mas-orange font-semibold">we handle the entire process for you.</span> Send us a link or describe what you need <span className="hidden lg:inline">in the form on the right</span><span className="lg:hidden">in the form below</span>. We source it, buy it, clear customs, and deliver to your door. You don't deal with suppliers, shipping, or paperwork — you just receive an <span className="font-semibold text-white">Icelandic VAT invoice</span>. We take care of the rest.
+              We don't just ship parts to Iceland —{" "}
+              <span className="text-mas-orange font-semibold">
+                we handle the entire process for you.
+              </span>{" "}
+              Send us a link or describe what you need{" "}
+              <span className="hidden lg:inline">in the form on the right</span>
+              <span className="lg:hidden">in the form below</span>. We source it, buy it, clear
+              customs, and deliver to your door. You don't deal with suppliers, shipping, or
+              paperwork — you just receive an{" "}
+              <span className="font-semibold text-white">Icelandic VAT invoice</span>. We take care
+              of the rest.
             </p>
             <p className="mt-4 lg:hidden text-sm text-white/70">
-              👉 Scroll down and request your quote in the form below — we usually reply within hours.
+              👉 Scroll down and request your quote in the form below — we usually reply within
+              hours.
             </p>
           </div>
           <div className="lg:pl-6">
@@ -78,16 +150,23 @@ function Index() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-200 text-navy text-xs font-bold uppercase tracking-widest">
               How it works
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 text-navy" style={{ letterSpacing: "-0.02em" }}>
+            <h2
+              className="text-3xl md:text-4xl font-bold mb-3 text-navy"
+              style={{ letterSpacing: "-0.02em" }}
+            >
               From your link to your door in 6 steps
             </h2>
-            <p className="text-slate-600 max-w-xl mx-auto">No phone calls. No customs paperwork. No surprise costs.</p>
+            <p className="text-slate-600 max-w-xl mx-auto">
+              No phone calls. No customs paperwork. No surprise costs.
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {PROCESS.map(({ n, icon: Icon, t, d }) => (
               <div key={n} className="parts-card p-5 md:p-8 rounded-xl relative group">
                 <span className="step-number">{n}</span>
-                <div className="mb-4 text-mas-orange"><Icon className="w-8 h-8" /></div>
+                <div className="mb-4 text-mas-orange">
+                  <Icon className="w-8 h-8" />
+                </div>
                 <h4 className="text-lg font-bold mb-2 text-navy">{t}</h4>
                 <p className="text-slate-500 text-sm">{d}</p>
               </div>
@@ -103,14 +182,23 @@ function Index() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest">
               Trusted by
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-navy" style={{ letterSpacing: "-0.02em" }}>
+            <h2
+              className="text-3xl md:text-4xl font-bold text-navy"
+              style={{ letterSpacing: "-0.02em" }}
+            >
               What clients say
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
             {REVIEWS.map((r, i) => (
               <div key={i} className="review-card p-8 rounded-2xl relative pt-12">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 p-2 rounded-lg shadow-sm" style={{ background: r.color, color: r.color === "#e2e8f0" ? "var(--navy)" : "white" }}>
+                <div
+                  className="absolute -top-4 left-1/2 -translate-x-1/2 p-2 rounded-lg shadow-sm"
+                  style={{
+                    background: r.color,
+                    color: r.color === "#e2e8f0" ? "var(--navy)" : "white",
+                  }}
+                >
                   <Quote className="w-5 h-5" />
                 </div>
                 <div className="flex-grow flex items-center justify-center mb-6 mt-2">
@@ -136,19 +224,33 @@ function Index() {
                 <div className="inline-block mb-6 px-4 py-1 rounded-sm text-xs font-bold uppercase tracking-widest border-l-2 text-mas-orange border-mas-orange bg-white/10">
                   Built on experience
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6" style={{ letterSpacing: "-0.02em" }}>
-                  From workshop owners,<br />
+                <h2
+                  className="text-3xl md:text-4xl font-bold text-white mb-6"
+                  style={{ letterSpacing: "-0.02em" }}
+                >
+                  From workshop owners,
+                  <br />
                   <span className="text-mas-orange">for workshop owners</span>
                 </h2>
                 <div className="space-y-4 text-slate-300 text-base md:text-lg leading-relaxed text-left">
-                  <p>We run 4 workshops ourselves. We know the stress of a car blocking a lift because of a missing bolt — so we built MAS Parts to fix the one thing that always slows the job down: <span className="text-mas-orange font-semibold">logistics.</span></p>
+                  <p>
+                    We run 4 workshops ourselves. We know the stress of a car blocking a lift
+                    because of a missing bolt — so we built MAS Parts to fix the one thing that
+                    always slows the job down:{" "}
+                    <span className="text-mas-orange font-semibold">logistics.</span>
+                  </p>
                 </div>
                 <div className="mt-12 flex flex-wrap items-center gap-8 md:gap-12 border-t border-slate-800 pt-8">
-                  {[["99%","Available parts"],["11+","B2B Partners"]].map(([num, lbl], i) => (
+                  {[
+                    ["99%", "Available parts"],
+                    ["11+", "B2B Partners"],
+                  ].map(([num, lbl], i) => (
                     <div key={i} className="flex items-center gap-8 md:gap-12">
                       <div className="flex flex-col">
                         <span className="text-3xl font-black text-white italic">{num}</span>
-                        <span className="text-xs uppercase text-slate-400 font-bold tracking-widest">{lbl}</span>
+                        <span className="text-xs uppercase text-slate-400 font-bold tracking-widest">
+                          {lbl}
+                        </span>
                       </div>
                       {i < 1 && <div className="w-px h-10 bg-slate-700 hidden md:block" />}
                     </div>
@@ -165,11 +267,16 @@ function Index() {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent hidden lg:block" />
                 </div>
                 <div className="relative z-10 bg-slate-900 p-8 lg:bg-transparent lg:absolute lg:bottom-0 lg:w-full lg:p-10 text-center">
-                  <div className="mb-4 mx-auto w-20 h-20 rounded-full flex items-center justify-center border-4 border-slate-900 relative -mt-14 lg:mt-0 bg-mas-orange" style={{ boxShadow: "0 0 30px rgba(255,123,0,0.5)" }}>
+                  <div
+                    className="mb-4 mx-auto w-20 h-20 rounded-full flex items-center justify-center border-4 border-slate-900 relative -mt-14 lg:mt-0 bg-mas-orange"
+                    style={{ boxShadow: "0 0 30px rgba(255,123,0,0.5)" }}
+                  >
                     <Award className="w-10 h-10 text-white" />
                   </div>
                   <h5 className="text-white font-bold text-2xl mb-2 italic">Local Support</h5>
-                  <p className="text-slate-200 text-sm font-medium leading-relaxed">"We operate in Iceland; we know local needs and market realities."</p>
+                  <p className="text-slate-200 text-sm font-medium leading-relaxed">
+                    "We operate in Iceland; we know local needs and market realities."
+                  </p>
                 </div>
               </div>
             </div>
@@ -184,17 +291,26 @@ function Index() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest">
               Knowledge
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-navy" style={{ letterSpacing: "-0.02em" }}>
+            <h2
+              className="text-3xl md:text-4xl font-bold text-navy"
+              style={{ letterSpacing: "-0.02em" }}
+            >
               Frequent questions
             </h2>
           </div>
           <Accordion type="single" collapsible className="space-y-2">
             {FAQ_KEYS.map((k, i) => (
-              <AccordionItem key={k} value={`f-${i}`} className="rounded-xl border border-slate-200 bg-slate-50 px-5 data-[state=open]:bg-white data-[state=open]:shadow-sm transition-all">
+              <AccordionItem
+                key={k}
+                value={`f-${i}`}
+                className="rounded-xl border border-slate-200 bg-slate-50 px-5 data-[state=open]:bg-white data-[state=open]:shadow-sm transition-all"
+              >
                 <AccordionTrigger className="hover:no-underline text-left text-base md:text-lg font-bold text-navy py-5">
                   <span>{t(`faq.q${k}`)}</span>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-600 leading-relaxed pb-5">{t(`faq.a${k}`)}</AccordionContent>
+                <AccordionContent className="text-slate-600 leading-relaxed pb-5">
+                  {t(`faq.a${k}`)}
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -204,11 +320,17 @@ function Index() {
       {/* CTA */}
       <section className="py-16 px-6 bg-navy">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white" style={{ letterSpacing: "-0.02em" }}>
+          <h2
+            className="text-2xl md:text-3xl font-bold mb-4 text-white"
+            style={{ letterSpacing: "-0.02em" }}
+          >
             Ready? Send us your link or describe what you need.
           </h2>
           <p className="text-slate-300 mb-8">We'll reply with the full price.</p>
-          <a href="#order" className="inline-block text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg bg-mas-orange hover:opacity-90">
+          <a
+            href="#order"
+            className="inline-block text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg bg-mas-orange hover:opacity-90"
+          >
             Get a quote
           </a>
         </div>
