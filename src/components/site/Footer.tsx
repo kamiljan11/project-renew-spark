@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { MapPin, Mail, Phone } from "lucide-react";
-import { useLang } from "@/i18n/LanguageContext";
+import { useLang } from "@/i18n/useLang";
 
 const LOGO =
   "https://d1yei2z3i6k35z.cloudfront.net/15618994/694407658cab3_694317fd7b14d_Untitleddesign.jpg";

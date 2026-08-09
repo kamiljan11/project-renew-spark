@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, X, Send, Sparkles, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useLang } from "@/i18n/LanguageContext";
+import { useLang } from "@/i18n/useLang";
 
 type Bubble = { who: "bot" | "user" | "typing"; html?: string; text?: string };
 
