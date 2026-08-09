@@ -1,0 +1,4 @@
+# False-positives: Supabase publishable/anon key (public by design, role=anon zweryfikowane 2026-08-09).
+# Fingerprint format for gitleaks --no-git: <file>:<rule-id>:<line>
+.env:jwt:1
+.env:jwt:4
