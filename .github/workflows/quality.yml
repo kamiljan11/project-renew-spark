@@ -88,3 +88,13 @@ jobs:
           npm ci || npm install
           npx playwright install --with-deps chromium
           npx playwright test --reporter=line
+
+  secrets-scan:
+    name: Gitleaks secrets scan
+    runs-on: ubuntu-latest
+    container:
+      image: zricethezav/gitleaks:latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Gitleaks (working tree)
+        run: gitleaks detect --source . --no-git --redact -v
