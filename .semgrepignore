@@ -1,0 +1,3 @@
+# .env jest commitowany celowo (konwencja Lovable): zawiera WYLACZNIE publiczne klucze anon
+# Supabase (chronione RLS). Semgrep flaguje kazdy JWT — false positive dla klucza anon.
+.env
