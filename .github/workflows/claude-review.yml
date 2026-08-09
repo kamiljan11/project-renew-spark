@@ -31,6 +31,8 @@ jobs:
         if: steps.token.outputs.ok == 'true'
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          track_progress: true
+          use_sticky_comment: true
           prompt: |
             Zrob code review tego PR jak senior 20+ (poziom Google/bank). Po polsku.
             KROK 0 — PAMIEC: najpierw przeczytaj CLAUDE.md i docs/REVIEW-LEARNINGS.md (jesli istnieja)
