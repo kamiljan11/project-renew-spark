@@ -1,49 +1,54 @@
-# [NAZWA PROJEKTU]
+# MAS Parts — Sourcing & Import to Iceland
 
-<!-- Jednozdaniowy opis: co to robi i dla kogo. UZUPELNIJ przy starcie projektu. -->
+**Status:** production · Part of the [MAS Group](https://masgroup.is) platform · Built by [Kamil Jan](https://kamiljan.com)
+
+Request-to-quote service for buying parts and goods from European suppliers and getting them
+to Iceland. A customer or workshop describes what they need; MAS verifies availability,
+quotes the full landed cost including shipping and customs, buys it, ships it, clears it, and
+hands over an Icelandic VAT invoice.
+
+The point of the product is that the customer never touches a customs form.
+
+## What it does
+
+- **Request form** for parts and goods, with an AI assistant that helps turn a vague
+  description ("front wishbone, 2014 Octavia") into a request precise enough to source
+- **Quote flow** — availability check, full landed price, explicit yes before any money moves
+- **Icelandic VAT invoicing** for business customers
+- **Admin back office** for triaging incoming requests
 
 ## Stack
-- Frontend: React 18 + TypeScript + Vite + Tailwind
-- Backend/API:
-- Baza:
-- Hosting/deploy:
 
-## Wymagania
-- Node 20+
-- npm
+React + TypeScript · Vite · TanStack Router · Tailwind CSS · Supabase (Postgres, Auth, RLS,
+Edge Functions) · hosted on Lovable.
 
-## Setup
+The `form-assist` edge function calls Gemini 2.5 Flash through the Lovable AI gateway. It is
+deliberately a cheap, fast model: the job is tidying a form field, not reasoning.
+
+## Running locally
+
 ```bash
 npm install
-cp .env.example .env   # uzupelnij wartosci (sekrety: Infisical "MAS Group")
+npm run dev
 ```
 
-## Komendy
-| Komenda | Co robi |
-|---|---|
-| `npm run dev` | serwer deweloperski |
-| `npm run build` | build produkcyjny |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | tsc --noEmit |
-| `npm test` | testy jednostkowe |
-| `npm run test:coverage` | testy + prog pokrycia |
-| `npx playwright test` | E2E smoke |
+Copy `.env.example` to `.env` and provide your own Supabase project URL and publishable key.
 
-## Zmienne srodowiskowe
-<!-- Tabela: NAZWA | wymagana? | opis. Zadnych wartosci sekretow w repo. -->
-
-## Struktura
-```
-src/            # kod aplikacji
-e2e/            # testy Playwright
-docs/adr/       # decyzje architektoniczne
-docs/RUNBOOK.md # operacje: deploy, rollback, awarie
+```bash
+npm run lint
+npm run build
+npx tsc -b        # note: -b, not --noEmit (project references)
 ```
 
-## Deploy i wersjonowanie
-- Flow: feature branch -> PR -> zielone CI + review -> merge do main -> deploy
-- Wersje: SemVer, tag `vX.Y.Z` tworzy GitHub Release (auto-notes)
-- Zmiany: `CHANGELOG.md` (Keep a Changelog) — aktualizuj sekcje [Unreleased] w kazdym PR
+## How security is handled
 
-## Wlasciciel
-MAS Group / Kamil Jan — mountainallservice@gmail.com
+- No secrets in the repo. The AI gateway key is read from the environment inside the edge
+  function and never reaches the browser; `.env` holds only the Supabase publishable key.
+- Row Level Security in Postgres is the authorisation boundary.
+- Every push runs build, lint, typecheck, tests, Semgrep and a Gitleaks secret scan; a
+  pre-commit hook blocks credential-shaped strings.
+- Customer requests stay in the database — no real data in fixtures.
+
+## Licence
+
+Proprietary. Published for reference, not for reuse.
