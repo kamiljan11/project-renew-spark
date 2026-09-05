@@ -1,6 +1,6 @@
-# MAS Parts — Sourcing & Import to Iceland (prototype)
-
 **Status: prototype (2026-08) — not maintained**
+
+# MAS Parts — Sourcing & Import to Iceland (prototype)
 
 A prototype request-to-quote tool for buying car parts and goods from EU suppliers and
 importing them to Iceland: a request form, an AI-assisted intake (`form-assist` edge function,
